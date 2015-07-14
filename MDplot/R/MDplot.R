@@ -10,13 +10,16 @@ PALETTE_histogramColours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) 
 
 split_equidistant <- function( VEC_values, n = 5 )
 {
-  delta <- VEC_values[[ 2 ]] - VEC_values[[ 1 ]]
-  it <- delta / n
-  VEC_return <- c( )
-  for( i in 1:n )
+  lower_bound = round( VEC_values[[ 1 ]], digits = - ( log10( VEC_values[[ 2 ]] ) - 1 ) )
+  upper_bound = round( VEC_values[[ 2 ]], digits = - ( log10( VEC_values[[ 2 ]] ) - 1 ) )
+  VEC_return <- c( lower_bound )
+  delta <- upper_bound - lower_bound
+  it <- delta / ( n - 1 )
+  for( i in 1:( n - 2 ) )
   {
-    VEC_return <- c( VEC_return, as.integer( VEC_values[[ 1 ]] + it * i ) )
+    VEC_return <- c( VEC_return, as.integer( lower_bound + it * i ) )
   }
+  VEC_return <- c( VEC_return, upper_bound )
   return( VEC_return )
 }
 
@@ -94,14 +97,14 @@ MDplot_RMSD <- function( MAT_datainput, BOOL_frax = TRUE, REAL_division_factor =
   COLOURS_RMSD <- PALETTE_RMSD_colours( ( ncol( MAT_datainput ) - 1 ) )
   TS_datainput <- as.ts( MAT_MDplot_RMSD_example[ , -1 ] )
   plot.ts( TS_datainput, col = COLOURS_RMSD, plot.type = "single", xaxs = "i", xaxt = "n", xlab = "", ylab = "", ... )
-  axis( 1, at = split_equidistant( c( 1, nrow( MAT_datainput ) ), 5 ), labels = split_equidistant( c( 1, ( nrow( MAT_datainput ) / REAL_division_factor ) ), 5 ), cex.axis = 1 )
+  axis( 1, at = split_equidistant( c( 1, nrow( MAT_datainput ) ), 7 ), labels = split_equidistant( c( 1, ( nrow( MAT_datainput ) / REAL_division_factor ) ), 7 ), cex.axis = 1 )
   mtext( side = 1, text = paste( "time [", xunit, "]" ), line = 3, cex = 1.75 )
   mtext( side = 2, text = "RMSD", line = 2.4, cex = 1.75 )
   title( plotTitle )
   legend( "topright", legend = colnames( MAT_MDplot_RMSD_example[ , -1 ] ), col = COLOURS_RMSD, lty = 1, cex = 1 )
 }
 
-MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLOURS_DSSP_summary = NULL )
+MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLOURS_DSSP_summary = NULL, VEC_showValues = NULL )
 {
   VEC_residues <- TABLE_datainput[ , 1 ]
   TABLE_datainput <- TABLE_datainput[ , -1 ]
@@ -111,6 +114,19 @@ MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLO
     PALETTE_DSSP_summary_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
     COLOURS_DSSP_summary <- PALETTE_DSSP_summary_colours( ncol( MAT_data ) )
   }
+  if( is.null( VEC_showValues  ) )
+  {
+    VEC_showValues = rep( 1:ncol( MAT_data ) )
+  }
+  MAT_buffer <- MAT_data
+  for( i in ncol( MAT_buffer ):1 )
+  {
+    if( !( i %in% VEC_showValues ) )
+    {
+      MAT_buffer <- MAT_buffer[ , -i, drop = FALSE ]
+    }
+  }
+  MAT_data <- MAT_buffer
   if( BOOL_printLegend )
   {
     par( mar = c( 4.5, 4.5, 2.5, 12 ) )
@@ -119,10 +135,10 @@ MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLO
   { 
     par( mar = c( 4.5, 4.5, 2.5, 2.5 ) )
   }
-  plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ], 
-        xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = COLOURS_DSSP_summary,
+  plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
+        xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = COLOURS_DSSP_summary, 
         xlab = "residues", ylab = "fractions [%]",  xaxs = "i", yaxs = "i", 
-        cex = 0.75, pch = 19 )
+       cex = 0.75, pch = 19 )
   if( nrow( MAT_data ) > 1 )
   {
     for( i in 2:nrow( MAT_data ) )
