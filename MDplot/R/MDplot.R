@@ -104,11 +104,24 @@ MDplot_RMSD <- function( MAT_datainput, BOOL_frax = TRUE, REAL_division_factor =
   legend( "topright", legend = colnames( MAT_MDplot_RMSD_example[ , -1 ] ), col = COLOURS_RMSD, lty = 1, cex = 1 )
 }
 
-MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLOURS_DSSP_summary = NULL, VEC_showValues = NULL )
+MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLOURS_DSSP_summary = NULL, VEC_showValues = NULL,
+                                 VEC_show_residues = NULL )
 {
   VEC_residues <- TABLE_datainput[ , 1 ]
   TABLE_datainput <- TABLE_datainput[ , -1 ]
   MAT_data <- as.matrix( TABLE_datainput[ , c( F, T ) ] )
+  MAT_buffer <- MAT_data
+  if( !is.null( VEC_show_residues ) )
+  {
+    for( i in nrow( MAT_buffer ):1 )
+    {
+      if( !( i %in% VEC_show_residues ) )
+      {
+        MAT_buffer <- MAT_buffer[ -i, , drop = FALSE ]
+      }
+    }
+  }
+  MAT_data <- MAT_buffer
   if( is.null( COLOURS_DSSP_summary ) )
   {
     PALETTE_DSSP_summary_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
@@ -169,17 +182,25 @@ MDplot_load_clusters <- function( STRING_path )
   return( MAT_pre )
 }
 
-MDplot_clusters <- function( MAT_clusters, INT_maximum_number = 0 )
+MDplot_clusters <- function( MAT_clusters, INT_maximum_number = 0, STRING_legend_title = "trajectories", 
+                             ylab = "# of cluster members", xlab = "# cluster", main = "cluster plot", 
+                             ... )
 {
   if( INT_maximum_number != 0 )
   {
     MAT_clusters <- MAT_clusters[ 1:INT_maximum_number, ]
   }
   MAT_clusters <- t( MAT_clusters )
+  colnames( MAT_clusters ) <- 1:ncol( MAT_clusters )
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_CLUSTERS <- PALETTE_clusters( nrow( MAT_clusters ) )
   names( MAT_clusters ) <- 1:nrow( MAT_clusters )
-  barplot( MAT_clusters, col = COLOURS_CLUSTERS )#, xaxt = "n" )
-  #axis( 1, at = 1:6, labels = 1:nrow( MAT_clusters ), cex.axis = 1 )
-  legend( "topright", legend = 1:nrow( MAT_clusters ), col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
+  barplot( MAT_clusters, col = COLOURS_CLUSTERS, ylab = ylab, xlab = xlab, main = main, ... )
+  legend( "topright", inset = 0.045, legend = 1:nrow( MAT_clusters ), title = STRING_legend_title, box.lwd = 0, col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
+}
+
+MDplot_load_hbond <- function( STRING_path )
+{
+  DF_input <- read.( STRING_path, blank.lines.skip = FALSE )
+  print( TABLE_input )
 }
