@@ -10,13 +10,40 @@ VEC_xTicks <- c( -179.9, -90, 0, 90, 180 )
 VEC_xLabels <- c( -180, -90, 0, 90, 180 )
 PALETTE_histogramColours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
 
-integrate_curve( MAT_input )
+integrate_curve <- function( MAT_input )
 {
-  if( ncol( MAT_input ) != 2 )
+  if( ncol( MAT_input ) < 2 )
   {
-    stop( paste( "Error: Number of columns in matrix not 2, but ", ncol( MAT_input ), "!" ) )
+    stop( paste( "Error: Number of columns in matrix not 2 or higher, but ",
+                 ncol( MAT_input ), "!" ) )
   }
-  
+  REAL_integral <- 0.0
+  for( i in 2:nrow( MAT_input ) )
+  {
+    REAL_addition <- ( ( MAT_input[ i, 1 ] - MAT_input[ i - 1, 1 ] ) *
+                     ( MAT_input[ i, 2 ] + MAT_input[ i - 1, 2 ] ) ) / 2
+    REAL_integral <- REAL_integral + REAL_addition
+  }
+  return( list( integral = REAL_integral ) )
+}
+
+MDplot_TIcurve <- function( MAT_input, STRING_main_title = "Thermodynamic integration" )
+{
+  par( oma = c( 0.35, 1.75, 0.45, 0.0 ) )
+  plot( MAT_input, ylim = c( min( MAT_input[ , 2 ] ), max( MAT_input[ , 2 ] ) ), xaxs = "i",
+        pch = 19, cex = 1.45, xlab = "", ylab = "", main = STRING_main_title )
+  mtext( side = 1, text = expression( lambda ), line = 3, cex = 1.45 )
+  mtext( side = 2, 
+         text = expression( frac( paste( partialdiff, "H" ), paste( partialdiff, lambda ) ) ), 
+         line = 2.4, cex = 1.45, las = 1 )
+  par( new = TRUE )
+  plot( MAT_input, ylim = c( min( MAT_input[ , 2 ] ), max( MAT_input[ , 2 ] ) ), xaxs = "i",
+        type = "l", lwd = 1, xaxt = "n", yaxt = "n", xlab = "", ylab = "" )
+  REAL_integral <- unlist( integrate_curve( MAT_input )[ "integral" ] )
+  mtext( side = 1, line = 3.0, cex = 1.25,
+         adj = 1,
+         text = substitute( paste( Delta, "G = ", REAL_integral, " [kJ/mol]" ) ) )
+  abline( h = 0, lwd = 1, lty = 3 )
 }
 
 split_equidistant <- function( VEC_values, n = 5 )
