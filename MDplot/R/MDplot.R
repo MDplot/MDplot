@@ -3,10 +3,21 @@ library( MASS )
 library( RColorBrewer )
 library( gplots )
 library( calibrate )
+library( gtools )
+library( grDevices )
 # definitions
 VEC_xTicks <- c( -179.9, -90, 0, 90, 180 )
 VEC_xLabels <- c( -180, -90, 0, 90, 180 )
 PALETTE_histogramColours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+
+integrate_curve( MAT_input )
+{
+  if( ncol( MAT_input ) != 2 )
+  {
+    stop( paste( "Error: Number of columns in matrix not 2, but ", ncol( MAT_input ), "!" ) )
+  }
+  
+}
 
 split_equidistant <- function( VEC_values, n = 5 )
 {
@@ -102,6 +113,71 @@ MDplot_RMSD <- function( MAT_datainput, BOOL_frax = TRUE, REAL_division_factor =
   mtext( side = 2, text = "RMSD", line = 2.4, cex = 1.75 )
   title( plotTitle )
   legend( "topright", legend = colnames( MAT_MDplot_RMSD_example[ , -1 ] ), col = COLOURS_RMSD, lty = 1, cex = 1 )
+}
+
+MDplot_load_rmsf <- function( VEC_files )
+{
+  LIST_return <- list()
+  for( i in 1:length( VEC_files ) )
+  {
+    TABLE_input <- read.table( VEC_files[ i ] )
+    if( length( LIST_return ) == 0 )
+    {
+      LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
+    }
+    else
+    {
+      LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
+      LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+    }
+  }
+  return( LIST_return )
+}
+
+MDplot_RMSF <- function( LIST_datainput, plotTitle = "RMSF plot", xunit = "ns", 
+                         VEC_colors = NULL, BOOL_residuewise = FALSE, INT_number_xticks = 7, 
+                         ... )
+{
+  PALETTE_RMSF_colors <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+  if( is.null( VEC_colors ) )
+  {
+    VEC_colors <- PALETTE_RMSF_colors( length( LIST_datainput ) / 2 )
+  }
+  par( new = FALSE )
+  REAL_max_RMSF = max( sapply( LIST_datainput[ c( F, T ) ], max ) )
+  INT_max_atomnumber = max( sapply( LIST_datainput[ c( T, F ) ], max ) )
+  # find better solution for "every second column as i"
+  for( i in 1:length( LIST_datainput ) )
+  {
+    if( i %% 2 == 1 )
+    {
+      plot( LIST_datainput[[ i ]], LIST_datainput[[ ( i + 1 ) ]],
+            type = "l", col = VEC_colors[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
+            xaxt = "n",  xlab = "", ylab = "",
+            ylim = c( 0, REAL_max_RMSF ),
+            xlim = c( 0, INT_max_atomnumber ),
+            ... )
+      par( new = TRUE )
+    }
+  }
+  mtext( side = 2, text = "RMSF", line = 2.4, cex = 1.75 )
+  VEC_atomnumbers <- 0:INT_max_atomnumber
+  if( !BOOL_residuewise )
+  {
+    mtext( side = 1, text = "atoms", line = 3, cex = 1.75 )
+    axis( 1, at = split_equidistant( c( 0, INT_max_atomnumber ), INT_number_xticks ),
+          label = split_equidistant( c( 0, INT_max_atomnumber ), INT_number_xticks ) )
+  }
+  else
+  {
+    mtext( side = 1, text = "residues", line = 3, cex = 1.75 )
+    axis( 1, at = split_equidistant( c( 0, INT_max_atomnumber ), INT_number_xticks ),
+          label = as.integer( split_equidistant( c( 0, INT_max_atomnumber ), INT_number_xticks )
+                              / 3 ) )
+  }
+  title( plotTitle )
+  #legend( "topright", legend = colnames( XYZ ),
+  #        col = COLOURS_RMSF, lty = 1, cex = 1 )
 }
 
 MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE, COLOURS_DSSP_summary = NULL, VEC_showValues = NULL,
@@ -201,6 +277,73 @@ MDplot_clusters <- function( MAT_clusters, INT_maximum_number = 0, STRING_legend
 
 MDplot_load_hbond <- function( STRING_path )
 {
-  DF_input <- read.( STRING_path, blank.lines.skip = FALSE )
-  print( TABLE_input )
+  TABLE_input <- read.table( STRING_path, skip = 22 )
+  TABLE_input <- TABLE_input[ , c( -19, -18, -17, -16, -14, -13, -11, -10, -6, -5, -2, -1 ) ]
+  colnames( TABLE_input ) <- c( "ResDonor", "ResDonorName", "ResAcceptor", "ResAcceptorName", "AtomDonor", "AtomH", "AtomAcceptor", "Percentage" )
+  return( TABLE_input )
+}
+
+MDplot_hbond <- function( TABLE_input, STRING_what_to_plot = "residue-wise", VEC_acceptorRange = NULL,
+                          VEC_donorRange = NULL, BOOL_print_legend = TRUE )
+{
+  if( STRING_what_to_plot == "residue-wise" )
+  {
+    TABLE_result <- as.data.frame( NULL )
+    VEC_boundariesDonor <- c( min( TABLE_input[ , 1 ] ), max( TABLE_input[ , 1 ] ) )
+    VEC_boundariesAcceptor <- c( min( TABLE_input[ , 3 ] ), max( TABLE_input[ , 3 ] ) )
+    for( i in 1:nrow( TABLE_input ) )
+    {
+      BOOL_found = FALSE
+      if( nrow( TABLE_result ) != 0 )
+      {
+        for( j in 1:nrow( TABLE_result ) )
+        {
+          if( TABLE_result[ j, 1 ] == TABLE_input[ i, 1 ] &&
+              TABLE_result[ j, 3 ] == TABLE_input[ i, 3 ] )
+          {
+            TABLE_result[ j, 8 ] <- TABLE_result[ j, 8 ] + TABLE_input[ i, 8 ]
+            BOOL_found = TRUE
+            break
+          }
+        }
+      }
+      if( !BOOL_found )
+      {
+        TABLE_result <- rbind( TABLE_result, TABLE_input[ i, ] )
+      }
+    }
+    TABLE_result <- TABLE_result[ , c( -7, -6, -5, -4, -2 ) ]
+    TABLE_result <- TABLE_result[ order( TABLE_result[ , 1 ], TABLE_result[ , 2 ] ), ]
+    PALETTE_residuewise <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+    if( !is.null( VEC_acceptorRange ) )
+    {
+      TABLE_result <- TABLE_result[ TABLE_result[ , 2 ] >= VEC_acceptorRange[ 1 ], , drop = FALSE ]
+      TABLE_result <- TABLE_result[ TABLE_result[ , 2 ] <= VEC_acceptorRange[ 2 ], , drop = FALSE ]
+    }
+    if( !is.null( VEC_donorRange ) )
+    {
+      TABLE_result <- TABLE_result[ TABLE_result[ , 1 ] >= VEC_donorRange[ 1 ], , drop = FALSE ]
+      TABLE_result <- TABLE_result[ TABLE_result[ , 1 ] <= VEC_donorRange[ 2 ], , drop = FALSE ]
+    }
+    VEC_normalized <- lapply( as.list( TABLE_result[ , 3 ] ), function( x ) x / 100 )
+    layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
+    PALETTE_colors <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
+    PALETTE_colors_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+    plot( TABLE_result[ , 1:2 ],
+          col = PALETTE_colors_rev( 10 )[ as.numeric( cut( as.numeric( VEC_normalized ), breaks = 10 ) )  ],
+          pch = 19,
+          cex = 1.25 )
+    if( BOOL_print_legend )
+    {
+      legend_image <- as.raster( matrix( PALETTE_colors( 10 ), ncol = 1 ) )
+      plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = 'Color legend [%]' )
+      text( x = 1.5, y = seq( 0, 1, l = 5 ),
+            labels = seq( 0, 100, l = 5 ) )
+      rasterImage( legend_image, 0, 0, 1, 1 )
+    }
+  }
+  else
+  {
+    stop( paste( "Error: plot method ", STRING_what_to_plot, " is unknown. Process aborted!" ) )
+  }
 }
