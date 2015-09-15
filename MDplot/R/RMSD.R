@@ -1,3 +1,4 @@
+# plot RMSD
 MDplot_RMSD <- function( MAT_datainput, BOOL_frax = TRUE, REAL_division_factor = 1, plotTitle = "RMSD plot", xunit = "ns", ... )
 {
   if( !BOOL_frax )
@@ -5,6 +6,8 @@ MDplot_RMSD <- function( MAT_datainput, BOOL_frax = TRUE, REAL_division_factor =
     newRow <- seq( 1:nrow( MAT_datainput ) )
     MAT_datainput <- cbind( newRow, MAT_datainput )
   }
+  
+  # plot the RMSD curves
   PALETTE_RMSD_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_RMSD <- PALETTE_RMSD_colours( ( ncol( MAT_datainput ) - 1 ) )
   TS_datainput <- as.ts( MAT_MDplot_RMSD_example[ , -1 ] )
@@ -14,4 +17,5 @@ MDplot_RMSD <- function( MAT_datainput, BOOL_frax = TRUE, REAL_division_factor =
   mtext( side = 2, text = "RMSD", line = 2.4, cex = 1.75 )
   title( plotTitle )
   legend( "topright", legend = colnames( MAT_MDplot_RMSD_example[ , -1 ] ), col = COLOURS_RMSD, lty = 1, cex = 1 )
+  #########
 }
