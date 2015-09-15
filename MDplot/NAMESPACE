@@ -1,1 +1,3 @@
-exportPattern("^[[:alpha:]]+")
+#exportPattern("^[[:alpha:]]+")
+export( MAT_MDplot_DSSP_example, MAT_MDplot_RMSD_example, MAT_MDplot_ramachandran_example,
+        MDplot_DSSP_summary, MDplot_DSSP_timeseries, MDplot_RMSD )
