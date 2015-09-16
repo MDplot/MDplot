@@ -81,7 +81,7 @@ calculate_mid <- function( LIST_points )
 
 # parse command line arguments
 parse_arguments <- function( VEC_arguments )
-{
+{  
   LIST_parsed <- list()
   if( length( VEC_arguments ) < 1 )
   {
