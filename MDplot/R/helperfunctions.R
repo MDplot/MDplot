@@ -78,3 +78,24 @@ calculate_mid <- function( LIST_points )
   return( c( ( REAL_x / length( LIST_points ) ),
              ( REAL_y / length( LIST_points ) ) ) )
 }
+
+# parse command line arguments
+parse_arguments <- function( VEC_arguments )
+{
+  LIST_parsed <- list()
+  if( length( VEC_arguments ) < 1 )
+  {
+    return( LIST_parsed )
+  }
+  for( i in 1:length( VEC_arguments ) )
+  {
+    if( grepl( VEC_arguments[ i ], "=" ) )
+    {
+    }
+    else
+    {
+      stop( paste( "Error in argument parsing: string '", VEC_arguments[ i ], 
+                   "' does not contain any equal sign." ) )
+    }
+  }
+}
