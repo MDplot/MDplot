@@ -7,6 +7,7 @@ if( length( LIST_packages ) > 0 ) install.packages( LIST_packages )
 #########
 
 # load required packages
+library( methods )
 library( MASS )
 library( RColorBrewer )
 library( gplots )
@@ -82,15 +83,20 @@ calculate_mid <- function( LIST_points )
 # parse command line arguments
 parse_arguments <- function( VEC_arguments )
 {  
-  LIST_parsed <- list()
-  if( length( VEC_arguments ) < 1 )
+  VEC_return <- c()
+  if( length( VEC_arguments ) < 2 )
   {
-    return( LIST_parsed )
+    return( VEC_return )
   }
-  for( i in 1:length( VEC_arguments ) )
+  for( i in 2:length( VEC_arguments ) )
   {
-    if( grepl( VEC_arguments[ i ], "=" ) )
+    if( grepl( "=", VEC_arguments[ i ] ) )
     {
+      curArgument <- new( "MDplot_argument" )
+      VEC_splitted <- unlist( strsplit( VEC_arguments[ i ], "=", fixed = TRUE ) )
+      curArgument.key   <- VEC_splitted[ 1 ]
+      curArgument.value <- VEC_splitted[ 2 ]
+      VEC_return <- c( VEC_return, curArgument )
     }
     else
     {
@@ -98,4 +104,5 @@ parse_arguments <- function( VEC_arguments )
                    "' does not contain any equal sign." ) )
     }
   }
+  return( VEC_return )
 }

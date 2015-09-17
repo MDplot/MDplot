@@ -1,21 +1,38 @@
-import( R.utils )
+import( gtools )
 import( MASS )
 import( RColorBrewer )
 import( gplots )
 import( calibrate )
-import( gtools )
 import( grDevices )
+import( methods )
 
-
-
-#exportPattern( "^[^\\.]" )
+# export plotting functions
 export( 
          MDplot_DSSP_summary,
          MDplot_DSSP_timeseries,
          MDplot_RMSD,
+         MDplot_RMSF,
          MDplot_clusters,
          MDplot_TIcurve,
          MDplot_hbond,
          MDplot_ramachandran
        )
-#exportClasses
+
+# export loading functions
+export(
+         MDplot_load_hbond,
+         MDplot_load_ramachandran,
+         MDplot_load_clusters,
+         MDplot_load_TIcurve,
+         MDplot_load_DSSP_summary
+      )
+
+# export other functions
+export(
+         parse_arguments
+      )
+
+# export classes
+exportClasses(
+               MDplot_argument
+             )

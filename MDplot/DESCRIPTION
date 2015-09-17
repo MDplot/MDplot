@@ -5,7 +5,7 @@ Version: 1.0
 Date: 2015-09-17
 Author: person( given = "Christian", family = "Margreitter", email = "christian.margreitter@boku.ac.at", role = "aut" )
 Title: MDplot - a package for plotting molecular dynamics analysis
-Depends: R (>= 3.0.0), R.utils, MASS, RColorBrewer, gplots, calibrate, gtools, grDevices
+Depends: R (>= 3.0.0), MASS, RColorBrewer, gplots, calibrate, gtools, grDevices
 Description: The purpose of MDplot is, to provide automatization for plot generation succeeding common 
               molecular dynamics analyses. This includes straightforward plots, such as RMSD and RMSF but also more 
               sophisticated ones such as dihedral angle maps, hydrogen bonds, cluster bar plots and DSSP analysis.
