@@ -92,10 +92,8 @@ parse_arguments <- function( VEC_arguments )
   {
     if( grepl( "=", VEC_arguments[ i ] ) )
     {
-      curArgument <- new( "MDplot_argument" )
       VEC_splitted <- unlist( strsplit( VEC_arguments[ i ], "=", fixed = TRUE ) )
-      curArgument.key   <- VEC_splitted[ 1 ]
-      curArgument.value <- VEC_splitted[ 2 ]
+      curArgument <- new( "MDplot_argument", key = "VEC_splitted[ 1 ]", value = VEC_splitted[ 2 ] )
       VEC_return <- c( VEC_return, curArgument )
     }
     else

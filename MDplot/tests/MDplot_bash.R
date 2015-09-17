@@ -1,4 +1,4 @@
-install.packages( "/home/margreitterc/Desktop/Code/MDplot/MDplot_1.0.tar.gz", dependencies = TRUE,
+install.packages( "./MDplot_1.0.tar.gz", dependencies = TRUE,
                   repos = NULL, type = "source" )
 library( MDplot )
 
@@ -12,10 +12,9 @@ if( length( VEC_inputArguments ) < 2 )
 }
 VEC_arguments <- parse_arguments( VEC_inputArguments )
 VEC_keys <- c()
-print( VEC_arguments[[ 1 ]]@key )
 for( i in 1:length( VEC_arguments ) )
 {
-  VEC_keys[ i ] <- VEC_arguments[[ i ]]@key
+  VEC_keys[ i ] <- slot( unlist( VEC_arguments[[ i ]] ), "key" )
 }
 print( VEC_keys )
 if( VEC_arguments[ 1 ] == "MDplot_DSSP_summary" )
