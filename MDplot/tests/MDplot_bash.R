@@ -1,9 +1,10 @@
 # load required libraries
 library( R.utils )
+library( "MDplot" )
 #########
 
 # load required files
-suppressMessages( sourceDirectory( "R/", modifiedOnly = FALSE ) )
+#suppressMessages( sourceDirectory( "R/", modifiedOnly = FALSE ) )
 #########
 
 # get arguments and look for function call

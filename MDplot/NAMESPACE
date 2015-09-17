@@ -1,3 +1,21 @@
-exportPattern( "^[^\\.]" )
-#export( MAT_MDplot_DSSP_example, MAT_MDplot_RMSD_example, MAT_MDplot_ramachandran_example,
-#        MDplot_DSSP_summary, MDplot_DSSP_timeseries, MDplot_RMSD, MDplot_clusters, MDplot_TIcurve )
+import( R.utils )
+import( MASS )
+import( RColorBrewer )
+import( gplots )
+import( calibrate )
+import( gtools )
+import( grDevices )
+
+
+
+#exportPattern( "^[^\\.]" )
+export( 
+         MDplot_DSSP_summary,
+         MDplot_DSSP_timeseries,
+         MDplot_RMSD,
+         MDplot_clusters,
+         MDplot_TIcurve,
+         MDplot_hbond,
+         MDplot_ramachandran
+       )
+#exportClasses
