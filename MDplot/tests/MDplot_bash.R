@@ -1,5 +1,5 @@
 install.packages( "./MDplot_1.0.tar.gz", dependencies = TRUE,
-                  repos = NULL, type = "source" )
+                  repos = NULL, type = "source", INSTALL_opts = c( "--no-lock" ) )
 library( MDplot )
 
 # get arguments and look for function call
