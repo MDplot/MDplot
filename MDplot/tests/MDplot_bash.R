@@ -10,38 +10,43 @@ if( length( VEC_inputArguments ) < 2 )
                "plot selection and an input file, e.g. 'Rscript /path/to/file/MDplot_bash.R ",
                "MDplot_RMSF files=/path/to/file/file1.txt,/path/to/file/file2.txt'" ) )
 }
-VEC_arguments <- parse_arguments( VEC_inputArguments )
-VEC_keys <- c()
-for( i in 1:length( VEC_arguments ) )
-{
-  VEC_keys[ i ] <- slot( unlist( VEC_arguments[[ i ]] ), "key" )
-}
-print( VEC_keys )
-if( VEC_arguments[ 1 ] == "MDplot_DSSP_summary" )
+STRING_function <- VEC_inputArguments[ 1 ]
+VEC_arguments <- parse_arguments( VEC_inputArguments[ -1 ] ) # -1: function name excluding
+#########
+
+# check, which plot has been selected
+if( STRING_function == "MDplot_DSSP_summary" )
 {
 }
-if( VEC_arguments[ 1 ] == "MDplot_RMSF" )
+if( STRING_function == "MDplot_RMSF" )
 {
-  VEC_required_input <- c( "files" )
-  for( i in 1:length( VEC_required_input ) )
+  # check, if input is sane for this plot and get input files
+  testRequired( c( "files" ), getListOfKeys( VEC_arguments ) )
+  testAllowed( c( "files", "size", "outformat" ), getListOfKeys( VEC_arguments ) )
+  VEC_files <- getFiles( getValue( VEC_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
   {
-    #if( !( VEC_required_input[ i ] %in% VEC_arguments[[ key ]] ) )
-    #{
-    #}
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
   }
+  
+  # plot
+  MDplot_RMSF( MDplot_load_rmsf( VEC_files ) )
 }
-if( VEC_arguments[ 1 ] == "MDplot_RMSD" )
+if( STRING_function == "MDplot_RMSD" )
 {
 }
-if( VEC_arguments[ 1 ] == "MDplot_TIcurve" )
+if( STRING_function == "MDplot_TIcurve" )
 {
 }
-if( VEC_arguments[ 1 ] == "MDplot_clusters" )
+if( STRING_function == "MDplot_clusters" )
 {
 }
-if( VEC_arguments[ 1 ] == "MDplot_DSSP_timeseries" )
+if( STRING_function == "MDplot_DSSP_timeseries" )
 {
 }
-if( VEC_arguments[ 1 ] == "MDplot_hbond" )
+if( STRING_function == "MDplot_hbond" )
 {
 }
+#########

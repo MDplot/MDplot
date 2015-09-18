@@ -84,16 +84,16 @@ calculate_mid <- function( LIST_points )
 parse_arguments <- function( VEC_arguments )
 {  
   VEC_return <- c()
-  if( length( VEC_arguments ) < 2 )
+  if( length( VEC_arguments ) < 1 )
   {
     return( VEC_return )
   }
-  for( i in 2:length( VEC_arguments ) )
+  for( i in 1:length( VEC_arguments ) )
   {
     if( grepl( "=", VEC_arguments[ i ] ) )
     {
       VEC_splitted <- unlist( strsplit( VEC_arguments[ i ], "=", fixed = TRUE ) )
-      curArgument <- new( "MDplot_argument", key = "VEC_splitted[ 1 ]", value = VEC_splitted[ 2 ] )
+      curArgument <- new( "MDplot_argument", key = VEC_splitted[ 1 ], value = VEC_splitted[ 2 ] )
       VEC_return <- c( VEC_return, curArgument )
     }
     else
@@ -103,4 +103,70 @@ parse_arguments <- function( VEC_arguments )
     }
   }
   return( VEC_return )
+}
+
+# test, whether all required input arguments are given with the script call
+testRequired <- function( VEC_required, VEC_provided )
+{
+  for( i in 1:length( VEC_required ) )
+  {
+    if( !( VEC_required[ i ] %in% VEC_provided ) )
+    {
+      stop( paste( "Error while checking the proper provision of all required parameters (",
+                   VEC_required, "). One or more missing." ) )
+    }
+  }
+}
+
+# hack to get value of key-value pair (fix for release please)
+getValue <- function( VEC_arguments, STRING_key )
+{
+  for( i in 1:length( VEC_arguments ) )
+  {
+    if( slot( VEC_arguments[[ i ]], "key" ) == STRING_key )
+      return( slot( VEC_arguments[[ i ]], "value" ) )
+  }
+  stop( paste( "Error while looking for value related to argument key",
+               STRING_key, "in list of keys." ) )
+}
+
+# get vector of files
+getFiles <- function( STRING_input )
+{
+  VEC_return <- c()
+  if( grepl( ",", STRING_input ) )
+  {
+    VEC_return <- strsplit( STRING_input, ",", fixed = TRUE )
+  }
+  else
+  {
+    return( STRING_input )
+  }
+  return( unlist( VEC_return ) )
+}
+
+# test, whether all provided arguments are also allowed or should be ignored instead
+testAllowed <- function( VEC_allowed, VEC_provided )
+{
+  for( i in 1:length( VEC_provided ) )
+  {
+    if( !( VEC_provided[ i ] %in% VEC_allowed ) )
+    {
+      warning( paste( "Warning due to provided parameter", VEC_provided[ i ],
+                      "which is not in the list of supported parameters (",
+                      paste(VEC_allowed, collapse = " " ),
+                      ") and therefore ignored." ) )
+    }
+  }
+}
+
+# redo at some point
+getListOfKeys <- function( LIST_arguments )
+{
+  VEC_keys <- c()
+  for( i in 1:length( LIST_arguments ) )
+  {
+    VEC_keys <- c( VEC_keys, slot( LIST_arguments[[ i ]], "key" ) )
+  }
+  return( VEC_keys )
 }

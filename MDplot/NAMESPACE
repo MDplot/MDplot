@@ -24,12 +24,18 @@ export(
          MDplot_load_ramachandran,
          MDplot_load_clusters,
          MDplot_load_TIcurve,
-         MDplot_load_DSSP_summary
+         MDplot_load_DSSP_summary,
+         MDplot_load_rmsf
       )
 
 # export other functions
 export(
-         parse_arguments
+         parse_arguments,
+         testRequired,
+         getValue,
+         getFiles,
+         testAllowed,
+         getListOfKeys
       )
 
 # export classes
