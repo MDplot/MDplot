@@ -82,6 +82,20 @@ if( STRING_outformat == "tiff" )
 # check, which plot has been selected
 if( STRING_function == "MDplot_DSSP_summary" )
 {
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( VEC_allowedForAll, LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }
+  
+  # plot
+  MDplot_DSSP_summary( MDplot_load_DSSP_summary( VEC_files ),
+                       main = STRING_main )
 }
 if( STRING_function == "MDplot_RMSF" )
 {
@@ -97,10 +111,25 @@ if( STRING_function == "MDplot_RMSF" )
   }
   
   # plot
-  MDplot_RMSF( MDplot_load_rmsf( VEC_files ) )
+  MDplot_RMSF( MDplot_load_RMSF( VEC_files ),
+               main = STRING_main )
 }
 if( STRING_function == "MDplot_RMSD" )
 {
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( VEC_allowedForAll, LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }
+  
+  # plot
+  MDplot_RMSD( MDplot_load_RMSD( VEC_files ),
+               main = STRING_main )
 }
 if( STRING_function == "MDplot_ramachandran" )
 {
@@ -121,6 +150,20 @@ if( STRING_function == "MDplot_ramachandran" )
 }
 if( STRING_function == "MDplot_TIcurve" )
 {
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( VEC_allowedForAll, LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }
+  
+  # plot
+  MDplot_TIcurve( MDplot_load_TIcurve( VEC_files ),
+                  main = STRING_main )
 }
 if( STRING_function == "MDplot_clusters" )
 {
@@ -138,9 +181,6 @@ if( STRING_function == "MDplot_clusters" )
   # plot
   MDplot_clusters( MDplot_load_clusters( VEC_files ),
                    main = STRING_main )
-}
-if( STRING_function == "MDplot_DSSP_timeseries" )
-{
 }
 if( STRING_function == "MDplot_hbond" )
 {

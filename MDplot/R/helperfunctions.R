@@ -1,19 +1,21 @@
 # install required packages
-LIST_packages <- c( "MASS", "RColorBrewer", "gplots",
-                    "calibrate", "gtools", "grDevices" )
+LIST_packages <- c( "methods", "MASS", "RColorBrewer",
+                    "gplots", "calibrate", "gtools",
+                    "grDevices" )
 LIST_packages <- LIST_packages[ !( LIST_packages
                                    %in% installed.packages()[ , "Package" ] ) ]
 if( length( LIST_packages ) > 0 ) install.packages( LIST_packages )
 #########
 
 # load required packages
-library( methods )
-library( MASS )
-library( RColorBrewer )
-library( gplots )
-library( calibrate )
-library( gtools )
-library( grDevices )
+#library( Unicode )
+#library( methods )
+#library( MASS )
+#library( RColorBrewer )
+#library( gplots )
+#library( calibrate )
+#library( gtools )
+#library( grDevices )
 #########
 
 # integrate over a curve

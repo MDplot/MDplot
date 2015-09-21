@@ -25,7 +25,8 @@ export(
          MDplot_load_clusters,
          MDplot_load_TIcurve,
          MDplot_load_DSSP_summary,
-         MDplot_load_rmsf
+         MDplot_load_RMSF,
+         MDplot_load_RMSD
       )
 
 # export other functions
@@ -36,7 +37,9 @@ export(
          getFiles,
          testAllowed,
          getListOfKeys,
-         isKeySet
+         isKeySet,
+         integrate_curve,
+         split_equidistant
       )
 
 # export classes

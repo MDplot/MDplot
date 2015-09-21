@@ -7,7 +7,7 @@ MDplot_load_DSSP_summary <- function( STRING_input )
 # plot the summary over residues and values (selected)
 MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE,
                                  BOOL_useOwnLegend = FALSE, COLOURS_DSSP_summary = NULL,
-                                 VEC_showValues = NULL, VEC_show_residues = NULL )
+                                 VEC_showValues = NULL, VEC_show_residues = NULL, ... )
 {
   
   # parse input table and get all values in a matrix
@@ -73,7 +73,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE,
   plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
         xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = COLOURS_DSSP_summary, 
         xlab = "residues", ylab = "fractions [%]",  xaxs = "i", yaxs = "i", 
-        cex = 0.75, pch = 19 )
+        cex = 0.75, pch = 19, ... )
   if( nrow( MAT_data ) > 1 )
   {
     for( i in 2:nrow( MAT_data ) )
