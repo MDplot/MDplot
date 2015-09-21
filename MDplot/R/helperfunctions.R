@@ -105,12 +105,38 @@ parse_arguments <- function( VEC_arguments )
   return( VEC_return )
 }
 
+# redo at some point
+getListOfKeys <- function( LIST_arguments )
+{
+  VEC_keys <- c()
+  for( i in 1:length( LIST_arguments ) )
+  {
+    VEC_keys <- c( VEC_keys, slot( LIST_arguments[[ i ]], "key" ) )
+  }
+  return( VEC_keys )
+}
+
+# check, whether a key <> value pair is set in input parameters
+isKeySet <- function( arguments, STRING_key )
+{
+  VEC_keysList <- c()
+  if( is.list( arguments ) )
+    VEC_keysList <- getListOfKeys( arguments )
+  else
+    VEC_keysList <- arguments
+  if( STRING_key %in% VEC_keysList )
+  {
+    return( TRUE )
+  }
+  return( FALSE )
+}
+
 # test, whether all required input arguments are given with the script call
-testRequired <- function( VEC_required, VEC_provided )
+testRequired <- function( VEC_required, LIST_provided )
 {
   for( i in 1:length( VEC_required ) )
   {
-    if( !( VEC_required[ i ] %in% VEC_provided ) )
+    if( !isKeySet( LIST_provided, VEC_required[ i ] ) )
     {
       stop( paste( "Error while checking the proper provision of all required parameters (",
                    VEC_required, "). One or more missing." ) )
@@ -119,15 +145,15 @@ testRequired <- function( VEC_required, VEC_provided )
 }
 
 # hack to get value of key-value pair (fix for release please)
-getValue <- function( VEC_arguments, STRING_key )
+getValue <- function( LIST_arguments, STRING_key )
 {
-  for( i in 1:length( VEC_arguments ) )
+  for( i in 1:length( LIST_arguments ) )
   {
-    if( slot( VEC_arguments[[ i ]], "key" ) == STRING_key )
-      return( slot( VEC_arguments[[ i ]], "value" ) )
+    if( slot( LIST_arguments[[ i ]], "key" ) == STRING_key )
+      return( slot( LIST_arguments[[ i ]], "value" ) )
   }
   stop( paste( "Error while looking for value related to argument key",
-               STRING_key, "in list of keys." ) )
+              STRING_key, "in list of keys." ) )
 }
 
 # get vector of files
@@ -146,27 +172,18 @@ getFiles <- function( STRING_input )
 }
 
 # test, whether all provided arguments are also allowed or should be ignored instead
-testAllowed <- function( VEC_allowed, VEC_provided )
+testAllowed <- function( VEC_allowed, LIST_provided )
 {
-  for( i in 1:length( VEC_provided ) )
+  VEC_providedKeys <- getListOfKeys( LIST_provided )
+  for( i in 1:length( VEC_providedKeys ) )
   {
-    if( !( VEC_provided[ i ] %in% VEC_allowed ) )
+    if( !( isKeySet( VEC_allowed, VEC_providedKeys[ i ] ) ) )
     {
-      warning( paste( "Warning due to provided parameter", VEC_provided[ i ],
-                      "which is not in the list of supported parameters (",
-                      paste(VEC_allowed, collapse = " " ),
-                      ") and therefore ignored." ) )
+      warning( paste( "Warning while checking provided parameters, since parameter",
+                      VEC_providedKeys[ i ],
+                      "is not in the list of allowed parameters (",
+                      paste( VEC_allowed, collapse = ', ' ),
+                      ") and therefore will be ignored for this call." ) )
     }
   }
-}
-
-# redo at some point
-getListOfKeys <- function( LIST_arguments )
-{
-  VEC_keys <- c()
-  for( i in 1:length( LIST_arguments ) )
-  {
-    VEC_keys <- c( VEC_keys, slot( LIST_arguments[[ i ]], "key" ) )
-  }
-  return( VEC_keys )
 }

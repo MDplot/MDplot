@@ -1,5 +1,5 @@
 # load ramachandran data into a matrix, select columns
-MDplot_load_ramachandran <- function( STRING_file, VEC_columns = c( 1, 2 ) )
+MDplot_load_ramachandran <- function( STRING_file, VEC_columns = c( 3, 4 ) )
 {
   
   # load and parse matrix, return result
@@ -14,8 +14,9 @@ MDplot_load_ramachandran <- function( STRING_file, VEC_columns = c( 1, 2 ) )
 
 
 # plot the angles on a x = ( -180, 180 ) to y = ( -180, 180 ) area
-MDplot_ramachandran <- function( MAT_dihedrals, xbins = 450, ybins = 450, heatFun = "log", 
-                                 plotTitle = "Ramachandran plot", LIST_areas = c( ), ... )
+MDplot_ramachandran <- function( MAT_dihedrals, xbins = 450,
+                                 ybins = 450, heatFun = "log", 
+                                 LIST_areas = c(), ... )
 {
   
   # settings (small offset for label printing required)
