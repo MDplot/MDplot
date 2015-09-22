@@ -1,4 +1,4 @@
-install.packages( "./MDplot_1.0.tar.gz", dependencies = TRUE,
+ install.packages( "./MDplot_1.0.tar.gz", dependencies = TRUE,
                   repos = NULL, type = "source", INSTALL_opts = c( "--no-lock" ) )
 library( MDplot )
 

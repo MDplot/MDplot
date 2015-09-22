@@ -134,7 +134,8 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
                                     VEC_time_boundaries = NULL,
                                     VEC_residue_boundaries = NULL,
                                     BOOL_printNanoseconds = FALSE,
-                                    REAL_snapshots_per_ns = 1000 )
+                                    REAL_snapshots_per_ns = 1000,
+                                    ... )
 {
   STRING_time_unit <- "snapshots"
   if( BOOL_printNanoseconds )
@@ -179,7 +180,8 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
             xaxs = "i", yaxs = "i",
             xlab = paste( "time [", STRING_time_unit, "]", sep = "" ),
             ylab = "residues",
-            pch = 22, col = VEC_colours[ i ], bg = VEC_colours[ i ], cex = 0.25 )
+            pch = 22, col = VEC_colours[ i ], bg = VEC_colours[ i ], cex = 0.25,
+            ... )
     }
     else
     {
