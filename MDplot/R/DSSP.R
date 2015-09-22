@@ -104,7 +104,108 @@ MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE,
   #########
 }
 
-MDplot_DSSP_timeseries <- function( VEC_timeseries )
+# load the time-series files
+MDplot_load_DSSP_timeseries <- function( STRING_folder )
 {
+  VEC_gromos_names <- c( "3-Helix", "4-Helix", "5-Helix",
+                         "Bend", "Beta-Bridge", "Beta-Strand",
+                         "Turn" )
+  STRING_gromos_postfix <- ".out"
+  LIST_return <- list()
+  for( i in 1:length( VEC_gromos_names ) )
+  {
+    STRING_file <- paste( STRING_folder,
+                          "/",
+                          VEC_gromos_names[ i ],
+                          STRING_gromos_postfix, sep = "" )
+    if( !file.exists( STRING_file ) )
+      next
+    TABLE_current <- read.table( STRING_file )
+    LIST_current <- list( name = VEC_gromos_names[ i ],
+                          values = TABLE_current )
+    LIST_return[[ length( LIST_return ) + 1 ]] <- LIST_current
+  }
+  return( LIST_return )
+}
+
+# plot the time-series files, that are specified
+MDplot_DSSP_timeseries <- function( LIST_timeseries,
+                                    BOOL_printLegend = TRUE,
+                                    VEC_time_boundaries = NULL,
+                                    VEC_residue_boundaries = NULL,
+                                    BOOL_printNanoseconds = FALSE,
+                                    REAL_snapshots_per_ns = 1000 )
+{
+  STRING_time_unit <- "snapshots"
+  if( BOOL_printNanoseconds )
+  {
+    for( i in 1:length( LIST_timeseries ) )
+    {
+      LIST_timeseries[[ i ]][[ "values" ]][ 1 ] <- LIST_timeseries[[ i ]][[ "values" ]][ 1 ] / REAL_snapshots_per_ns
+    }
+    STRING_time_unit <- "ns"
+    VEC_time_boundaries <- VEC_time_boundaries / REAL_snapshots_per_ns
+  }
+  if( is.null( VEC_time_boundaries ) )
+    VEC_time_boundaries <- c( min( unlist( lapply( LIST_timeseries,
+                                   function( x ) x[[ "values" ]][ 1 ] ) ) ),
+                              max( unlist( lapply( LIST_timeseries,
+                                   function( x ) x[[ "values" ]][ 1 ] ) ) ) )
+  if( is.null( VEC_residue_boundaries ) )
+    VEC_residue_boundaries <- c( min( unlist( lapply( LIST_timeseries,
+                                      function( x ) x[[ "values" ]][ 2 ] ) ) ),
+                                 max( unlist( lapply( LIST_timeseries,
+                                      function( x ) x[[ "values" ]][ 2 ] ) ) ) )
+  PALETTE_DSSP_timeseries_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+  VEC_colours <- PALETTE_DSSP_timeseries_colours( length( LIST_timeseries ) )
   
+  # specify graphical settings, in case a legend has been requested (or not)
+  if( BOOL_printLegend )
+  {
+    par( mar = c( 4.5, 4.5, 2.5, 12 ) )
+  }
+  else
+  { 
+    par( mar = c( 4.5, 4.5, 2.5, 2.5 ) )
+  }
+  #########
+  for( i in 1:length( LIST_timeseries )  )
+  {
+    if( i < 2 )
+    {
+      plot( LIST_timeseries[[ i ]][[ "values" ]],
+            xlim = VEC_time_boundaries,
+            ylim = VEC_residue_boundaries,
+            xaxs = "i", yaxs = "i",
+            xlab = paste( "time [", STRING_time_unit, "]", sep = "" ),
+            ylab = "residues",
+            pch = 22, col = VEC_colours[ i ], bg = VEC_colours[ i ], cex = 0.25 )
+    }
+    else
+    {
+      par( new = TRUE )
+      plot( LIST_timeseries[[ i ]][[ "values" ]],
+            xlim = VEC_time_boundaries,
+            ylim = VEC_residue_boundaries,
+            xaxs = "i", yaxs = "i",
+            xaxt = "n", yaxt = "n",
+            xlab = "", ylab = "",
+            pch = 22, col = VEC_colours[ i ], bg = VEC_colours[ i ], cex = 0.25 )
+    }
+  }
+  
+  # print legend, if flag is set
+  if( BOOL_printLegend )
+  {
+    par( xpd = TRUE )
+    legend( "topright", inset = c( -0.325, 0.4 ),
+            legend = unlist( lapply( LIST_timeseries,
+                                     function( x ) x[[ "name" ]] ) ),
+            pch = 22, col = VEC_colours, pt.bg = VEC_colours, pt.cex = 1.25,
+            lty = 0, lwd = 0,
+            cex = 1,
+            bty = "n" )
+    par( xpd = FALSE )
+  }
+  #########
 }

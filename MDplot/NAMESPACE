@@ -25,6 +25,7 @@ export(
          MDplot_load_clusters,
          MDplot_load_TIcurve,
          MDplot_load_DSSP_summary,
+         MDplot_load_DSSP_timeseries,
          MDplot_load_RMSF,
          MDplot_load_RMSD
       )
