@@ -1,20 +1,32 @@
+# load the XRMSD data
+# WARNING: very sensitive to proper file format (line skipping and end ignoring)
 MDplot_load_XRMSD <- function( STRING_path, INT_skip_beginning = 8, INT_factor = 10000 )
 {
+  
+  # get total line number and subtract end and header after header skipping
   InputFile <- readLines( STRING_path )
   MAT_return <- as.matrix( read.table( STRING_path,
                                        skip = INT_skip_beginning,
                                        nrows = length( InputFile ) -
-                                               ( INT_skip_beginning + 1 ) ) )
+                                               ( INT_skip_beginning + 2 ) ) )
+  #########
+  
+  # divide RMSD integer values by the proper factor (usually 10000) and return resulting matrix
   MAT_return[ , 3 ] <- MAT_return[ , 3 ] / INT_factor
   return( MAT_return )  
+  #########
 }
 
+# do 2D XRMSD heatmap plot, with possible legend
+# TODO: allow user to set appropriate colour span
 MDplot_XRMSD <- function( MAT_values,
                           BOOL_printLegend = TRUE,
                           VEC_xaxis_range = NULL,
                           VEC_yaxis_range = NULL,
                           VEC_colour_range = NULL )
 {
+  
+  # check user supplied input and replace in case undefined
   if( is.null( VEC_xaxis_range ) )
     VEC_xaxis_range <- c( min( MAT_values[ , 1 ] ),
                           max( MAT_values[ , 1 ] ) )
@@ -23,6 +35,7 @@ MDplot_XRMSD <- function( MAT_values,
                           max( MAT_values[ , 2 ] ) )
   VEC_colour_range <- c( 0, 
                          max( MAT_values[ , 3 ] ) )
+  #########
   
   # colour values accordingly
   if( BOOL_printLegend )
