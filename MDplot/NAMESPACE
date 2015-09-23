@@ -15,7 +15,8 @@ export(
          MDplot_clusters,
          MDplot_TIcurve,
          MDplot_hbond,
-         MDplot_ramachandran
+         MDplot_ramachandran,
+         MDplot_XRMSD
        )
 
 # export loading functions
@@ -27,7 +28,8 @@ export(
          MDplot_load_DSSP_summary,
          MDplot_load_DSSP_timeseries,
          MDplot_load_RMSF,
-         MDplot_load_RMSD
+         MDplot_load_RMSD,
+         MDplot_load_XRMSD
       )
 
 # export other functions
