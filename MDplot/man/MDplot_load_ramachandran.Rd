@@ -1,6 +1,6 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_ramachandran}
-\alias{MDplot_ramachandran}
+\name{MDplot_load_ramachandran}
+\alias{MDplot_load_ramachandran}
 \title{Ramachandran plot for two dihedral angles}
 \description{
 This plotting function divides a full rotation (360 degrees) into x- and y- bins and colors them according to the number of angle pairs that are provided in the input, a so-called Ramachandran plot.}

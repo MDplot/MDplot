@@ -1,14 +1,16 @@
 # load the XRMSD data
 # WARNING: very sensitive to proper file format (line skipping and end ignoring)
-MDplot_load_XRMSD <- function( STRING_path, INT_skip_beginning = 8, INT_factor = 10000 )
+MDplot_load_XRMSD <- function( STRING_path,
+                               INT_skipBeginning = 8,
+                               INT_factor = 10000 )
 {
   
   # get total line number and subtract end and header after header skipping
   InputFile <- readLines( STRING_path )
   MAT_return <- as.matrix( read.table( STRING_path,
-                                       skip = INT_skip_beginning,
+                                       skip = INT_skipBeginning,
                                        nrows = length( InputFile ) -
-                                               ( INT_skip_beginning + 2 ) ) )
+                                               ( INT_skipBeginning + 2 ) ) )
   #########
   
   # divide RMSD integer values by the proper factor (usually 10000) and return resulting matrix
@@ -21,19 +23,20 @@ MDplot_load_XRMSD <- function( STRING_path, INT_skip_beginning = 8, INT_factor =
 # TODO: allow user to set appropriate colour span
 MDplot_XRMSD <- function( MAT_values,
                           BOOL_printLegend = TRUE,
-                          VEC_xaxis_range = NULL,
-                          VEC_yaxis_range = NULL,
-                          VEC_colour_range = NULL )
+                          VEC_xAxisRange = NULL,
+                          VEC_yAxisRange = NULL,
+                          VEC_colourRange = NULL,
+                          ... )
 {
   
   # check user supplied input and replace in case undefined
-  if( is.null( VEC_xaxis_range ) )
-    VEC_xaxis_range <- c( min( MAT_values[ , 1 ] ),
+  if( is.null( VEC_xAxisRange ) )
+    VEC_xAxisRange <- c( min( MAT_values[ , 1 ] ),
                           max( MAT_values[ , 1 ] ) )
-  if( is.null( VEC_yaxis_range ) )
-    VEC_yaxis_range <- c( min( MAT_values[ , 2 ] ),
+  if( is.null( VEC_yAxisRange ) )
+    VEC_yAxisRange <- c( min( MAT_values[ , 2 ] ),
                           max( MAT_values[ , 2 ] ) )
-  VEC_colour_range <- c( 0, 
+  VEC_colourRange <- c( 0, 
                          max( MAT_values[ , 3 ] ) )
   #########
   
@@ -52,10 +55,11 @@ MDplot_XRMSD <- function( MAT_values,
         col = VEC_coloursPlot,
         bg = VEC_coloursPlot,
         pch = 22,
-        cex = 2.75 / log( ( ( VEC_xaxis_range[ 2 ] - VEC_xaxis_range[ 1 ] ) *
-                            ( VEC_yaxis_range[ 2 ] - VEC_yaxis_range[ 1 ] ) ) ),
+        cex = 2.75 / log( ( ( VEC_xAxisRange[ 2 ] - VEC_xAxisRange[ 1 ] ) *
+                            ( VEC_yAxisRange[ 2 ] - VEC_yAxisRange[ 1 ] ) ) ),
         xaxs = "i", yaxs = "i",
-        xlim = VEC_xaxis_range, ylim = VEC_yaxis_range )
+        xlim = VEC_xAxisRange, ylim = VEC_yAxisRange,
+        ... )
   #########
   
   # print legend in case it is specified
@@ -64,7 +68,7 @@ MDplot_XRMSD <- function( MAT_values,
     legend_image <- as.raster( matrix( PALETTE_colours( 11 ), ncol = 1 ) )
     plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = 'Legend [nm]' )
     text( x = 1.5, y = seq( 0, 1, l = 5 ),
-          labels = round( seq( VEC_colour_range[ 1 ], VEC_colour_range[ 2 ], l = 5 ), digits = 2 ) )
+          labels = round( seq( VEC_colourRange[ 1 ], VEC_colourRange[ 2 ], l = 5 ), digits = 2 ) )
     rasterImage( legend_image, 0, 0, 1, 1 )
   }
   #########

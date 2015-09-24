@@ -1,6 +1,6 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_DSSP_summary}
-\alias{MDplot_DSSP_summary}
+\name{MDplot_hbond}
+\alias{MDplot_hbond}
 \title{DSSP summary plot for secondary structure elements (proteins)}
 \description{
 Plots summary plot for secondary structure motifs based on the output of the widely used classification program DSSP, which takes hydrogen bonds into account. The defaul order is: "3-Helix", "4-Helix", "5-Helix", "Bend", "Beta-Bridge", "Beta-Strand", "Turn".}

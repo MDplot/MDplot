@@ -7,7 +7,7 @@ MDplot_load_DSSP_summary <- function( STRING_input )
 # plot the summary over residues and values (selected)
 MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE,
                                  BOOL_useOwnLegend = FALSE, COLOURS_DSSP_summary = NULL,
-                                 VEC_showValues = NULL, VEC_show_residues = NULL, ... )
+                                 VEC_showValues = NULL, VEC_showResidues = NULL, ... )
 {
   
   # parse input table and get all values in a matrix
@@ -18,11 +18,11 @@ MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE,
   #########
   
   # if certain range of residues is to be shown, remove the rest
-  if( !is.null( VEC_show_residues ) )
+  if( !is.null( VEC_showResidues ) )
   {
     for( i in nrow( MAT_buffer ):1 )
     {
-      if( !( i %in% VEC_show_residues ) )
+      if( !( i %in% VEC_showResidues ) )
       {
         #use "drop = FALSE" to avoid dimension reduction
         MAT_buffer <- MAT_buffer[ -i, , drop = FALSE ]
@@ -92,11 +92,12 @@ MDplot_DSSP_summary <- function( TABLE_datainput, BOOL_printLegend = FALSE,
     VEC_namesLegend = c( "3-Helix", "4-Helix", "5-Helix",
                          "Turn", "B-strand", "B-Bridge",
                          "Bend", rep( NA, 16 ) )
+    
     # in case, no own order has been specified
     if( !BOOL_useOwnLegend )
-    {
       colnames( MAT_data ) <- VEC_namesLegend[ 1:ncol( MAT_data ) ]
-    }
+    #########
+    
     par( xpd = TRUE )
     legend( 110, 75, legend = colnames( MAT_data ), col = COLOURS_DSSP_summary, lty = 1, cex = 1 )
     par( xpd = FALSE )
@@ -131,10 +132,10 @@ MDplot_load_DSSP_timeseries <- function( STRING_folder )
 # plot the time-series files, that are specified
 MDplot_DSSP_timeseries <- function( LIST_timeseries,
                                     BOOL_printLegend = TRUE,
-                                    VEC_time_boundaries = NULL,
-                                    VEC_residue_boundaries = NULL,
+                                    VEC_timeBoundaries = NULL,
+                                    VEC_residueBoundaries = NULL,
                                     BOOL_printNanoseconds = FALSE,
-                                    REAL_snapshots_per_ns = 1000,
+                                    REAL_snapshotsPerNS = 1000,
                                     ... )
 {
   STRING_time_unit <- "snapshots"
@@ -142,18 +143,18 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
   {
     for( i in 1:length( LIST_timeseries ) )
     {
-      LIST_timeseries[[ i ]][[ "values" ]][ 1 ] <- LIST_timeseries[[ i ]][[ "values" ]][ 1 ] / REAL_snapshots_per_ns
+      LIST_timeseries[[ i ]][[ "values" ]][ 1 ] <- LIST_timeseries[[ i ]][[ "values" ]][ 1 ] / REAL_snapshotsPerNS
     }
     STRING_time_unit <- "ns"
-    VEC_time_boundaries <- VEC_time_boundaries / REAL_snapshots_per_ns
+    VEC_timeBoundaries <- VEC_timeBoundaries / REAL_snapshotsPerNS
   }
-  if( is.null( VEC_time_boundaries ) )
-    VEC_time_boundaries <- c( min( unlist( lapply( LIST_timeseries,
+  if( is.null( VEC_timeBoundaries ) )
+    VEC_timeBoundaries <- c( min( unlist( lapply( LIST_timeseries,
                                    function( x ) x[[ "values" ]][ 1 ] ) ) ),
                               max( unlist( lapply( LIST_timeseries,
                                    function( x ) x[[ "values" ]][ 1 ] ) ) ) )
-  if( is.null( VEC_residue_boundaries ) )
-    VEC_residue_boundaries <- c( min( unlist( lapply( LIST_timeseries,
+  if( is.null( VEC_residueBoundaries ) )
+    VEC_residueBoundaries <- c( min( unlist( lapply( LIST_timeseries,
                                       function( x ) x[[ "values" ]][ 2 ] ) ) ),
                                  max( unlist( lapply( LIST_timeseries,
                                       function( x ) x[[ "values" ]][ 2 ] ) ) ) )
@@ -175,8 +176,8 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
     if( i < 2 )
     {
       plot( LIST_timeseries[[ i ]][[ "values" ]],
-            xlim = VEC_time_boundaries,
-            ylim = VEC_residue_boundaries,
+            xlim = VEC_timeBoundaries,
+            ylim = VEC_residueBoundaries,
             xaxs = "i", yaxs = "i",
             xlab = paste( "time [", STRING_time_unit, "]", sep = "" ),
             ylab = "residues",
@@ -187,8 +188,8 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
     {
       par( new = TRUE )
       plot( LIST_timeseries[[ i ]][[ "values" ]],
-            xlim = VEC_time_boundaries,
-            ylim = VEC_residue_boundaries,
+            xlim = VEC_timeBoundaries,
+            ylim = VEC_residueBoundaries,
             xaxs = "i", yaxs = "i",
             xaxt = "n", yaxt = "n",
             xlab = "", ylab = "",

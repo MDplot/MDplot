@@ -1,14 +1,10 @@
- install.packages( "./MDplot_1.0.tar.gz", dependencies = TRUE,
-                  repos = NULL, type = "source", INSTALL_opts = c( "--no-lock" ) )
-library( MDplot )
+require( MDplot )
 
 # get arguments and look for function call
 VEC_inputArguments <- commandArgs( trailingOnly = TRUE )
 if( length( VEC_inputArguments ) < 2 )
 {
-  stop( paste( "Error due to missing arguments. You need to supply at least a ",
-               "plot selection and an input file, e.g. 'Rscript /path/to/file/MDplot_bash.R ",
-               "MDplot_RMSF files=/path/to/file/file1.txt,/path/to/file/file2.txt'" ) )
+  stop( "Error due to missing arguments. You need to supply at least a plot selection and an input file." )
 }
 STRING_function <- VEC_inputArguments[ 1 ]
 LIST_arguments <- parse_arguments( VEC_inputArguments[ -1 ] ) # -1: function name excluding
@@ -19,37 +15,32 @@ VEC_requiredForAll <- c( "files" )
 VEC_allowedForAll <- c( VEC_requiredForAll, "size", "outformat",
                         "outfile", "title", "subtitle",
                         "xaxislabel", "yaxislabel", "enableprotocol",
-                        "colours", "resolution" )
+                        "colours", "resolution", "axisnames" )
 #########
 
 # set settings for all plots to be followed
 VEC_size <- c( 640, 640 )
 if( isKeySet( LIST_arguments, "size" ) )
-{
   VEC_size <- unlist( strsplit( getValue( LIST_arguments, "size" ),
                                 ",",
                                 fixed = TRUE ) )
-}
+VEC_axisNames <- NULL
+if( isKeySet( LIST_arguments, "axisnames" ) )
+  VEC_axisNames <- unlist( strsplit( getValue( LIST_arguments, "axisnames" ),
+                                     ",",
+                                     fixed = TRUE ) )
 STRING_outformat <- "pdf"
 if( isKeySet( LIST_arguments, "outformat" ) )
-{
   STRING_outformat <- getValue( LIST_arguments, "outformat" )
-}
-STRING_main <- ""
+STRING_main <- NULL
 if( isKeySet( LIST_arguments, "title" ) )
-{
   STRING_main <- getValue( LIST_arguments, "title" )
-}
 STRING_outfile <- "MDplot_out"
 if( isKeySet( LIST_arguments, "outfile" ) )
-{
   STRING_outfile <- getValue( LIST_arguments, "outfile" )
-}
 REAL_resolution <- 150
 if( isKeySet( LIST_arguments, "resolution" ) )
-{
   REAL_resolution <- as.numeric( getValue( LIST_arguments, "resolution" ) )
-}
 #########
 
 # define plot device and options
@@ -95,7 +86,43 @@ if( STRING_function == "MDplot_DSSP_summary" )
   
   # plot
   MDplot_DSSP_summary( MDplot_load_DSSP_summary( VEC_files ),
-                       main = STRING_main )
+                       main = ifelse( is.null( STRING_main ), "DSSP summary", STRING_main ) )
+}
+if( STRING_function == "MDplot_DSSP_timeseries" )
+{
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( VEC_allowedForAll, LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }
+  
+  # plot
+  MDplot_DSSP_timeseries( MDplot_load_DSSP_timeseries( VEC_files ),
+                          main = ifelse( is.null( STRING_main ), "DSSP timeseries", STRING_main ) )
+}
+if( STRING_function == "MDplot_XRMSD" )
+{
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( VEC_allowedForAll, LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }
+  
+  # plot
+  MDplot_XRMSD( MDplot_load_XRMSD( VEC_files ),
+                main = main = ifelse( is.null( STRING_main ), "XRMSD", STRING_main ) )
+                xlab = ifelse( is.null( VEC_axisNames ), "snapshots", VEC_axisNames[ 1 ] ),
+                ylab = ifelse( is.null( VEC_axisNames ), "snapshots", VEC_axisNames[ 2 ] ) )
 }
 if( STRING_function == "MDplot_RMSF" )
 {
@@ -112,7 +139,7 @@ if( STRING_function == "MDplot_RMSF" )
   
   # plot
   MDplot_RMSF( MDplot_load_RMSF( VEC_files ),
-               main = STRING_main )
+               main = ifelse( is.null( STRING_main ), "RMSF", STRING_main ) )
 }
 if( STRING_function == "MDplot_RMSD" )
 {
@@ -129,7 +156,7 @@ if( STRING_function == "MDplot_RMSD" )
   
   # plot
   MDplot_RMSD( MDplot_load_RMSD( VEC_files ),
-               main = STRING_main )
+               main = ifelse( is.null( STRING_main ), "RMSD", STRING_main ) )
 }
 if( STRING_function == "MDplot_ramachandran" )
 {
@@ -146,7 +173,7 @@ if( STRING_function == "MDplot_ramachandran" )
   
   # plot
   MDplot_ramachandran( MDplot_load_ramachandran( VEC_files ),
-                       main = STRING_main )
+                       main = ifelse( is.null( STRING_main ), "Ramachandran plot", STRING_main ) )
 }
 if( STRING_function == "MDplot_TIcurve" )
 {
@@ -163,7 +190,7 @@ if( STRING_function == "MDplot_TIcurve" )
   
   # plot
   MDplot_TIcurve( MDplot_load_TIcurve( VEC_files ),
-                  main = STRING_main )
+                  main = ifelse( is.null( STRING_main ), "TIcurve", STRING_main ) )
 }
 if( STRING_function == "MDplot_clusters" )
 {
@@ -180,7 +207,7 @@ if( STRING_function == "MDplot_clusters" )
   
   # plot
   MDplot_clusters( MDplot_load_clusters( VEC_files ),
-                   main = STRING_main )
+                   main = ifelse( is.null( STRING_main ), "Clusters", STRING_main ) )
 }
 if( STRING_function == "MDplot_hbond" )
 {
@@ -196,7 +223,8 @@ if( STRING_function == "MDplot_hbond" )
   }
   
   # plot
-  MDplot_hbond( MDplot_load_hbond( VEC_files ) )
+  MDplot_hbond( MDplot_load_hbond( VEC_files ),
+                main = ifelse( is.null( STRING_main ), "Hbonds", STRING_main ) )
 }
 #########
 

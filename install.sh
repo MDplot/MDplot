@@ -1,2 +1,2 @@
 #!/bin/bash
-Rscript MDplot/tests/MDplot_install.R
+Rscript MDplot/bash/MDplot_install.R

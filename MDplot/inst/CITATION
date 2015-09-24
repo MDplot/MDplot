@@ -5,5 +5,6 @@ citEntry(
           title  = "The butterfly effect: molecular dynamics simulations, small and large",
           school = "University of Natural Resources and Life Sciences, Vienna",
           year   = 2015,
-          note   = "to be published"
+          note   = "to be published",
+          textVersion = 0.1
          )
