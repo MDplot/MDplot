@@ -120,7 +120,7 @@ if( STRING_function == "MDplot_XRMSD" )
   
   # plot
   MDplot_XRMSD( MDplot_load_XRMSD( VEC_files ),
-                main = ifelse( is.null( STRING_main ), "XRMSD", STRING_main )
+                main = ifelse( is.null( STRING_main ), "XRMSD", STRING_main ),
                 xlab = ifelse( is.null( VEC_axisNames ), "snapshots", VEC_axisNames[ 1 ] ),
                 ylab = ifelse( is.null( VEC_axisNames ), "snapshots", VEC_axisNames[ 2 ] ) )
 }
