@@ -43,12 +43,17 @@ MDplot_load_hbond <- function( STRING_path )
   return( TABLE_input )
 }
 
-MDplot_hbond <- function( TABLE_input, STRING_what_to_plot = "residue-wise", VEC_acceptorRange = NULL,
-                          VEC_donorRange = NULL, BOOL_print_legend = TRUE )
+# plot the hbond information
+MDplot_hbond <- function( TABLE_input,
+                          STRING_plotMethod = "residue-wise",
+                          VEC_acceptorRange = NULL,
+                          VEC_donorRange = NULL,
+                          BOOL_printLegend = TRUE,
+                          ... )
 {
   
   # residue-wise: sum all residue-to-residue hbonds up (per-atom contributions)
-  if( STRING_what_to_plot == "residue-wise" )
+  if( STRING_plotMethod == "residue-wise" )
   {
     TABLE_result <- as.data.frame( NULL )
     VEC_boundariesDonor <- c( min( TABLE_input[ , 1 ] ), max( TABLE_input[ , 1 ] ) )
@@ -103,8 +108,9 @@ MDplot_hbond <- function( TABLE_input, STRING_what_to_plot = "residue-wise", VEC
     plot( TABLE_result[ , 1:2 ],
           col = PALETTE_colors_rev( 10 )[ as.numeric( cut( as.numeric( VEC_normalized ), breaks = 10 ) )  ],
           pch = 19,
-          cex = 1.25 )
-    if( BOOL_print_legend )
+          cex = 1.00,
+          ... )
+    if( BOOL_printLegend )
     {
       legend_image <- as.raster( matrix( PALETTE_colors( 10 ), ncol = 1 ) )
       plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = 'Color legend [%]' )
@@ -116,6 +122,6 @@ MDplot_hbond <- function( TABLE_input, STRING_what_to_plot = "residue-wise", VEC
   }
   else
   {
-    stop( paste( "Error: plot method ", STRING_what_to_plot, " is unknown. Process aborted!" ) )
+    stop( paste( "Error: plot method ", STRING_plotMethod, " is unknown. Process aborted!" ) )
   }
 }

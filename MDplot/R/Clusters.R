@@ -7,14 +7,14 @@ MDplot_load_clusters <- function( STRING_path )
 }
 
 # print the clusters
-MDplot_clusters <- function( MAT_clusters, INT_maximum_number = 0, STRING_legend_title = "trajectories", 
-                             ylab = "# of cluster members", xlab = "# cluster", main = "cluster plot",
-                             BOOL_trajectory_names = FALSE, ... )
+MDplot_clusters <- function( MAT_clusters,
+                             INT_numberClusters = NULL,
+                             STRING_legend_title = "trajectories",
+                             BOOL_trajectory_names = FALSE,
+                             ... )
 {
-  if( INT_maximum_number != 0 )
-  {
-    MAT_clusters <- MAT_clusters[ 1:INT_maximum_number, ]
-  }
+  if( !is.null( INT_numberClusters ) )
+    MAT_clusters <- MAT_clusters[ 1:INT_numberClusters, ]
   
   # transpose cluster's matrix and plot it
   MAT_clusters <- t( MAT_clusters )
@@ -29,7 +29,7 @@ MDplot_clusters <- function( MAT_clusters, INT_maximum_number = 0, STRING_legend
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_CLUSTERS <- PALETTE_clusters( nrow( MAT_clusters ) )
   names( MAT_clusters ) <- 1:nrow( MAT_clusters )
-  barplot( MAT_clusters, col = COLOURS_CLUSTERS, ylab = ylab, xlab = xlab, main = main, ... )
+  barplot( MAT_clusters, col = COLOURS_CLUSTERS, ... )
   legend( "topright", inset = 0.045, legend = rownames( MAT_clusters ),
           title = STRING_legend_title, box.lwd = 0, 
           col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
