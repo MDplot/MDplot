@@ -1,3 +1,84 @@
+# load and parse GROMOS hbond timeseries
+MDplot_load_hbond_timeseries <- function( STRING_path )
+{
+  TABLE_timeseries <- read.table( STRING_path )
+  return( TABLE_timeseries )
+}
+
+# plot hbond timeseries
+MDplot_hbond_timeseries <- function( TABLE_timeseries,
+                                     TABLE_summary,
+                                     VEC_acceptorRange = NULL,
+                                     VEC_donorRange = NULL,
+                                     BOOL_plotOccurences = FALSE,
+                                     REAL_heightsHbonds = NULL )
+{
+  if( is.null( VEC_acceptorRange ) )
+    VEC_acceptorRange = c( min( TABLE_summary[ , 3 ] ), max( TABLE_summary[ , 3 ] ) )
+  if( is.null( VEC_donorRange ) )
+    VEC_donorRange = c( min( TABLE_summary[ , 1 ] ), max( TABLE_summary[ , 1 ] ) )
+  VEC_hbondIDs <- c()
+  for( i in 1:nrow( TABLE_summary ) )
+  {
+    if( TABLE_summary[ i, 1 ] >= VEC_donorRange[ 1 ] &&
+        TABLE_summary[ i, 1 ] <= VEC_donorRange[ 2 ] &&
+        TABLE_summary[ i, 3 ] >= VEC_acceptorRange[ 1 ] &&
+        TABLE_summary[ i, 3 ] <= VEC_acceptorRange[ 2 ] )
+      VEC_hbondIDs <- c( VEC_hbondIDs, i )
+  }
+  if( length( VEC_hbondIDs ) == 0 )
+    stop( paste( "The selection, acceptor residues ", VEC_acceptorRange[ 1 ], ":",
+                 VEC_acceptorRange[ 2 ], " with donor residues ", VEC_donorRange[ 1 ], ":",
+                 VEC_donorRange[ 2 ], " does not contain any hbonds.", sep = "" ) )
+  VEC_timeLimits = c( min( TABLE_timeseries[ , 1 ] ),
+                   max( TABLE_timeseries[ , 1 ] ) )
+  TABLE_timeseries <- TABLE_timeseries[ ( TABLE_timeseries[ , 2 ] %in% VEC_hbondIDs ), ,
+                                        drop = FALSE ]
+  if( is.null( REAL_heightsHbonds ) )
+    REAL_heightsHbonds <- 0.75 / log( length( VEC_hbondIDs ) )
+  if( BOOL_plotOccurences )
+  {
+    par( mar = c( 3.0, 3.0, 3.0, 0.0 ) )
+    layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
+  }
+  plot( TABLE_timeseries,
+        xlim = VEC_timeLimits,
+        ylim = c( min( VEC_hbondIDs ), max( VEC_hbondIDs ) ),
+        type = "n" )
+  segments( TABLE_timeseries[ , 1 ],
+            TABLE_timeseries[ , 2 ] - REAL_heightsHbonds,
+            TABLE_timeseries[ , 1 ],
+            TABLE_timeseries[ , 2 ] + REAL_heightsHbonds,
+            lwd = 0.15 )
+  if( BOOL_plotOccurences )
+  {
+    VEC_occurences <- c()
+    for( i in 1:length( VEC_hbondIDs ) )
+    {
+      INT_numberAppearances <- sum( TABLE_timeseries[ , 2 ] == VEC_hbondIDs[ i ] )
+      VEC_occurences <- c( VEC_occurences, ( INT_numberAppearances / 
+                                             ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 
+                                               100 ) )
+    }
+    par( mar = c( 3.0, 0.0, 3.0, 3.0 ) )
+    plot( VEC_hbondIDs~VEC_occurences,
+          ylab = "", yaxt = "n", ylim = c( min( VEC_hbondIDs ),
+                                           max( VEC_hbondIDs ) ),
+          xaxs = "i", xlim = c( 0, 100 ),
+          type = "n" )
+    segments( rep( 0, length( VEC_hbondIDs ) ),
+              VEC_hbondIDs,
+              VEC_occurences,
+              VEC_hbondIDs,
+              lwd = 2.0 )
+    segments( VEC_occurences,
+              VEC_hbondIDs - REAL_heightsHbonds * 0.75,
+              VEC_occurences,
+              VEC_hbondIDs + REAL_heightsHbonds * 0.75,
+              lwd = 2.0 )
+  }
+}
+
 # load and parse GROMOS hbond output
 MDplot_load_hbond <- function( STRING_path )
 {

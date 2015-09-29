@@ -42,9 +42,7 @@ MDplot_XRMSD <- function( MAT_values,
   
   # colour values accordingly
   if( BOOL_printLegend )
-  {
     layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
-  }
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
   PALETTE_colours_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   VEC_coloursPlot <- PALETTE_colours_rev( 11 )[ as.numeric( cut( as.numeric( MAT_values[ , 3 ] ), breaks = 10 ) ) ]
