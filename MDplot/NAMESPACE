@@ -45,7 +45,8 @@ export(
          getListOfKeys,
          isKeySet,
          integrate_curve,
-         split_equidistant
+         split_equidistant,
+         translate_aminoacids
       )
 
 # export classes

@@ -18,6 +18,63 @@ if( length( LIST_packages ) > 0 ) install.packages( LIST_packages )
 #library( grDevices )
 #########
 
+# translate amino acids in the context of the GROMOS framework
+translate_aminoacids <- function( VEC_input,
+                                 INT_switch )
+{
+  VEC_GROMOS_triple = c( "ALA", "ARG", "ASN",
+                         "ASP", "ASPH", "CYS",
+                         "CYSH", "CYS1", "CYS2",
+                         "GLN", "GLU", "GLUH",
+                         "GLY", "HIS", "HISA",
+                         "HISB", "HISH", "ILE",
+                         "LEU", "LYS", "LYSH",
+                         "MET", "PHE", "PRO",
+                         "SER", "THR", "TRP",
+                         "TYR", "VAL" )
+  VEC_canonical_triple = c( "ALA", "ARG", "ASN",
+                            "ASP", "ASP", "CYS",
+                            "CYS", "CYS", "CYS",
+                            "GLN", "GLU", "GLU",
+                            "GLY", "HIS", "HIS",
+                            "HIS", "HIS", "ILE",
+                            "LEU", "LYS", "LYS",
+                            "MET", "PHE", "PRO",
+                            "SER", "THR", "TRP",
+                            "TYR", "VAL" )
+  VEC_canonical_single = c( "A", "R", "N",
+                            "D", "D", "C",
+                            "C", "C", "C",
+                            "Q", "E", "E",
+                            "G", "H", "H",
+                            "H", "H", "I",
+                            "L", "K", "K",
+                            "M", "F", "P",
+                            "S", "T", "W",
+                            "Y", "V" )
+  VEC_return <- c()
+  
+  # read three letter code and return canonical single letter code
+  if( INT_switch == 1 )
+    for( i in 1:length( VEC_input ) )
+      VEC_return <- c( VEC_return,
+                       ifelse( VEC_input[ i ] %in% VEC_GROMOS_triple,
+                       VEC_canonical_single[ VEC_GROMOS_triple == VEC_input[ i ] ],
+                       VEC_input[ i ] ) )
+  #########
+  
+  # read GROMOS three lettercode and return canonical three letter code 
+  if( INT_switch == 2 )
+    for( i in 1:length( VEC_input ) )
+      VEC_return <- c( VEC_return,
+                       ifelse( VEC_input[ i ] %in% VEC_GROMOS_triple,
+                               VEC_canonical_triple[ VEC_GROMOS_triple == VEC_input[ i ] ],
+                               VEC_input[ i ] ) )
+  #########
+  
+  return( VEC_return )
+}
+
 # integrate over a curve
 integrate_curve <- function( MAT_input )
 {
@@ -50,7 +107,11 @@ integrate_curve <- function( MAT_input )
 }
 
 # get nice axis values
-split_equidistant <- function( VEC_values, n = 5 )
+split_equidistant <- function( VEC_values,
+                               n = 5,
+                               BOOL_removeFirst = FALSE,
+                               BOOL_removeLast = FALSE,
+                               BOOL_roundDown = FALSE )
 {
   
   # get spread and divide in "n" values
@@ -60,10 +121,17 @@ split_equidistant <- function( VEC_values, n = 5 )
   delta <- upper_bound - lower_bound
   it <- delta / ( n - 1 )
   for( i in 1:( n - 2 ) )
-  {
     VEC_return <- c( VEC_return, as.integer( lower_bound + it * i ) )
-  }
   VEC_return <- c( VEC_return, upper_bound )
+  #########
+  
+  # apply afterwork (in case)
+  if( BOOL_removeFirst )
+    VEC_return <- VEC_return[ -1 ]
+  if( BOOL_removeLast )
+    VEC_return <- VEC_return[ -length( VEC_return ) ]
+  if( BOOL_roundDown )
+    VEC_return <- signif( VEC_return, digits = 0 )
   #########
   return( VEC_return )
 }

@@ -1,9 +1,9 @@
 %  Copyright (C) 2015 Christian Margreitter
 \name{MDplot_XRMSD}
+\docType{methods}
 \alias{MDplot_XRMSD}
 \title{XRMSD plot in heatmap style}
-\description{
-Plots an heatmap according to the RMSD value for a 2D snapshot matrix, based on trajectories.}
+\description{Plots an heatmap according to the RMSD value for a 2D snapshot matrix, based on trajectories.}
 \usage{
 MDplot_XRMSD <- function( MAT_values,
                           BOOL_printLegend = TRUE,
@@ -21,8 +21,8 @@ MDplot_XRMSD <- function( MAT_values,
 }
 \examples{
 # load matrix and return it into plotting function "MDplot_XRMSD()"
-# see "extdata/MDplot_XRMSD_example.tar.gz" for format information
-MDplot_XRMSD( MDplot_load_XRMSD( system.file( "extdata/MDplot_XRMSD_example.tar.gz", package = "MDplot" ) ) )
+# see "extdata/MDplot_XRMSD_example.txt" for format information
+#MDplot_XRMSD( MDplot_load_XRMSD( system.file( "extdata/MDplot_XRMSD_example.txt", package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{XRMSD}
