@@ -1,8 +1,12 @@
 # load function for "MDplot_clusters"
 MDplot_load_clusters <- function( STRING_path )
 {
+  
+  # load and transpose matrix
   MAT_pre <- as.matrix( read.table( STRING_path ) )[ , -1  ]
   MAT_pre <- MAT_pre[ , ( ( ncol( MAT_pre ) / 2 ) + 1 ):ncol( MAT_pre ) ]
+  MAT_pre <- t( MAT_pre )
+  #########
   return( MAT_pre )
 }
 
@@ -10,22 +14,17 @@ MDplot_load_clusters <- function( STRING_path )
 MDplot_clusters <- function( MAT_clusters,
                              INT_numberClusters = NULL,
                              STRING_legend_title = "trajectories",
-                             BOOL_trajectory_names = FALSE,
+                             BOOL_ownTrajectoryNames = FALSE,
                              ... )
 {
+  # reduce number of clusters, in case specified and take care of the trajectory names
   if( !is.null( INT_numberClusters ) )
-    MAT_clusters <- MAT_clusters[ 1:INT_numberClusters, ]
-  
-  # transpose cluster's matrix and plot it
-  MAT_clusters <- t( MAT_clusters )
-  if( is.null( colnames( MAT_clusters ) ) )
-  {
-    colnames( MAT_clusters ) <- 1:ncol( MAT_clusters )
-  }
-  if( !BOOL_trajectory_names )
-  {
+    MAT_clusters <- MAT_clusters[ , 1:INT_numberClusters ]
+  colnames( MAT_clusters ) <- 1:ncol( MAT_clusters )
+  if( !BOOL_ownTrajectoryNames )
     rownames( MAT_clusters ) <- 1:nrow( MAT_clusters )
-  }
+  #########
+  
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_CLUSTERS <- PALETTE_clusters( nrow( MAT_clusters ) )
   names( MAT_clusters ) <- 1:nrow( MAT_clusters )

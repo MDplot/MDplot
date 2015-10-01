@@ -7,7 +7,7 @@ MDplot_load_TIcurve <- function( STRING_path )
 # plot the error segments
 plot_segments <- function( MAT_values, VEC_spread, REAL_difference = 0.1 )
 {
-  par( new = TRUE ) # plot in same plot
+  par( new = TRUE )
   segments( MAT_values[ , 1 ], MAT_values[ , 2 ] - VEC_spread, MAT_values[ , 1 ],
             MAT_values[ , 2 ] + VEC_spread )
   segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] - VEC_spread,
@@ -23,7 +23,7 @@ MDplot_TIcurve <- function( MAT_input,
   # set proper outer margins and plot it
   par( oma = c( 1.35, 2.45, 0.45, 0.0 ) )
   TIplot <- plot( MAT_input, ylim = c( min( MAT_input[ , 2 ] ), max( MAT_input[ , 2 ] ) ),
-                  xaxs = "i", pch = 19, cex = 1.00, xlab = "", ylab = "",
+                  xaxs = "i", pch = 19, cex = 0.6, xlab = "", ylab = "",
                   ... )
   plot_segments( MAT_input[ , 1:2 ], MAT_input[ , 3 ], 0.01 )
   mtext( side = 1, text = expression( lambda ), line = 3, cex = 1.45 )

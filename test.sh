@@ -1,7 +1,8 @@
+
 #!/bin/bash
 
 # clusters
-#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters files=MDplot/inst/extdata/MDplot_clusters_example.txt title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clusternumber=7
+#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters files=MDplot/inst/extdata/MDplot_clusters_example.txt title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clusternumber=7 trajectorynames=WT,variant1a,variantb,variant2,variant3,variant4
 #acroread clusters.pdf &
 
 # ramachandran
@@ -9,7 +10,7 @@
 #eog ramachandran.png &
 
 # hbond
-#Rscript MDplot/bash/MDplot_bash.R MDplot_hbond files=MDplot/inst/extdata/MDplot_hbond_example.tar.gz title="Hbonds plot" size=1200,900 resolution=165 outformat=tiff outfile=hbond.tiff
+#Rscript MDplot/bash/MDplot_bash.R MDplot_hbond files=MDplot/inst/extdata/MDplot_hbond_example.txt title="Hbonds plot" size=1200,900 resolution=165 outformat=tiff outfile=hbond.tiff
 #eog hbond.tiff &
 
 # TIcurve
@@ -33,5 +34,9 @@
 #eog DSSP_timeseries.tiff &
 
 # XRMSD
-#Rscript MDplot/bash/MDplot_bash.R MDplot_XRMSD files=MDplot/inst/extdata/MDplot_XRMSD_example.tar.gz title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf axisnames=snapshotsX,snapshotsY
+#Rscript MDplot/bash/MDplot_bash.R MDplot_XRMSD files=MDplot/inst/extdata/MDplot_XRMSD_example.txt title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf
 #acroread XRMSD.pdf &
+
+# hbond timeseries
+#Rscript MDplot/bash/MDplot_bash.R MDplot_hbond_timeseries files=MDplot/inst/extdata/MDplot_hbond_timeseries_example.txt,MDplot/inst/extdata/MDplot_hbond_example.txt acceptors=61,64 donors=64,72 title="HBOND timeseries" size=1450,950 plotoccurences=TRUE outformat=tiff printnames=TRUE outfile=hbond_timeseries.tiff single=TRUE timeNS=TRUE
+#eog hbond_timeseries.tiff

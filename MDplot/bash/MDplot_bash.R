@@ -141,8 +141,8 @@ if( STRING_function == "MDplot_XRMSD" )
                 main = ifelse( isKeySet( LIST_arguments, "title" ),
                                getValue( LIST_arguments, "title" ),
                                NULL ),
-                xlab = ifelse( is.null( VEC_axisNames ), "snapshots", VEC_axisNames[ 1 ] ),
-                ylab = ifelse( is.null( VEC_axisNames ), "snapshots", VEC_axisNames[ 2 ] ) )
+                xlab = ifelse( is.null( VEC_axisNames ), "time [structure]", VEC_axisNames[ 1 ] ),
+                ylab = ifelse( is.null( VEC_axisNames ), "time [structure]", VEC_axisNames[ 2 ] ) )
 }
 
 
@@ -241,22 +241,45 @@ if( STRING_function == "MDplot_clusters" )
 {
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_allowedForAll, "clusternumber" ), LIST_arguments )
+  testAllowed( c( VEC_allowedForAll,
+                  "clusternumber",
+                  "trajectorynames" ),
+               LIST_arguments )
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
-  {
     if( !file.exists( VEC_files[ i ] ) )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
+  
+  # load matrix and set names
+  MAT_input <- MDplot_load_clusters( VEC_files )
+  if( isKeySet( LIST_arguments, "trajectorynames" ) )
+  {
+    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectorynames" ),
+                                   ",",
+                                   fixed = TRUE ) )
+    if( length( VEC_names ) != nrow( MAT_input ) )
+      stop( paste( "Error while assigning user specified trajectory ",
+                   "names, since the numbers (",
+                   length( VEC_names ),
+                   ",",
+                   nrow( MAT_input ),
+                   ") do not match.",
+                   sep = "" ) )
+    rownames( MAT_input ) <- VEC_names
   }
 
   # plot
-  MDplot_clusters( MDplot_load_clusters( VEC_files ),
+  MDplot_clusters( MAT_input,
                    INT_numberClusters = ifelse( isKeySet( LIST_arguments, "clusternumber" ),
                                                 getValue( LIST_arguments, "clusternumber" ),
                                                 NULL ),
+                   BOOL_ownTrajectoryNames = ifelse( isKeySet( LIST_arguments,
+                                                               "trajectorynames" ),
+                                                     TRUE,
+                                                     FALSE ),
                    xlab = ifelse( is.null( VEC_axisNames ), "clusters", VEC_axisNames[ 1 ] ),
-                   ylab = ifelse( is.null( VEC_axisNames ), "populations", VEC_axisNames[ 2 ] ),
+                   ylab = ifelse( is.null( VEC_axisNames ), "# configurations", VEC_axisNames[ 2 ] ),
                    main = ifelse( isKeySet( LIST_arguments, "title" ),
                                   getValue( LIST_arguments, "title" ),
                                   NULL ) )
@@ -282,6 +305,69 @@ if( STRING_function == "MDplot_hbond" )
                 main = ifelse( isKeySet( LIST_arguments, "title" ),
                                getValue( LIST_arguments, "title" ),
                                NULL ) )
+}
+
+
+
+if( STRING_function == "MDplot_hbond_timeseries" )
+{
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( c( VEC_allowedForAll,
+                  "plotoccurences",
+                  "acceptors",
+                  "donors",
+                  "printnames",
+                  "single",
+                  "timeNS",
+                  "snapshotsperNS" ),
+               LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }
+  if( length( VEC_files ) != 2 )
+    stop( paste( "Error in file checking: seemingly, the number of provided files is",
+                 length( VEC_files ), "and not 2, as expected." ) )
+  VEC_acceptors = NULL
+  if( isKeySet( LIST_arguments, "acceptors" ) )
+    VEC_acceptors <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "acceptors" ),
+                                                   ",",
+                                                   fixed = TRUE ) ) )
+  VEC_donors <- NULL
+  if( isKeySet( LIST_arguments, "donors" ) )
+    VEC_donors <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "donors" ),
+                                                ",",
+                                                fixed = TRUE ) ) )
+  
+  # plot
+  MDplot_hbond_timeseries( MDplot_load_hbond_timeseries( VEC_files[ 1 ] ),
+                           MDplot_load_hbond( VEC_files[ 2 ] ),
+                           BOOL_printNames = ifelse( isKeySet( LIST_arguments, "printnames" ),
+                                                     TRUE,
+                                                     FALSE ),
+                           BOOL_plotOccurences = ifelse( isKeySet( LIST_arguments, "plotoccurences" ),
+                                                         TRUE,
+                                                         FALSE ),
+                           VEC_acceptorRange = VEC_acceptors,
+                           VEC_donorRange = VEC_donors,
+                           BOOL_namesToSingle = ifelse( isKeySet( LIST_arguments, "single" ),
+                                                        TRUE,
+                                                        FALSE ),
+                           BOOL_timeInNS = ifelse( isKeySet( LIST_arguments, "timeNS" ),
+                                                  TRUE,
+                                                  FALSE ),
+                           REAL_divisionFactor = ifelse( isKeySet( LIST_arguments,
+                                                                   "snapshotsperNS" ),
+                                                         getValue( LIST_arguments,
+                                                                   "snapshotsperNS" ),
+                                                         1000 ),
+                           main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                          getValue( LIST_arguments, "title" ),
+                                          NULL ) )
 }
 #########
 

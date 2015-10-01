@@ -47,7 +47,7 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
   # check, that one or more hbonds match the criteria
   # remove all hbonds from the timeseries table, that do not match the criteria
   if( length( VEC_hbondIDs ) == 0 )
-    stop( paste( "The selection, acceptor residues ", VEC_acceptorRange[ 1 ], ":",
+    stop( paste( "The selection of acceptor residues ", VEC_acceptorRange[ 1 ], ":",
                  VEC_acceptorRange[ 2 ], " with donor residues ", VEC_donorRange[ 1 ], ":",
                  VEC_donorRange[ 2 ], " does not contain any hbonds.", sep = "" ) )
   TABLE_timeseries <- TABLE_timeseries[ ( TABLE_timeseries[ , 2 ] %in% VEC_hbondIDs ), ,
@@ -102,8 +102,9 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
   # in case the occurences are to be plotted, make some space
   # do make sure, that the y axis has enough space for long labels
   par( mar = c( 4.0,
-                ifelse( !BOOL_namesToSingle &&
-                          BOOL_printNames, 7.95, 4.75 ),
+                ifelse( !BOOL_namesToSingle && BOOL_printNames,
+                        7.95,
+                        5.25 ),
                 3.0,
                 ifelse( BOOL_plotOccurences,
                         0.0,
@@ -147,7 +148,7 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
                       1,
                       0 ),
         cex.axis = ifelse( BOOL_printNames,
-                           REAL_scalingFactorPlot * 2.75,
+                           REAL_scalingFactorPlot * 2.45,
                            1 ) )
   segments( TABLE_timeseries[ , 1 ],
             TABLE_timeseries[ , 2 ] - REAL_scalingFactorPlot,
@@ -186,9 +187,9 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
               VEC_hbondIDs,
               lwd = 2.0 )
     segments( VEC_occurences,
-              VEC_hbondIDs - REAL_scalingFactorPlot * 0.75,
+              VEC_hbondIDs - REAL_scalingFactorPlot * 0.65,
               VEC_occurences,
-              VEC_hbondIDs + REAL_scalingFactorPlot * 0.75,
+              VEC_hbondIDs + REAL_scalingFactorPlot * 0.65,
               lwd = 2.0 )
   }
   #########
@@ -302,7 +303,9 @@ MDplot_hbond <- function( TABLE_input,
     plot( TABLE_result[ , 1:2 ],
           col = PALETTE_colors_rev( 10 )[ as.numeric( cut( as.numeric( VEC_normalized ), breaks = 10 ) )  ],
           pch = 19,
-          cex = 1.00,
+          cex = 0.75,
+          xlab = "Donor [residue number]",
+          ylab = "Acceptor [residue number]",
           ... )
     if( BOOL_printLegend )
     {

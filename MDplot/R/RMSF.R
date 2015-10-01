@@ -67,13 +67,13 @@ MDplot_RMSF <- function( LIST_datainput,
   VEC_atomNumbers <- 0:INT_maxAtomnumber
   if( !BOOL_residueWise )
   {
-    mtext( side = 1, text = "atoms", line = 3, cex = 1.25 )
+    mtext( side = 1, text = "atom number", line = 3, cex = 1.25 )
     axis( 1, at = split_equidistant( c( 0, INT_maxAtomnumber ), INT_numberXLabels ),
           label = split_equidistant( c( 0, INT_maxAtomnumber ), INT_numberXLabels ) )
   }
   else
   {
-    mtext( side = 1, text = "residues", line = 3, cex = 1.25 )
+    mtext( side = 1, text = "residue number", line = 3, cex = 1.25 )
     axis( 1, at = split_equidistant( c( 0, INT_maxAtomnumber ), INT_numbeXLabels ),
           label = as.integer( split_equidistant( c( 0, INT_maxAtomnumber ), INT_numberXLabels )
                               / 3 ) )

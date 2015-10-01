@@ -189,7 +189,7 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
             ylim = VEC_residueBoundaries,
             xaxs = "i", yaxs = "i",
             xlab = paste( "time [", STRING_time_unit, "]", sep = "" ),
-            ylab = "residues",
+            ylab = "residue number",
             pch = 22, col = VEC_colours[ i ], bg = VEC_colours[ i ], cex = 0.25,
             ... )
     }
