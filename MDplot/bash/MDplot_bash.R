@@ -287,6 +287,67 @@ if( STRING_function == "MDplot_clusters" )
 
 
 
+if( STRING_function == "MDplot_clusters_timeseries" )
+{
+  # check, if input is sane for this plot and get input files
+  testRequired( c( VEC_requiredForAll,
+                   "lengths" ),
+                LIST_arguments )
+  testAllowed( c( VEC_allowedForAll,
+                  "clusternumber",
+                  "trajectorynames",
+                  "timeNS",
+                  "snapshotsNS",
+                  "lengths" ),
+               LIST_arguments )
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  
+  # load matrix and set names
+  LIST_input <- MDplot_load_clusters_timeseries( STRING_path = VEC_files,
+                                                VEC_lengths = as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                                                           "lengths" ),
+                                                                                           split = ",",
+                                                                                           fixed = TRUE ) ) ),
+                                                VEC_names = NULL )
+  if( isKeySet( LIST_arguments, "trajectorynames" ) )
+  {
+    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectorynames" ),
+                                   ",",
+                                   fixed = TRUE ) )
+    if( length( VEC_names ) != length( LIST_input ) )
+      stop( paste( "Error while assigning user specified trajectory ",
+                   "names, since the numbers (",
+                   length( VEC_names ),
+                   ",",
+                   length( LIST_input ),
+                   ") do not match.",
+                   sep = "" ) )
+    for( i in 1:length( LIST_input ) )
+      LIST_input[[ i ]][[ 1 ]] <- VEC_names[ i ]
+  }
+  
+  # plot
+  MDplot_clusters_timeseries( LIST_input,
+                              INT_numberClusters = ifelse( isKeySet( LIST_arguments, "clusternumber" ),
+                                                           as.numeric( getValue( LIST_arguments, "clusternumber" ) ),
+                                                           NA ),
+                              BOOL_printNanoseconds = ifelse( isKeySet( LIST_arguments, "timeNS" ),
+                                                              TRUE,
+                                                              FALSE ),
+                              REAL_snapshotsNS = ifelse( isKeySet( LIST_arguments, "snapshotsperNS" ),
+                                                         as.numeric( getValue( LIST_arguments, "snapshotsperNS" ) ),
+                                                         1000 ),
+                              main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                             getValue( LIST_arguments, "title" ),
+                                             NULL ) )
+}
+
+
+
 if( STRING_function == "MDplot_hbond" )
 {
   # check, if input is sane for this plot and get input files

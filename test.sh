@@ -40,3 +40,7 @@
 # hbond timeseries
 #Rscript MDplot/bash/MDplot_bash.R MDplot_hbond_timeseries files=MDplot/inst/extdata/MDplot_hbond_timeseries_example.txt,MDplot/inst/extdata/MDplot_hbond_example.txt acceptors=61,64 donors=64,72 title="HBOND timeseries" size=1450,950 plotoccurences=TRUE outformat=tiff printnames=TRUE outfile=hbond_timeseries.tiff single=TRUE timeNS=TRUE
 #eog hbond_timeseries.tiff
+
+# clusters timeseries
+Rscript MDplot/bash/MDplot_bash.R MDplot_clusters_timeseries files=MDplot/inst/extdata/MDplot_clusters_timeseries_example.txt title="CLUSTERS timeseries" size=1200,1000 outformat=png outfile=clusters_timeseries.png timeNS=TRUE lengths=4000,4000,4000,4000,4000,4000 clusternumber=10
+eog clusters_timeseries.png
