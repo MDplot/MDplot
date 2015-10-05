@@ -197,7 +197,8 @@ if( STRING_function == "MDplot_ramachandran" )
 {
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_allowedForAll,
+                  "bins" ), LIST_arguments )
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -205,9 +206,16 @@ if( STRING_function == "MDplot_ramachandran" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  VEC_bins <- c( 450, 450 )
+  if( isKeySet( LIST_arguments, "bins" ) )
+    VEC_bins <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "bins" ),
+                                              ",",
+                                              fixed = TRUE ) ) )
   
   # plot
   MDplot_ramachandran( MDplot_load_ramachandran( VEC_files ),
+                       xbins = VEC_bins[ 1 ],
+                       ybins = VEC_bins[ 2 ],
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
                                       NULL ) )
