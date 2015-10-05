@@ -78,7 +78,7 @@ MDplot_RMSD <- function( LIST_datainput,
             title = "Legend",
             legend = VEC_names,
             col = VEC_colours,
-            lty = 1,
-            cex = 1 )
+            lty = 1.0, lwd = 2.0,
+            cex = 1.0 )
   #########
 }

@@ -2,11 +2,11 @@
 #!/bin/bash
 
 # clusters
-#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters files=MDplot/inst/extdata/MDplot_clusters_example.txt title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clusternumber=7 trajectorynames=WT,variant1a,variantb,variant2,variant3,variant4
+#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters files=MDplot/inst/extdata/MDplot_clusters_example.txt title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clusternumber=7 #trajectorynames=WT,variant1a,variantb,variant2,variant3,variant4
 #acroread clusters.pdf &
 
 # ramachandran
-#Rscript MDplot/bash/MDplot_bash.R MDplot_ramachandran files=MDplot/inst/extdata/MDplot_ramachandran_example.txt title="Ramachandran plot" size=1400,1400 resolution=175 outformat=png outfile=ramachandran.png
+#Rscript MDplot/bash/MDplot_bash.R MDplot_ramachandran files=MDplot/inst/extdata/MDplot_ramachandran_example.txt title="Ramachandran plot" size=1400,1400 resolution=175 outformat=png #outfile=ramachandran.png
 #eog ramachandran.png &
 
 # hbond

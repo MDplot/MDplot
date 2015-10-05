@@ -78,7 +78,7 @@ MDplot_ramachandran <- function( MAT_dihedrals, xbins = 450,
   # print additional plot information
   axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.25 )
   axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.25 )
-  mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 3, cex = 1.75 )
-  mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.4, cex = 1.75 )
+  mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.75, cex = 1.25 )
+  mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.45, cex = 1.25 )
   #########
 }
