@@ -19,7 +19,8 @@ export(
          MDplot_ramachandran,
          MDplot_XRMSD,
          MDplot_hbond_timeseries,
-         MDplot_clusters_timeseries
+         MDplot_clusters_timeseries,
+         MDplot_RMSD_average
        )
 
 # export loading functions
@@ -48,7 +49,8 @@ export(
          isKeySet,
          integrate_curve,
          split_equidistant,
-         translate_aminoacids
+         translate_aminoacids,
+         plot_segments
       )
 
 # export classes

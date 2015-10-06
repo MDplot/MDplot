@@ -257,3 +257,15 @@ testAllowed <- function( VEC_allowed, LIST_provided )
     }
   }
 }
+
+# plot the error segments
+plot_segments <- function( MAT_values, VEC_spread, REAL_difference = 0.1 )
+{
+  par( new = TRUE )
+  segments( MAT_values[ , 1 ], MAT_values[ , 2 ] - VEC_spread, MAT_values[ , 1 ],
+            MAT_values[ , 2 ] + VEC_spread )
+  segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] - VEC_spread,
+            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] - VEC_spread )
+  segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] + VEC_spread,
+            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] + VEC_spread )
+}

@@ -1,3 +1,40 @@
+# plot the average RMSD of many runs with spread
+MDplot_RMSD_average <- function( LIST_input,
+                                 ... )
+{
+  
+  # initialization
+  VEC_names <- rep( NA, length( LIST_input ) )
+  MAT_result <- NULL
+  #########
+  
+  # calculate the average RMSD and the standard deviation
+  for( i in 1:length( LIST_input ) )
+  {
+    VEC_names[ i ] <- LIST_input[[ i ]][[ "name" ]]
+    VEC_files <- LIST_input[[ i ]][[ "files" ]]
+    VEC_values <- c()
+    for( j in 1:length( VEC_files ) )
+      VEC_values <- c( VEC_values,
+                         read.table( VEC_files[ j ] )[ , 2 ] )
+    MAT_result <- rbind( MAT_result, c( mean( VEC_values ), sd( VEC_values ) ) )
+  }
+  #########
+  
+  # set the column and row names
+  colnames( MAT_result ) <- c( "values", "sds" )
+  rownames( MAT_result ) <- VEC_names
+  #########
+  
+  # plot the bars and the errors
+  PLOT_positions = barplot( MAT_result[ , 1 ],
+                            ylim = c( 0.0, 1.5 * max( MAT_result[ , 1 ] ) ),
+                            ... )
+  plot_segments( MAT_values = cbind( PLOT_positions, MAT_result[ , 1 ] ),
+                 VEC_spread = MAT_result[ , 2 ] )
+  #########
+}
+
 # load RMSD
 MDplot_load_RMSD <- function( VEC_files )
 {

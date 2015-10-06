@@ -20,9 +20,10 @@ MDplot_XRMSD <- function( MAT_values,
   \item{...}{Graphical parameters.}
 }
 \examples{
+\dontrun{
 # load matrix and return it into plotting function "MDplot_XRMSD()"
 # see "extdata/MDplot_XRMSD_example.txt" for format information
 #MDplot_XRMSD( MDplot_load_XRMSD( system.file( "extdata/MDplot_XRMSD_example.txt", package = "MDplot" ) ) )
-}
+}}
 \author{Christian Margreitter}
 \keyword{XRMSD}

@@ -105,7 +105,7 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
                 ifelse( !BOOL_namesToSingle && BOOL_printNames,
                         7.95,
                         5.25 ),
-                3.0,
+                3.25,
                 ifelse( BOOL_plotOccurences,
                         0.0,
                         2.0 ) ) )
@@ -171,7 +171,7 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
                                              ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 
                                                100 ) )
     }
-    par( mar = c( 4.0, 0.0, 3.0, 3.0 ) )
+    par( mar = c( 4.0, 0.0, 3.25, 3.0 ) )
     
     # plot
     plot( VEC_hbondIDs~VEC_occurences,
@@ -297,7 +297,11 @@ MDplot_hbond <- function( TABLE_input,
     
     # normalize values to 0 to 100% and plot graph and legend (in case)
     VEC_normalized <- lapply( as.list( TABLE_result[ , 3 ] ), function( x ) x / 100 )
-    layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
+    if( BOOL_printLegend )
+    {
+      par( mar = c( 4.25, 4.25, 3.25, 0.25 ) )
+      layout( matrix( 1:2, ncol = 2 ), width = c( 2.5, 0.5 ), height = c( 1.0, 1.0 ) )
+    }
     PALETTE_colors <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
     PALETTE_colors_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
     plot( TABLE_result[ , 1:2 ],
@@ -309,8 +313,9 @@ MDplot_hbond <- function( TABLE_input,
           ... )
     if( BOOL_printLegend )
     {
+      par( mar = c( 4.25, 0.25, 3.25, 1.0 ) )
       legend_image <- as.raster( matrix( PALETTE_colors( 10 ), ncol = 1 ) )
-      plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = 'Color legend [%]' )
+      plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = '[%]' )
       text( x = 1.5, y = seq( 0, 1, l = 5 ),
             labels = seq( 0, 100, l = 5 ) )
       rasterImage( legend_image, 0, 0, 1, 1 )

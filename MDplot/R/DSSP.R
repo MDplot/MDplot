@@ -23,16 +23,10 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   
   # if certain range of residues is to be shown, remove the rest
   if( !is.null( VEC_showResidues ) )
-  {
     for( i in nrow( MAT_buffer ):1 )
-    {
-      if( !( i %in% VEC_showResidues ) )
-      {
+      if( !( i %in% VEC_showResidues[ 1 ]:VEC_showResidues[ 2 ] ) )
         #use "drop = FALSE" to avoid dimension reduction
         MAT_buffer <- MAT_buffer[ -i, , drop = FALSE ]
-      }
-    }
-  }
   MAT_data <- MAT_buffer
   #########
   
@@ -46,25 +40,19 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   
   # if certain range of values is to be shown, remove the rest
   if( is.null( VEC_showValues  ) )
-  {
     VEC_showValues = rep( 1:ncol( MAT_data ) )
-  }
   MAT_buffer <- MAT_data
   for( i in ncol( MAT_buffer ):1 )
-  {
     if( !( i %in% VEC_showValues ) )
-    {
       # use "drop = FALSE" to avoid dimension reduction
       MAT_buffer <- MAT_buffer[ , -i, drop = FALSE ]
-    }
-  }
   MAT_data <- MAT_buffer
   #########
   
   # specify graphical settings, in case a legend has been requested (or not)
   if( BOOL_printLegend )
   {
-    par( mar = c( 4.5, 4.5, 2.5, 12 ) )
+    par( mar = c( 4.5, 4.5, 2.5, 9 ) )
   }
   else
   { 
@@ -95,7 +83,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   {
     VEC_namesLegend = c( "3-Helix", "4-Helix", "5-Helix",
                          "Turn", "B-strand", "B-Bridge",
-                         "Bend", rep( NA, 16 ) )
+                         "Bend            ", rep( NA, 17 ) )
     
     # in case, no own order has been specified
     if( !BOOL_useOwnLegend )
@@ -138,6 +126,7 @@ MDplot_load_DSSP_timeseries <- function( STRING_folder )
   return( LIST_return )
 }
 
+# BUG: time in nanoseconds does not work!
 # plot the time-series files, that are specified
 MDplot_DSSP_timeseries <- function( LIST_timeseries,
                                     BOOL_printLegend = TRUE,
@@ -151,34 +140,29 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
   if( BOOL_printNanoseconds )
   {
     for( i in 1:length( LIST_timeseries ) )
-    {
-      LIST_timeseries[[ i ]][[ "values" ]][ 1 ] <- LIST_timeseries[[ i ]][[ "values" ]][ 1 ] / REAL_snapshotsPerNS
-    }
+      LIST_timeseries[[ i ]][[ "values" ]][ 1 ] <- LIST_timeseries[[ i ]][[ "values" ]][ 1 ] /
+                                                   REAL_snapshotsPerNS
     STRING_time_unit <- "ns"
     VEC_timeBoundaries <- VEC_timeBoundaries / REAL_snapshotsPerNS
   }
   if( is.null( VEC_timeBoundaries ) )
     VEC_timeBoundaries <- c( min( unlist( lapply( LIST_timeseries,
-                                   function( x ) x[[ "values" ]][ 1 ] ) ) ),
-                              max( unlist( lapply( LIST_timeseries,
-                                   function( x ) x[[ "values" ]][ 1 ] ) ) ) )
+                                                  function( x ) x[[ "values" ]][ 1 ] ) ) ),
+                             max( unlist( lapply( LIST_timeseries,
+                                                  function( x ) x[[ "values" ]][ 1 ] ) ) ) )
   if( is.null( VEC_residueBoundaries ) )
     VEC_residueBoundaries <- c( min( unlist( lapply( LIST_timeseries,
-                                      function( x ) x[[ "values" ]][ 2 ] ) ) ),
-                                 max( unlist( lapply( LIST_timeseries,
-                                      function( x ) x[[ "values" ]][ 2 ] ) ) ) )
+                                                     function( x ) x[[ "values" ]][ 2 ] ) ) ),
+                                max( unlist( lapply( LIST_timeseries,
+                                                     function( x ) x[[ "values" ]][ 2 ] ) ) ) )
   PALETTE_DSSP_timeseries_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   VEC_colours <- PALETTE_DSSP_timeseries_colours( length( LIST_timeseries ) )
   
   # specify graphical settings, in case a legend has been requested (or not)
   if( BOOL_printLegend )
-  {
-    par( mar = c( 4.5, 4.5, 2.5, 12 ) )
-  }
+    par( mar = c( 4.5, 4.5, 2.5, 10 ) )
   else
-  { 
     par( mar = c( 4.5, 4.5, 2.5, 2.5 ) )
-  }
   #########
   for( i in 1:length( LIST_timeseries )  )
   {
@@ -210,7 +194,7 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
   if( BOOL_printLegend )
   {
     par( xpd = TRUE )
-    legend( "topright", inset = c( -0.325, 0.4 ),
+    legend( "topright", inset = c( -0.325, 0.3 ),
             legend = unlist( lapply( LIST_timeseries,
                                      function( x ) x[[ "name" ]] ) ),
             pch = 22, col = VEC_colours, pt.bg = VEC_colours, pt.cex = 1.25,

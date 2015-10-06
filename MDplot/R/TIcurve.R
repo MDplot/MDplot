@@ -4,24 +4,12 @@ MDplot_load_TIcurve <- function( STRING_path )
   return( as.matrix( read.table( STRING_path ) ) )
 }
 
-# plot the error segments
-plot_segments <- function( MAT_values, VEC_spread, REAL_difference = 0.1 )
-{
-  par( new = TRUE )
-  segments( MAT_values[ , 1 ], MAT_values[ , 2 ] - VEC_spread, MAT_values[ , 1 ],
-            MAT_values[ , 2 ] + VEC_spread )
-  segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] - VEC_spread,
-            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] - VEC_spread )
-  segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] + VEC_spread,
-            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] + VEC_spread )
-}
-
 # plot the curve and calculate and plot the integral
 MDplot_TIcurve <- function( MAT_input,
                             ... )
 {
   # set proper outer margins and plot it
-  par( oma = c( 1.35, 2.45, 0.45, 0.0 ) )
+  par( oma = c( 1.35, 3.00, 0.45, 0.0 ) )
   TIplot <- plot( MAT_input, ylim = c( min( MAT_input[ , 2 ] ), max( MAT_input[ , 2 ] ) ),
                   xaxs = "i", pch = 19, cex = 0.6, xlab = "", ylab = "",
                   ... )

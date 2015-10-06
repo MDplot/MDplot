@@ -103,7 +103,7 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
         ylim = c( 0.575, length( LIST_timeseries ) + 0.425 ),
         yaxt = "n", ylab = "", yaxs = "i",
         bty = "n", type = "n" )
-  mtext( side = 3, line = 17.0, cex = 2.0,
+  mtext( side = 3, line = 14.0, cex = 1.45,
          text = ifelse( is.null( list( ... )[[ "main" ]] ),
                         "Cluster timeseries plot",
                         list( ... )[[ "main" ]] ) )
@@ -181,7 +181,7 @@ MDplot_clusters <- function( MAT_clusters,
   names( MAT_clusters ) <- 1:nrow( MAT_clusters )
   barplot( MAT_clusters, col = COLOURS_CLUSTERS, ... )
   legend( "topright", inset = 0.045, legend = rownames( MAT_clusters ),
-          title = STRING_legend_title, box.lwd = 0, 
+          title = STRING_legend_title, box.lty = 0, box.lwd = 0, 
           col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
   #########
 }

@@ -82,7 +82,9 @@ if( STRING_function == "MDplot_DSSP_summary" )
 {
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_allowedForAll,
+                  "residues" ),
+               LIST_arguments )
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -90,10 +92,16 @@ if( STRING_function == "MDplot_DSSP_summary" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  VEC_residues <- NULL
+  if( isKeySet( LIST_arguments, "residues" ) )
+    VEC_residues <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "residues" ),
+                                                  ",",
+                                                  fixed = TRUE ) ) )
   
   # plot
   MDplot_DSSP_summary( MDplot_load_DSSP_summary( VEC_files ),
                        BOOL_printLegend = BOOL_printLegend,
+                       VEC_showResidues = VEC_residues,
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
                                       NULL ) )
@@ -189,6 +197,22 @@ if( STRING_function == "MDplot_RMSD" )
                main = ifelse( isKeySet( LIST_arguments, "title" ),
                               getValue( LIST_arguments, "title" ),
                               NULL ) )
+}
+
+
+
+if( STRING_function == "MDplot_RMSD_average" )
+{
+  # check, if input is sane for this plot and get input files
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( VEC_allowedForAll, LIST_arguments )
+
+  # plot
+  MDplot_RMSD_average( LIST_input = list( list( name = "one", 
+                                                files = getValue( LIST_arguments, "files" ) ) ),
+                       main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                      getValue( LIST_arguments, "title" ),
+                                      NULL ) )
 }
 
 
