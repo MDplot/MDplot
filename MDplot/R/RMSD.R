@@ -1,5 +1,6 @@
 # plot the average RMSD of many runs with spread
 MDplot_RMSD_average <- function( LIST_input,
+                                 INT_skip = 0,
                                  ... )
 {
   
@@ -15,8 +16,12 @@ MDplot_RMSD_average <- function( LIST_input,
     VEC_files <- LIST_input[[ i ]][[ "files" ]]
     VEC_values <- c()
     for( j in 1:length( VEC_files ) )
-      VEC_values <- c( VEC_values,
-                         read.table( VEC_files[ j ] )[ , 2 ] )
+    {
+      VEC_buffer <- read.table( VEC_files[ j ] )[ , 2 ]
+      if( INT_skip > 0 )
+        VEC_buffer <- VEC_buffer[ INT_skip:length( VEC_buffer ) ]
+      VEC_values <- c( VEC_values, VEC_buffer )
+    }
     MAT_result <- rbind( MAT_result, c( mean( VEC_values ), sd( VEC_values ) ) )
   }
   #########
@@ -27,11 +32,19 @@ MDplot_RMSD_average <- function( LIST_input,
   #########
   
   # plot the bars and the errors
+  par( mar = c( 2.5, 4.25, 1.0, 1.5 ) )
   PLOT_positions = barplot( MAT_result[ , 1 ],
                             ylim = c( 0.0, 1.5 * max( MAT_result[ , 1 ] ) ),
+                            ylab = "RMSD [nm]",
+                            xaxt = "n",
                             ... )
-  plot_segments( MAT_values = cbind( PLOT_positions, MAT_result[ , 1 ] ),
+  plot_segments( cbind( PLOT_positions, MAT_result[ , 1 ] ),
                  VEC_spread = MAT_result[ , 2 ] )
+  axis( 1,
+        at = PLOT_positions,
+        labels = rownames( MAT_result ),
+        cex.axis = 0.95,
+        tick = FALSE )
   #########
 }
 
