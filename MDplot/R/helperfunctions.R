@@ -79,15 +79,11 @@ translate_aminoacids <- function( VEC_input,
 integrate_curve <- function( MAT_input )
 {
   if( ncol( MAT_input ) < 2 )
-  {
     stop( paste( "Error: Number of columns in matrix not 2 or higher, but ",
                  ncol( MAT_input ), "!" ) )
-  }
   REAL_error <- NA
   if( ncol( MAT_input ) > 2 )
-  {
     REAL_error <- 0.0
-  }
   REAL_integral <- 0.0
   
   # add next integral and error to sums
@@ -96,10 +92,8 @@ integrate_curve <- function( MAT_input )
     REAL_integral <- REAL_integral + ( ( MAT_input[ i, 1 ] - MAT_input[ i - 1, 1 ] ) *
                                          ( MAT_input[ i, 2 ] + MAT_input[ i - 1, 2 ] ) ) / 2
     if( ncol( MAT_input ) > 2 )
-    {
       REAL_error <- REAL_error + ( ( MAT_input[ i, 1 ] - MAT_input[ i - 1, 1 ] ) *
                                      ( MAT_input[ i, 3 ] + MAT_input[ i - 1, 3 ] ) ) / 2
-    }
   }
   #########
   
@@ -167,10 +161,8 @@ parse_arguments <- function( VEC_arguments )
       VEC_return <- c( VEC_return, curArgument )
     }
     else
-    {
       stop( paste( "Error in argument parsing: string '", VEC_arguments[ i ], 
                    "' does not contain any equal sign." ) )
-    }
   }
   return( VEC_return )
 }
@@ -180,9 +172,7 @@ getListOfKeys <- function( LIST_arguments )
 {
   VEC_keys <- c()
   for( i in 1:length( LIST_arguments ) )
-  {
     VEC_keys <- c( VEC_keys, slot( LIST_arguments[[ i ]], "key" ) )
-  }
   return( VEC_keys )
 }
 
@@ -195,9 +185,7 @@ isKeySet <- function( arguments, STRING_key )
   else
     VEC_keysList <- arguments
   if( STRING_key %in% VEC_keysList )
-  {
     return( TRUE )
-  }
   return( FALSE )
 }
 
@@ -205,23 +193,17 @@ isKeySet <- function( arguments, STRING_key )
 testRequired <- function( VEC_required, LIST_provided )
 {
   for( i in 1:length( VEC_required ) )
-  {
     if( !isKeySet( LIST_provided, VEC_required[ i ] ) )
-    {
       stop( paste( "Error while checking the proper provision of all required parameters (",
                    VEC_required, "). One or more missing." ) )
-    }
-  }
 }
 
 # hack to get value of key-value pair (fix for release please)
 getValue <- function( LIST_arguments, STRING_key )
 {
   for( i in 1:length( LIST_arguments ) )
-  {
     if( slot( LIST_arguments[[ i ]], "key" ) == STRING_key )
       return( slot( LIST_arguments[[ i ]], "value" ) )
-  }
   stop( paste( "Error while looking for value related to argument key",
               STRING_key, "in list of keys." ) )
 }
@@ -231,13 +213,9 @@ getFiles <- function( STRING_input )
 {
   VEC_return <- c()
   if( grepl( ",", STRING_input ) )
-  {
     VEC_return <- strsplit( STRING_input, ",", fixed = TRUE )
-  }
   else
-  {
     return( STRING_input )
-  }
   return( unlist( VEC_return ) )
 }
 
@@ -259,13 +237,32 @@ testAllowed <- function( VEC_allowed, LIST_provided )
 }
 
 # plot the error segments
-plot_segments <- function( MAT_values, VEC_spread, REAL_difference = 0.1 )
+plot_segments <- function( MAT_values,
+                           VEC_spread,
+                           REAL_difference = 0.1,
+                           col = "black" )
 {
   par( new = TRUE )
   segments( MAT_values[ , 1 ], MAT_values[ , 2 ] - VEC_spread, MAT_values[ , 1 ],
-            MAT_values[ , 2 ] + VEC_spread )
+            MAT_values[ , 2 ] + VEC_spread,
+            col = col ) # vertical lines
   segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] - VEC_spread,
-            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] - VEC_spread )
+            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] - VEC_spread,
+            col = col ) # horizontal bottom line
   segments( MAT_values[ , 1 ] - REAL_difference, MAT_values[ , 2 ] + VEC_spread,
-            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] + VEC_spread )
+            MAT_values[ , 1 ] + REAL_difference, MAT_values[ , 2 ] + VEC_spread,
+            col = col ) # horizontal top line
+}
+
+# significant digits based on the error
+get_sign_digits <- function( REAL_error )
+{
+  if( REAL_error > 1.0 )
+    return( 0 )
+  VEC_digits <- as.numeric( strsplit( as.character( REAL_error ),
+                                      "" )[[ 1 ]][ -1:-2 ] )
+  for( i in 1:length( VEC_digits ) )
+    if( VEC_digits[ i ] != 0 )
+      return( i )
+  return( VEC_digits )
 }

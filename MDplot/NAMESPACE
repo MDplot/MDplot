@@ -50,7 +50,8 @@ export(
          integrate_curve,
          split_equidistant,
          translate_aminoacids,
-         plot_segments
+         plot_segments,
+         get_sign_digits
       )
 
 # export classes

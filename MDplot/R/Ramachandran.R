@@ -1,14 +1,13 @@
 # load ramachandran data into a matrix, select columns
-MDplot_load_ramachandran <- function( STRING_file, VEC_columns = c( 3, 4 ) )
+MDplot_load_ramachandran <- function( STRING_file,
+                                      VEC_columns = c( 3, 4 ) )
 {
   
   # load and parse matrix, return result
   MAT_input <- as.matrix( read.table( STRING_file ) )
   if( ncol( MAT_input ) < max( VEC_columns ) )
-  {
     stop( paste( "Error while loading and parsing file '", STRING_file, "' since the number ",
                  "of columns is less than the maximum column number specified." ) )
-  }
   return( MAT_input[ , VEC_columns ] )
 }
 
@@ -30,13 +29,9 @@ MDplot_ramachandran <- function( MAT_dihedrals, xbins = 450,
   if( heatFun == "log" )
   {}
   else if( heatFun == "norm" )
-  {
     FUN_heatFun = function( x ) x
-  }
   else
-  {
     stop( paste( "Error: the function '", heatFun, "' for parameter 'heatFun' is not defined.", sep = "" ) )
-  }
   #########
   
   # plot the information and use 15 histogram colours
@@ -47,7 +42,6 @@ MDplot_ramachandran <- function( MAT_dihedrals, xbins = 450,
   
   # if specified, print all Ramachandran regions and their labels
   if( length( LIST_areas ) > 0 )
-  {
     for( i in 1:length( LIST_areas ) )
     {
       if( length( LIST_areas[[ i ]] ) < 3 )
@@ -72,7 +66,6 @@ MDplot_ramachandran <- function( MAT_dihedrals, xbins = 450,
       cen <- calculate_mid( LIST_areas[[ i ]][ -1 ] )
       text( cen[[ 1 ]], cen[[ 2 ]], labels = LIST_areas[[ i ]][[ 1 ]], cex = 2.15 )
     }
-  }
   #########
   
   # print additional plot information

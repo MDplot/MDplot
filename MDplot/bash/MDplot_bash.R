@@ -29,12 +29,12 @@ if( isKeySet( LIST_arguments, "size" ) )
   VEC_size <- unlist( strsplit( getValue( LIST_arguments, "size" ),
                                 ",",
                                 fixed = TRUE ) )
-VEC_dataNames <- NULL
+VEC_dataNames <- NA
 if( isKeySet( LIST_arguments, "datanames" ) )
   VEC_dataNames <- unlist( strsplit( getValue( LIST_arguments, "datanames" ),
                                 ",",
                                 fixed = TRUE ) )
-VEC_axisNames <- NULL
+VEC_axisNames <- NA
 if( isKeySet( LIST_arguments, "axisnames" ) )
   VEC_axisNames <- unlist( strsplit( getValue( LIST_arguments, "axisnames" ),
                                      ",",
@@ -92,7 +92,7 @@ if( STRING_function == "MDplot_DSSP_summary" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
-  VEC_residues <- NULL
+  VEC_residues <- NA
   if( isKeySet( LIST_arguments, "residues" ) )
     VEC_residues <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "residues" ),
                                                   ",",
@@ -104,7 +104,7 @@ if( STRING_function == "MDplot_DSSP_summary" )
                        VEC_showResidues = VEC_residues,
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
-                                      NULL ) )
+                                      NA ) )
 }
 
 
@@ -126,7 +126,7 @@ if( STRING_function == "MDplot_DSSP_timeseries" )
   MDplot_DSSP_timeseries( MDplot_load_DSSP_timeseries( VEC_files ),
                           main = ifelse( isKeySet( LIST_arguments, "title" ),
                                          getValue( LIST_arguments, "title" ),
-                                         NULL ) )
+                                         NA ) )
 }
 
 
@@ -148,9 +148,9 @@ if( STRING_function == "MDplot_XRMSD" )
   MDplot_XRMSD( MDplot_load_XRMSD( VEC_files ),
                 main = ifelse( isKeySet( LIST_arguments, "title" ),
                                getValue( LIST_arguments, "title" ),
-                               NULL ),
-                xlab = ifelse( is.null( VEC_axisNames ), "time [structure]", VEC_axisNames[ 1 ] ),
-                ylab = ifelse( is.null( VEC_axisNames ), "time [structure]", VEC_axisNames[ 2 ] ) )
+                               NA ),
+                xlab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 1 ] ),
+                ylab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 2 ] ) )
 }
 
 
@@ -173,7 +173,7 @@ if( STRING_function == "MDplot_RMSF" )
                VEC_names = VEC_dataNames,
                main = ifelse( isKeySet( LIST_arguments, "title" ),
                               getValue( LIST_arguments, "title" ),
-                              NULL ) )
+                              NA ) )
 }
 
 
@@ -196,7 +196,7 @@ if( STRING_function == "MDplot_RMSD" )
                VEC_names = VEC_dataNames,
                main = ifelse( isKeySet( LIST_arguments, "title" ),
                               getValue( LIST_arguments, "title" ),
-                              NULL ) )
+                              NA ) )
 }
 
 
@@ -212,7 +212,7 @@ if( STRING_function == "MDplot_RMSD_average" )
                                                 files = getValue( LIST_arguments, "files" ) ) ),
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
-                                      NULL ) )
+                                      NA ) )
 }
 
 
@@ -242,7 +242,7 @@ if( STRING_function == "MDplot_ramachandran" )
                        ybins = VEC_bins[ 2 ],
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
-                                      NULL ) )
+                                      NA ) )
 }
 
 
@@ -251,7 +251,9 @@ if( STRING_function == "MDplot_TIcurve" )
 {
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_allowedForAll,
+                  "invert" ),
+               LIST_arguments )
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -262,9 +264,13 @@ if( STRING_function == "MDplot_TIcurve" )
   
   # plot
   MDplot_TIcurve( MDplot_load_TIcurve( VEC_files ),
+                  BOOL_invertedBackwards = ifelse( isKeySet( LIST_arguments,
+                                                             "invert" ),
+                                                   FALSE,
+                                                   TRUE ),
                   main = ifelse( isKeySet( LIST_arguments, "title" ),
                                  getValue( LIST_arguments, "title" ),
-                                 NULL ) )
+                                 NA ) )
 }
 
 
@@ -305,16 +311,16 @@ if( STRING_function == "MDplot_clusters" )
   MDplot_clusters( MAT_input,
                    INT_numberClusters = ifelse( isKeySet( LIST_arguments, "clusternumber" ),
                                                 getValue( LIST_arguments, "clusternumber" ),
-                                                NULL ),
+                                                NA ),
                    BOOL_ownTrajectoryNames = ifelse( isKeySet( LIST_arguments,
                                                                "trajectorynames" ),
                                                      TRUE,
                                                      FALSE ),
-                   xlab = ifelse( is.null( VEC_axisNames ), "clusters", VEC_axisNames[ 1 ] ),
-                   ylab = ifelse( is.null( VEC_axisNames ), "# configurations", VEC_axisNames[ 2 ] ),
+                   xlab = ifelse( is.na( VEC_axisNames ), "clusters", VEC_axisNames[ 1 ] ),
+                   ylab = ifelse( is.na( VEC_axisNames ), "# configurations", VEC_axisNames[ 2 ] ),
                    main = ifelse( isKeySet( LIST_arguments, "title" ),
                                   getValue( LIST_arguments, "title" ),
-                                  NULL ) )
+                                  NA ) )
 }
 
 
@@ -344,7 +350,7 @@ if( STRING_function == "MDplot_clusters_timeseries" )
                                                                                            "lengths" ),
                                                                                            split = ",",
                                                                                            fixed = TRUE ) ) ),
-                                                VEC_names = NULL )
+                                                VEC_names = NA )
   if( isKeySet( LIST_arguments, "trajectorynames" ) )
   {
     VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectorynames" ),
@@ -375,7 +381,7 @@ if( STRING_function == "MDplot_clusters_timeseries" )
                                                          1000 ),
                               main = ifelse( isKeySet( LIST_arguments, "title" ),
                                              getValue( LIST_arguments, "title" ),
-                                             NULL ) )
+                                             NA ) )
 }
 
 
@@ -397,7 +403,7 @@ if( STRING_function == "MDplot_hbond" )
   MDplot_hbond( MDplot_load_hbond( VEC_files ),
                 main = ifelse( isKeySet( LIST_arguments, "title" ),
                                getValue( LIST_arguments, "title" ),
-                               NULL ) )
+                               NA ) )
 }
 
 
@@ -425,12 +431,12 @@ if( STRING_function == "MDplot_hbond_timeseries" )
   if( length( VEC_files ) != 2 )
     stop( paste( "Error in file checking: seemingly, the number of provided files is",
                  length( VEC_files ), "and not 2, as expected." ) )
-  VEC_acceptors = NULL
+  VEC_acceptors = NA
   if( isKeySet( LIST_arguments, "acceptors" ) )
     VEC_acceptors <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "acceptors" ),
                                                    ",",
                                                    fixed = TRUE ) ) )
-  VEC_donors <- NULL
+  VEC_donors <- NA
   if( isKeySet( LIST_arguments, "donors" ) )
     VEC_donors <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "donors" ),
                                                 ",",
@@ -460,7 +466,7 @@ if( STRING_function == "MDplot_hbond_timeseries" )
                                                          1000 ),
                            main = ifelse( isKeySet( LIST_arguments, "title" ),
                                           getValue( LIST_arguments, "title" ),
-                                          NULL ) )
+                                          NA ) )
 }
 #########
 

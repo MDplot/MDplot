@@ -56,9 +56,7 @@ MDplot_load_RMSD <- function( VEC_files )
   {
     TABLE_input <- read.table( VEC_files[ i ] )
     if( length( LIST_return ) == 0 )
-    {
       LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
-    }
     else
     {
       LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
@@ -75,20 +73,22 @@ MDplot_RMSD <- function( LIST_datainput,
                          REAL_divisionFactor = 1000,
                          STRING_timeUnit = "ns",
                          STRING_RMSDUnit = "nm",
-                         VEC_colours = NULL,
-                         VEC_names = NULL,
+                         VEC_colours = NA,
+                         VEC_names = NA,
                          ... )
 {
   # get boundaries
-  REAL_max_RMSD = max( sapply( LIST_datainput[ c( F, T ) ], max ) )
-  INT_max_atomnumber = max( sapply( LIST_datainput[ c( T, F ) ], max ) )
+  REAL_max_RMSD = max( unlist( lapply( LIST_datainput,
+                                       FUN = function( x ) max( x[[ 2 ]] ) ) ) )
+  INT_max_atomnumber = max( unlist( lapply( LIST_datainput,
+                                            FUN = function( x ) max( x[[ 1 ]] ) ) ) )
   #########
   
   # set colours and names
   PALETTE_RMSD_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  if( is.null( VEC_colours ) )
+  if( is.na( VEC_colours ) )
     VEC_colours <- PALETTE_RMSD_colours( length( LIST_datainput ) / 2 )
-  if( is.null( VEC_names ) )
+  if( is.na( VEC_names ) )
     VEC_names = 1:( length( LIST_datainput ) / 2 )
   #########
   

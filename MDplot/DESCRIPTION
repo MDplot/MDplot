@@ -1,7 +1,7 @@
 Package: MDplot
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Plots (automated) graphs for molecular dynamics simulation analysis
+Version: 0.2
 Date: 2015-09-17
 Author: person( given = "Christian", family = "Margreitter", email = "christian.margreitter@boku.ac.at", role = "aut" )
 Title: MDplot - a package for plotting molecular dynamics analysis

@@ -14,7 +14,7 @@
 #eog hbond.tiff &
 
 # TIcurve
-#Rscript MDplot/bash/MDplot_bash.R MDplot_TIcurve files=MDplot/inst/extdata/MDplot_TIcurve_example.txt title="TIcurve plotted" size=900,900 resolution=145 outformat=png outfile=TIcurve.png
+#Rscript MDplot/bash/MDplot_bash.R MDplot_TIcurve files=MDplot/inst/extdata/MDplot_TIcurve_fb_forward_example.txt,MDplot/inst/extdata/MDplot_TIcurve_fb_backward_example.txt title="TIcurve plotted" size=900,900 resolution=145 outformat=png outfile=TIcurve.png
 #eog TIcurve.png &
 
 # RMSD

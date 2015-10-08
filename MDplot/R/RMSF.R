@@ -22,23 +22,25 @@ MDplot_load_RMSF <- function( VEC_files )
 MDplot_RMSF <- function( LIST_datainput,
                          BOOL_printLegend = TRUE,
                          STRING_RMSFUnit = "nm",
-                         VEC_colours = NULL,
+                         VEC_colours = NA,
                          BOOL_residueWise = FALSE,
                          INT_numberXLabels = 7,
-                         VEC_names = NULL,
+                         VEC_names = NA,
                          ... )
 {
   # set colours and names
   PALETTE_RMSF_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  if( is.null( VEC_colours ) )
+  if( is.na( VEC_colours ) )
     VEC_colours <- PALETTE_RMSF_colours( length( LIST_datainput ) / 2 )
-  if( is.null( VEC_names ) )
+  if( is.na( VEC_names ) )
     VEC_names <- 1:( length( LIST_datainput ) / 2 )
   #########
   
   # get boundaries
-  REAL_maxRMSF = max( sapply( LIST_datainput[ c( F, T ) ], max ) )
-  INT_maxAtomnumber = max( sapply( LIST_datainput[ c( T, F ) ], max ) )
+  REAL_maxRMSF = max( unlist( lapply( LIST_datainput,
+                                      FUN = function( x ) max( x[[ 2 ]] ) ) ) )
+  INT_maxAtomnumber = max( unlist( lapply( LIST_datainput,
+                                           FUN = function( x ) max( x[[ 1 ]] ) ) ) )
   #########
   
   # plot the RMSF for all elements of the list containing the data

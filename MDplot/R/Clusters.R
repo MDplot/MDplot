@@ -1,5 +1,5 @@
 # load function for "MDplot_clusters_timeseries"
-MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names = NULL )
+MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names = NA )
 {
   
   # read input and get rid of column 2, which is unnecessary and pack everything in a list
@@ -8,7 +8,7 @@ MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names
   TABLE_buf <- read.table( STRING_path )[ , -2 ]
   LIST_return <- list()
   INT_startLine <- 1  
-  if( is.null( VEC_names ) ||
+  if( is.na( VEC_names ) ||
       length( VEC_lengths ) != length( VEC_names ) )
     VEC_names <- sapply( seq( 1, length( VEC_lengths ) ),
                          function( x ) paste( "trajectory",
@@ -27,8 +27,8 @@ MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names
 # plot timeseries of the clusters
 MDplot_clusters_timeseries <- function( LIST_timeseries,
                                         INT_numberClusters = NA,
-                                        VEC_selectTraj = NULL,
-                                        VEC_selectTime = NULL,
+                                        VEC_selectTraj = NA,
+                                        VEC_selectTime = NA,
                                         BOOL_printNanoseconds = FALSE,
                                         REAL_snapshotsPerNS = 1000,
                                         ... )
@@ -38,9 +38,9 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
   # in addition, generate the fake plotting matrix for the timeseries plot to generate the properly spanned area
   if( is.na( INT_numberClusters ) )
     INT_numberClusters <- max( unlist( lapply( LIST_timeseries, FUN = function( x ) unlist( x[[ 2 ]] ) ) ) )
-  if( !is.null( VEC_selectTraj ) )
+  if( !is.na( VEC_selectTraj ) )
     LIST_timeseries <- LIST_timeseries[ VEC_selectTraj ] 
-  if( !is.null( VEC_selectTime ) )
+  if( !is.na( VEC_selectTime ) )
     for( i in 1:length( LIST_timeseries ) )
       LIST_timeseries[[ i ]][[ 2 ]] <- LIST_timeseries[[ i ]][[ 2 ]][ VEC_selectTime[ 1 ]:VEC_selectTime[ 2 ] ]
   INT_maxSnapshots <- max( unlist( lapply( LIST_timeseries, FUN = function( x ) length( unlist( x[[ 2 ]] ) ) ) ) )
@@ -104,7 +104,7 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
         yaxt = "n", ylab = "", yaxs = "i",
         bty = "n", type = "n" )
   mtext( side = 3, line = 14.0, cex = 1.45,
-         text = ifelse( is.null( list( ... )[[ "main" ]] ),
+         text = ifelse( is.na( list( ... )[[ "main" ]] ),
                         "Cluster timeseries plot",
                         list( ... )[[ "main" ]] ) )
   axis( 1,
@@ -163,13 +163,13 @@ MDplot_load_clusters <- function( STRING_path )
 
 # plot the clusters
 MDplot_clusters <- function( MAT_clusters,
-                             INT_numberClusters = NULL,
+                             INT_numberClusters = NA,
                              STRING_legend_title = "trajectories",
                              BOOL_ownTrajectoryNames = FALSE,
                              ... )
 {
   # reduce number of clusters, in case specified and take care of the trajectory names
-  if( !is.null( INT_numberClusters ) )
+  if( !is.na( INT_numberClusters ) )
     MAT_clusters <- MAT_clusters[ , 1:INT_numberClusters ]
   colnames( MAT_clusters ) <- 1:ncol( MAT_clusters )
   if( !BOOL_ownTrajectoryNames )

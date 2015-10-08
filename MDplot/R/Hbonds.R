@@ -8,25 +8,25 @@ MDplot_load_hbond_timeseries <- function( STRING_path )
 # plot hbond timeseries
 MDplot_hbond_timeseries <- function( TABLE_timeseries,
                                      TABLE_summary,
-                                     VEC_acceptorRange = NULL,
-                                     VEC_donorRange = NULL,
+                                     VEC_acceptorRange = NA,
+                                     VEC_donorRange = NA,
                                      BOOL_plotOccurences = FALSE,
-                                     REAL_scalingFactorPlot = NULL,
+                                     REAL_scalingFactorPlot = NA,
                                      BOOL_printNames = FALSE,
                                      BOOL_namesToSingle = FALSE,
                                      BOOL_timeInNS = FALSE,
                                      REAL_divisionFactor = 1000,
-                                     VEC_timeRange = NULL,
-                                     VEC_hbondIndices = NULL,
+                                     VEC_timeRange = NA,
+                                     VEC_hbondIndices = NA,
                                      ... )
 {
   
   # set all ranges to full, in case they are not specified
-  if( is.null( VEC_acceptorRange ) )
+  if( is.na( VEC_acceptorRange ) )
     VEC_acceptorRange <- c( min( TABLE_summary[ , 4 ] ), max( TABLE_summary[ , 4 ] ) )
-  if( is.null( VEC_donorRange ) )
+  if( is.na( VEC_donorRange ) )
     VEC_donorRange <- c( min( TABLE_summary[ , 2 ] ), max( TABLE_summary[ , 2 ] ) )
-  if( is.null( VEC_hbondIndices ) )
+  if( is.na( VEC_hbondIndices ) )
     VEC_hbondIndices <- c( min( TABLE_summary[ , 1 ] ), max( TABLE_summary[ , 1 ] ) )
   #########
   
@@ -95,7 +95,7 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
   #########
 
   # calculate a scaling factor in dependence of the number of hbonds to be plotted
-  if( is.null( REAL_scalingFactorPlot ) )
+  if( is.na( REAL_scalingFactorPlot ) )
     REAL_scalingFactorPlot <- 0.75 / log( length( VEC_hbondIDs ) )
   #########
 
@@ -120,7 +120,7 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
         type = "n" )
   LIST_ellipsis <- list( ... )
   mtext( side = 3, line = 1.25, cex = 2.0,
-         text = ifelse( is.null( LIST_ellipsis[[ "main" ]] ),
+         text = ifelse( is.na( LIST_ellipsis[[ "main" ]] ),
                         "Hbond timeseries",
                         LIST_ellipsis[[ "main" ]] ),
          adj = ifelse( BOOL_plotOccurences,
@@ -241,8 +241,8 @@ MDplot_load_hbond <- function( STRING_path )
 # plot the hbond information
 MDplot_hbond <- function( TABLE_input,
                           STRING_plotMethod = "residue-wise",
-                          VEC_acceptorRange = NULL,
-                          VEC_donorRange = NULL,
+                          VEC_acceptorRange = NA,
+                          VEC_donorRange = NA,
                           BOOL_printLegend = TRUE,
                           ... )
 {
@@ -250,7 +250,7 @@ MDplot_hbond <- function( TABLE_input,
   # residue-wise: sum all residue-to-residue hbonds up (per-atom contributions)
   if( STRING_plotMethod == "residue-wise" )
   {
-    TABLE_result <- as.data.frame( NULL )
+    TABLE_result <- as.data.frame( NA )
     VEC_boundariesDonor <- c( min( TABLE_input[ , 2 ] ), max( TABLE_input[ , 2 ] ) )
     VEC_boundariesAcceptor <- c( min( TABLE_input[ , 4 ] ), max( TABLE_input[ , 4 ] ) )
     
@@ -283,12 +283,12 @@ MDplot_hbond <- function( TABLE_input,
     TABLE_result <- TABLE_result[ , c( -8, -7, -6, -5, -3, -1 ) ]
     TABLE_result <- TABLE_result[ order( TABLE_result[ , 1 ], TABLE_result[ , 2 ] ), ]
     PALETTE_residuewise <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    if( !is.null( VEC_acceptorRange ) )
+    if( !is.na( VEC_acceptorRange ) )
     {
       TABLE_result <- TABLE_result[ TABLE_result[ , 2 ] >= VEC_acceptorRange[ 1 ], , drop = FALSE ]
       TABLE_result <- TABLE_result[ TABLE_result[ , 2 ] <= VEC_acceptorRange[ 2 ], , drop = FALSE ]
     }
-    if( !is.null( VEC_donorRange ) )
+    if( !is.na( VEC_donorRange ) )
     {
       TABLE_result <- TABLE_result[ TABLE_result[ , 1 ] >= VEC_donorRange[ 1 ], , drop = FALSE ]
       TABLE_result <- TABLE_result[ TABLE_result[ , 1 ] <= VEC_donorRange[ 2 ], , drop = FALSE ]

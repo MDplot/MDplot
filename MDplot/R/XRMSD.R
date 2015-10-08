@@ -23,17 +23,17 @@ MDplot_load_XRMSD <- function( STRING_path,
 # TODO: allow user to set appropriate colour span
 MDplot_XRMSD <- function( MAT_values,
                           BOOL_printLegend = TRUE,
-                          VEC_xAxisRange = NULL,
-                          VEC_yAxisRange = NULL,
-                          VEC_colourRange = NULL,
+                          VEC_xAxisRange = NA,
+                          VEC_yAxisRange = NA,
+                          VEC_colourRange = NA,
                           ... )
 {
   
   # check user supplied input and replace in case undefined
-  if( is.null( VEC_xAxisRange ) )
+  if( is.na( VEC_xAxisRange ) )
     VEC_xAxisRange <- c( min( MAT_values[ , 1 ] ),
                           max( MAT_values[ , 1 ] ) )
-  if( is.null( VEC_yAxisRange ) )
+  if( is.na( VEC_yAxisRange ) )
     VEC_yAxisRange <- c( min( MAT_values[ , 2 ] ),
                           max( MAT_values[ , 2 ] ) )
   VEC_colourRange <- c( 0, 
