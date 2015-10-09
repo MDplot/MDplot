@@ -52,29 +52,30 @@ if( isKeySet( LIST_arguments, "resolution" ) )
 
 # define plot device and options
 if( STRING_outformat == "pdf" )
-{
   pdf( file = paste( STRING_outfile ),
        width = as.numeric( VEC_size[ 1 ] ) / 96,
        height = as.numeric( VEC_size[ 2 ] ) / 96 )
-}
-if( STRING_outformat == "png" )
-{
-  png( paste( STRING_outfile ),
-       width = as.numeric( VEC_size[ 1 ] ),
-       height = as.numeric( VEC_size[ 2 ] ),
-       units = "px",
-       res = REAL_resolution,
-       type = "cairo" )
-}
-if( STRING_outformat == "tiff" )
-{
-  tiff( filename = paste( STRING_outfile ),
-        width = as.numeric( VEC_size[ 1 ] ),
-        height = as.numeric( VEC_size[ 2 ] ),
-        units = "px",
-        compression = "none",
-        res = REAL_resolution )
-}
+else
+  if( STRING_outformat == "png" )
+    png( paste( STRING_outfile ),
+         width = as.numeric( VEC_size[ 1 ] ),
+         height = as.numeric( VEC_size[ 2 ] ),
+         units = "px",
+         res = REAL_resolution,
+         type = "cairo" )
+  else
+    if( STRING_outformat == "tiff" )
+      tiff( filename = paste( STRING_outfile ),
+            width = as.numeric( VEC_size[ 1 ] ),
+            height = as.numeric( VEC_size[ 2 ] ),
+            units = "px",
+            compression = "none",
+            res = REAL_resolution )
+    else
+      stop( paste( "Error, the specified output format '",
+                   STRING_outformat,
+                   "' is not known.",
+                   sep = "" ) )
 #########
 
 # check, which plot has been selected
@@ -266,8 +267,8 @@ if( STRING_function == "MDplot_TIcurve" )
   MDplot_TIcurve( MDplot_load_TIcurve( VEC_files ),
                   BOOL_invertedBackwards = ifelse( isKeySet( LIST_arguments,
                                                              "invert" ),
-                                                   FALSE,
-                                                   TRUE ),
+                                                   TRUE,
+                                                   FALSE ),
                   main = ifelse( isKeySet( LIST_arguments, "title" ),
                                  getValue( LIST_arguments, "title" ),
                                  NA ) )

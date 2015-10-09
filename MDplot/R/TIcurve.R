@@ -98,7 +98,7 @@ MDplot_TIcurve <- function( LIST_input,
     INT_significantBackward <- get_sign_digits( REAL_backward_error )
     REAL_backward_integral_rounded <- round( REAL_backward_integral, digits = INT_significantBackward )
     REAL_backward_error_rounded <- round( REAL_backward_error, digits = INT_significantBackward )
-    mtext( side = 1, line = 6.0, cex = 1.0,
+    mtext( side = 1, line = 6.25, cex = 1.0,
            adj = 1,
            text = substitute( paste( Delta, "G"["back"], " = ",
                                      REAL_backward_integral_rounded,
@@ -109,7 +109,7 @@ MDplot_TIcurve <- function( LIST_input,
     REAL_hysteresis <- round( REAL_forward_integral - REAL_backward_integral,
                               digits = min( c( INT_significantForward,
                                                INT_significantBackward ) ) )
-    mtext( side = 1, line = 7.0, cex = 1.0,
+    mtext( side = 1, line = 7.5, cex = 1.0,
            adj = 1,
            text = substitute( paste( "hysteresis = ",
                                      REAL_hysteresis,

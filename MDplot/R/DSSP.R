@@ -50,14 +50,9 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   #########
   
   # specify graphical settings, in case a legend has been requested (or not)
-  if( BOOL_printLegend )
-  {
-    par( mar = c( 4.5, 4.5, 2.5, 9 ) )
-  }
-  else
-  { 
-    par( mar = c( 4.5, 4.5, 2.5, 2.5 ) )
-  }
+  par( mar = c( 4.5, 4.5, 2.5, ifelse( BOOL_printLegend,
+                                       7.5,
+                                       2.5 ) ) )
   #########
   
   # plot the values of the first secondary structure kind, followed
@@ -90,14 +85,12 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
       colnames( MAT_data ) <- VEC_namesLegend[ 1:ncol( MAT_data ) ]
     #########
     
-    par( xpd = TRUE )
     legend( 110,
             75,
             legend = colnames( MAT_data ),
             col = COLOURS_DSSP_summary,
-            lty = 0, lwd = 0,
-            pch = 19, cex = 1 )
-    par( xpd = FALSE )
+            lty = 0, lwd = 0, bty = "n",
+            pch = 19, cex = 1, xpd = TRUE )
   }
   #########
 }
@@ -117,6 +110,8 @@ MDplot_load_DSSP_timeseries <- function( STRING_folder )
                           VEC_gromos_names[ i ],
                           STRING_gromos_postfix, sep = "" )
     if( !file.exists( STRING_file ) )
+      next
+    if( file.info( STRING_file )$size == 0 )
       next
     TABLE_current <- read.table( STRING_file )
     LIST_current <- list( name = VEC_gromos_names[ i ],
