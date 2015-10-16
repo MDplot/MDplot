@@ -1,6 +1,7 @@
 # plot the average RMSD of many runs with spread
 MDplot_RMSD_average <- function( LIST_input,
                                  INT_skip = 0,
+                                 BOOL_printMeans = FALSE,
                                  ... )
 {
   
@@ -45,6 +46,14 @@ MDplot_RMSD_average <- function( LIST_input,
         labels = rownames( MAT_result ),
         cex.axis = 0.95,
         tick = FALSE )
+  #########
+  
+  # print the means in case specified
+  print( paste( "Mean: ",
+                round( mean( MAT_result[ , 1 ] ), digits = 2 ),
+                " +/- ",
+                round( mean( MAT_result[ , 2 ] ), digits = 2 ),
+                sep = "" ) )
   #########
 }
 

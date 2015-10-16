@@ -1,3 +1,68 @@
+# plot multiple DSSP plots
+MDplot_multi_DSSP_summary <- function( LIST_input,
+                                       STRING_selectedMotif,
+                                       BOOL_printLegend = FALSE,
+                                       VEC_colours = NA,
+                                       ... )
+{
+  if( length( LIST_input ) < 2 )
+    stop( "Error occured since the length of the input list is less than two." )
+  
+  # specify graphical settings and colours, in case a legend has been requested (or not)
+  if( BOOL_printLegend )
+    layout( matrix( 1:2, ncol = 2 ), width = c( 0.825, 0.175 ), height = c( 1, 1 ) )
+  if( all( is.na( VEC_colours ) ) )
+  {
+    PALETTE_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+    VEC_colours <- PALETTE_colours( length( LIST_input ) )
+  }
+  #########
+  MDplot_DSSP_summary( LIST_input[[ 1 ]][[ "matrix" ]],
+                       VEC_selectedMotifs = c( STRING_selectedMotif ),
+                       BOOL_barePlot = FALSE,
+                       STRING_plotType = "curves",
+                       COLOURS_DSSP_summary = c( VEC_colours[ 1 ] ) )
+  for( i in 2:length( LIST_input ) )
+  {
+    par( new = TRUE )
+    MDplot_DSSP_summary( LIST_input[[ i ]][[ "matrix" ]],
+                         VEC_selectedMotifs = c( STRING_selectedMotif ),
+                         BOOL_barePlot = TRUE,
+                         STRING_plotType = "curves",
+                         COLOURS_DSSP_summary = c( VEC_colours[ i ] ) )
+  }
+  
+  # print legend, if flag is set
+  if( BOOL_printLegend )
+  {
+    plot.new()
+    legend( "right",
+            legend = unlist( lapply( LIST_input, function( x ) x[[ "name" ]] ) ),
+            col = VEC_colours,
+            lty = 0, lwd = 0, bty = "n",
+            pch = 19, cex = 1, xpd = TRUE )
+  }
+  #########
+}
+
+# get average summary table
+MDplot_averaging_DSSP_summary <- function( VEC_files )
+{
+  if( length( VEC_files ) < 2 )
+    stop( "Error because no input files (two at least) have been specified!" )
+  MAT_average <- MDplot_load_DSSP_summary( VEC_files[ 1 ] )
+  for( i in 2:length( VEC_files ) )
+    MAT_average <- MAT_average +
+                   MDplot_load_DSSP_summary( VEC_files[ i ] )
+  MAT_average <- MAT_average / length( VEC_files )
+  colnames( MAT_average ) <- c( "residuenumber", "# 3-Helix", "3-Helix",
+                                "# 4-Helix", "4-Helix", "# 5-Helix",
+                                "5-Helix", "# Turn", "Turn",
+                                "# B-Strand", "B-Strand", "# B-Bridge",
+                                "B-Bridge", "# Bend", "Bend" )
+  return( MAT_average )
+}
+
 # load and return input
 MDplot_load_DSSP_summary <- function( STRING_input )
 {
@@ -8,9 +73,13 @@ MDplot_load_DSSP_summary <- function( STRING_input )
 MDplot_DSSP_summary <- function( TABLE_datainput,
                                  BOOL_printLegend = FALSE,
                                  BOOL_useOwnLegend = FALSE,
+                                 VEC_namesLegend = NA,
                                  COLOURS_DSSP_summary = NA,
                                  VEC_showValues = NA,
                                  VEC_showResidues = NA,
+                                 STRING_plotType = "dots",
+                                 VEC_selectedMotifs = NA,
+                                 BOOL_barePlot = FALSE,
                                  ... )
 {
   
@@ -18,11 +87,40 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   VEC_residues <- TABLE_datainput[ , 1 ]
   TABLE_datainput <- TABLE_datainput[ , -1 ]
   MAT_data <- as.matrix( TABLE_datainput[ , c( F, T ) ] )
-  MAT_buffer <- MAT_data
+  colnames( MAT_data ) <- c( "3-Helix", "4-Helix", "5-Helix",
+                             "Turn", "B-Strand", "B-Bridge",
+                             "Bend" )
+  #########
+  
+  # check plot type, delete non-selected motifs and check legend names
+  if( STRING_plotType != "dots" &&
+      STRING_plotType != "bars" &&
+      STRING_plotType != "curves" )
+    stop( paste( "Error while analysing plot type in 'MDplot_DSSP_summary()', type ",
+                 STRING_plotType,
+                 " is not known!",
+                 sep = "" ) )
+  if( all( is.na( VEC_selectedMotifs ) ) )
+    VEC_selectedMotifs <- colnames( MAT_data )
+  MAT_data <- MAT_data[ ,
+                        ifelse( colnames( MAT_data ) %in% VEC_selectedMotifs,
+                                TRUE,
+                                FALSE ),
+                        drop = FALSE ]
+  if( BOOL_useOwnLegend )
+    if( all( is.na( VEC_namesLegend ) ) ||
+        length( VEC_namesLegend ) != ncol( MAT_data ) )
+      stop( "Error while trying to name the columns in the input matrix ",
+            "according to specification, since either no 'VEC_namesLegend' has been ",
+            "supplied or it has the wrong length!",
+            sep = "" )
+    else
+      colnames( MAT_data ) <- VEC_namesLegend
   #########
   
   # if certain range of residues is to be shown, remove the rest
-  if( !is.na( VEC_showResidues ) )
+  MAT_buffer <- MAT_data
+  if( !all( is.na( VEC_showResidues ) ) )
     for( i in nrow( MAT_buffer ):1 )
       if( !( i %in% VEC_showResidues[ 1 ]:VEC_showResidues[ 2 ] ) )
         #use "drop = FALSE" to avoid dimension reduction
@@ -31,7 +129,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   #########
   
   # if no colour vector has been supplied, create one now
-  if( is.na( COLOURS_DSSP_summary ) )
+  if( all( is.na( COLOURS_DSSP_summary ) ) )
   {
     PALETTE_DSSP_summary_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
     COLOURS_DSSP_summary <- PALETTE_DSSP_summary_colours( ncol( MAT_data ) )
@@ -39,7 +137,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   #########
   
   # if certain range of values is to be shown, remove the rest
-  if( is.na( VEC_showValues  ) )
+  if( all( is.na( VEC_showValues  ) ) )
     VEC_showValues = rep( 1:ncol( MAT_data ) )
   MAT_buffer <- MAT_data
   for( i in ncol( MAT_buffer ):1 )
@@ -55,36 +153,79 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
                                        2.5 ) ) )
   #########
   
-  # plot the values of the first secondary structure kind, followed
-  # by the others
-  plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
-        xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = COLOURS_DSSP_summary, 
-        xlab = "residues", ylab = "fractions [%]",  xaxs = "i", yaxs = "i", 
-        cex = 0.9, pch = 19, ... )
-  if( nrow( MAT_data ) > 1 )
+  # dots plot variant
+  if( STRING_plotType == "dots" )
   {
-    for( i in 2:nrow( MAT_data ) )
+    plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
+          xlim = c( 1, nrow( MAT_data ) ),
+          xlab = ifelse( BOOL_barePlot, "", "residues" ), xaxs = "i", xaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          ylim = c( 0, 100 ),
+          ylab = ifelse( BOOL_barePlot, "", "fractions [%]" ), yaxs = "i", yaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          col = COLOURS_DSSP_summary, 
+          cex = 0.9, pch = 19, bty = ifelse( BOOL_barePlot, "n", "o" ), ... )
+    if( nrow( MAT_data ) > 1 )
+      for( i in 2:nrow( MAT_data ) )
     {
       par( new = TRUE )
-      plot( rep( VEC_residues[[ i ]], each = ncol( MAT_data ) ), MAT_data[ i, ], col = COLOURS_DSSP_summary, 
-            xaxs = "i", yaxs = "i", xaxt = "n", yaxt = "n", xlab = "", ylab = "", 
-            xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), cex = 0.75, pch = 19 )
-    }
+      plot( rep( VEC_residues[[ i ]], each = ncol( MAT_data ) ),
+            MAT_data[ i, ],
+            col = COLOURS_DSSP_summary, 
+            xaxs = "i", xaxt = "n", xlab = "", xlim = c( 1, nrow( MAT_data ) ),
+            yaxs = "i", yaxt = "n", ylab = "", ylim = c( 0, 100 ),
+            cex = 0.9, pch = 19, bty = "n" )
+      }
+  }
+  #########
+  
+  # bars plot variant
+  if( STRING_plotType == "bars" )
+  {
+    stop( "Type 'bars' is not yet implemented, sorry!" )
+    #plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
+    #      xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = COLOURS_DSSP_summary, 
+    #      xlab = "residues", ylab = "fractions [%]",  xaxs = "i", yaxs = "i", 
+    #      cex = 0.9, pch = 19, ... )
+    #if( nrow( MAT_data ) > 1 )
+    #  for( i in 2:nrow( MAT_data ) )
+    #  {
+    #    par( new = TRUE )
+    #    plot( rep( VEC_residues[[ i ]], each = ncol( MAT_data ) ),
+    #          MAT_data[ i, ],
+    #          col = COLOURS_DSSP_summary, 
+    #          xaxs = "i", xaxt = "n", xlab = "", xlim = c( 1, nrow( MAT_data ) ),
+    #          yaxs = "i", yaxt = "n", ylab = "", ylim = c( 0, 100 ),
+    #          cex = 0.75, pch = 19 )
+    #  }
+  }
+  #########
+  
+  # curves plot variant
+  if( STRING_plotType == "curves" )
+  {
+    plot( MAT_data[ , 1 ],
+          xlim = c( 1, nrow( MAT_data ) ),
+          xlab = ifelse( BOOL_barePlot, "", "residues" ), xaxs = "i", xaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          ylim = c( 0, 100 ),
+          ylab = ifelse( BOOL_barePlot, "", "fractions [%]" ), yaxs = "i", yaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          col = COLOURS_DSSP_summary[ 1 ],
+          type = "l",
+          bty = ifelse( BOOL_barePlot, "n", "o" ), ... )
+    if( ncol( MAT_data ) > 1 )
+      for( i in 2:ncol( MAT_data ) )
+      {
+        par( new = TRUE )
+        plot( MAT_data[ , i ],
+              col = COLOURS_DSSP_summary[ i ], 
+              xaxs = "i", xaxt = "n", xlab = "", xlim = c( 1, nrow( MAT_data ) ),
+              yaxs = "i", yaxt = "n", ylab = "", ylim = c( 0, 100 ),
+              type = "l", bty = "n" )
+      }
   }
   #########
   
   # print legend, if flag is set
   if( BOOL_printLegend )
-  {
-    VEC_namesLegend = c( "3-Helix", "4-Helix", "5-Helix",
-                         "Turn", "B-strand", "B-Bridge",
-                         "Bend            ", rep( NA, 17 ) )
-    
-    # in case, no own order has been specified
-    if( !BOOL_useOwnLegend )
-      colnames( MAT_data ) <- VEC_namesLegend[ 1:ncol( MAT_data ) ]
-    #########
-    
+  {    
     legend( 110,
             75,
             legend = colnames( MAT_data ),
@@ -154,10 +295,8 @@ MDplot_DSSP_timeseries <- function( LIST_timeseries,
   VEC_colours <- PALETTE_DSSP_timeseries_colours( length( LIST_timeseries ) )
   
   # specify graphical settings, in case a legend has been requested (or not)
-  if( BOOL_printLegend )
-    par( mar = c( 4.5, 4.5, 2.5, 10 ) )
-  else
-    par( mar = c( 4.5, 4.5, 2.5, 2.5 ) )
+  par( mar = c( 4.5, 4.5, 2.5, ifelse( BOOL_printLegend, 10.0, 2.5 ) ) )
+
   #########
   for( i in 1:length( LIST_timeseries )  )
   {

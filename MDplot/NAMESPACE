@@ -20,7 +20,8 @@ export(
          MDplot_XRMSD,
          MDplot_hbond_timeseries,
          MDplot_clusters_timeseries,
-         MDplot_RMSD_average
+         MDplot_RMSD_average,
+         MDplot_multi_DSSP_summary
        )
 
 # export loading functions
@@ -38,6 +39,10 @@ export(
          MDplot_load_clusters_timeseries
       )
 
+# export data manipulation functions
+export(
+         MDplot_averaging_DSSP_summary
+      )
 # export other functions
 export(
          parse_arguments,
