@@ -56,7 +56,8 @@ export(
          split_equidistant,
          translate_aminoacids,
          plot_segments,
-         get_sign_digits
+         get_sign_digits,
+         fill_bins
       )
 
 # export classes

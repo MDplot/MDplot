@@ -3,6 +3,8 @@ MDplot_multi_DSSP_summary <- function( LIST_input,
                                        STRING_selectedMotif,
                                        BOOL_printLegend = FALSE,
                                        VEC_colours = NA,
+                                       VEC_showResidues = NA,
+                                       BOOL_barePlot = FALSE,
                                        ... )
 {
   if( length( LIST_input ) < 2 )
@@ -19,9 +21,11 @@ MDplot_multi_DSSP_summary <- function( LIST_input,
   #########
   MDplot_DSSP_summary( LIST_input[[ 1 ]][[ "matrix" ]],
                        VEC_selectedMotifs = c( STRING_selectedMotif ),
-                       BOOL_barePlot = FALSE,
+                       BOOL_barePlot = BOOL_barePlot,
                        STRING_plotType = "curves",
-                       COLOURS_DSSP_summary = c( VEC_colours[ 1 ] ) )
+                       VEC_colours = c( VEC_colours[ 1 ] ),
+                       VEC_showResidues = VEC_showResidues,
+                       ... )
   for( i in 2:length( LIST_input ) )
   {
     par( new = TRUE )
@@ -29,7 +33,9 @@ MDplot_multi_DSSP_summary <- function( LIST_input,
                          VEC_selectedMotifs = c( STRING_selectedMotif ),
                          BOOL_barePlot = TRUE,
                          STRING_plotType = "curves",
-                         COLOURS_DSSP_summary = c( VEC_colours[ i ] ) )
+                         VEC_colours = c( VEC_colours[ i ] ),
+                         VEC_showResidues = VEC_showResidues,
+                         ... )
   }
   
   # print legend, if flag is set
@@ -70,16 +76,19 @@ MDplot_load_DSSP_summary <- function( STRING_input )
 }
 
 # plot the summary over residues and values (selected)
+# WARNING because residues are renumbered if selected
 MDplot_DSSP_summary <- function( TABLE_datainput,
                                  BOOL_printLegend = FALSE,
                                  BOOL_useOwnLegend = FALSE,
                                  VEC_namesLegend = NA,
-                                 COLOURS_DSSP_summary = NA,
+                                 VEC_colours = NA,
                                  VEC_showValues = NA,
                                  VEC_showResidues = NA,
                                  STRING_plotType = "dots",
                                  VEC_selectedMotifs = NA,
                                  BOOL_barePlot = FALSE,
+                                 xlab = "residues",
+                                 ylab = "occurences [%]",
                                  ... )
 {
   
@@ -129,10 +138,10 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   #########
   
   # if no colour vector has been supplied, create one now
-  if( all( is.na( COLOURS_DSSP_summary ) ) )
+  if( all( is.na( VEC_colours ) ) )
   {
     PALETTE_DSSP_summary_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    COLOURS_DSSP_summary <- PALETTE_DSSP_summary_colours( ncol( MAT_data ) )
+    VEC_colours <- PALETTE_DSSP_summary_colours( ncol( MAT_data ) )
   }
   #########
   
@@ -158,18 +167,20 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   {
     plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
           xlim = c( 1, nrow( MAT_data ) ),
-          xlab = ifelse( BOOL_barePlot, "", "residues" ), xaxs = "i", xaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          xlab = ifelse( BOOL_barePlot, "", "residues" ),
+          xaxs = "i", xaxt = ifelse( BOOL_barePlot, "n", "s" ),
           ylim = c( 0, 100 ),
-          ylab = ifelse( BOOL_barePlot, "", "fractions [%]" ), yaxs = "i", yaxt = ifelse( BOOL_barePlot, "n", "s" ),
-          col = COLOURS_DSSP_summary, 
-          cex = 0.9, pch = 19, bty = ifelse( BOOL_barePlot, "n", "o" ), ... )
+          ylab = ifelse( BOOL_barePlot, "", "occurences [%]" ),
+          yaxs = "i", yaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          col = VEC_colours, 
+          cex = 0.9, pch = 19, bty = ifelse( BOOL_barePlot, "n", "o" ) )
     if( nrow( MAT_data ) > 1 )
       for( i in 2:nrow( MAT_data ) )
     {
       par( new = TRUE )
       plot( rep( VEC_residues[[ i ]], each = ncol( MAT_data ) ),
             MAT_data[ i, ],
-            col = COLOURS_DSSP_summary, 
+            col = VEC_colours, 
             xaxs = "i", xaxt = "n", xlab = "", xlim = c( 1, nrow( MAT_data ) ),
             yaxs = "i", yaxt = "n", ylab = "", ylim = c( 0, 100 ),
             cex = 0.9, pch = 19, bty = "n" )
@@ -182,8 +193,8 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   {
     stop( "Type 'bars' is not yet implemented, sorry!" )
     #plot( rep( VEC_residues[[ 1 ]], each = ncol( MAT_data ) ), MAT_data[ 1, ],
-    #      xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = COLOURS_DSSP_summary, 
-    #      xlab = "residues", ylab = "fractions [%]",  xaxs = "i", yaxs = "i", 
+    #      xlim = c( 1, nrow( MAT_data ) ), ylim = c( 0, 100 ), col = VEC_colours, 
+    #      xlab = "residues", ylab = "occurences [%]",  xaxs = "i", yaxs = "i", 
     #      cex = 0.9, pch = 19, ... )
     #if( nrow( MAT_data ) > 1 )
     #  for( i in 2:nrow( MAT_data ) )
@@ -191,7 +202,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
     #    par( new = TRUE )
     #    plot( rep( VEC_residues[[ i ]], each = ncol( MAT_data ) ),
     #          MAT_data[ i, ],
-    #          col = COLOURS_DSSP_summary, 
+    #          col = VEC_colours, 
     #          xaxs = "i", xaxt = "n", xlab = "", xlim = c( 1, nrow( MAT_data ) ),
     #          yaxs = "i", yaxt = "n", ylab = "", ylim = c( 0, 100 ),
     #          cex = 0.75, pch = 19 )
@@ -204,10 +215,12 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
   {
     plot( MAT_data[ , 1 ],
           xlim = c( 1, nrow( MAT_data ) ),
-          xlab = ifelse( BOOL_barePlot, "", "residues" ), xaxs = "i", xaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          xlab = ifelse( BOOL_barePlot, "", "residues" ),
+          xaxs = "i", xaxt = ifelse( BOOL_barePlot, "n", "s" ),
           ylim = c( 0, 100 ),
-          ylab = ifelse( BOOL_barePlot, "", "fractions [%]" ), yaxs = "i", yaxt = ifelse( BOOL_barePlot, "n", "s" ),
-          col = COLOURS_DSSP_summary[ 1 ],
+          ylab = ifelse( BOOL_barePlot, "", "occurences [%]" ),
+          yaxs = "i", yaxt = ifelse( BOOL_barePlot, "n", "s" ),
+          col = VEC_colours[ 1 ],
           type = "l",
           bty = ifelse( BOOL_barePlot, "n", "o" ), ... )
     if( ncol( MAT_data ) > 1 )
@@ -215,7 +228,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
       {
         par( new = TRUE )
         plot( MAT_data[ , i ],
-              col = COLOURS_DSSP_summary[ i ], 
+              col = VEC_colours[ i ], 
               xaxs = "i", xaxt = "n", xlab = "", xlim = c( 1, nrow( MAT_data ) ),
               yaxs = "i", yaxt = "n", ylab = "", ylim = c( 0, 100 ),
               type = "l", bty = "n" )
@@ -229,7 +242,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
     legend( 110,
             75,
             legend = colnames( MAT_data ),
-            col = COLOURS_DSSP_summary,
+            col = VEC_colours,
             lty = 0, lwd = 0, bty = "n",
             pch = 19, cex = 1, xpd = TRUE )
   }

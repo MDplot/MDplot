@@ -266,3 +266,27 @@ get_sign_digits <- function( REAL_error )
       return( i )
   return( VEC_digits )
 }
+
+# fill the bins according to specification
+fill_bins <- function( MAT_input,
+                       INT_xbins = 100,
+                       INT_ybins = 100,
+                       VEC_xLim = NA,
+                       VEC_yLim = NA )
+{
+  if( all( is.na( VEC_xLim ) ) )
+    VEC_xLim <- c( floor( min( MAT_input[ , 1 ] ) ), ceiling( max( MAT_input[ , 1 ] ) ) )
+  if( all( is.na( VEC_yLim ) ) )
+    VEC_yLim <- c( floor( min( MAT_input[ , 2 ] ) ), ceiling( max( MAT_input[ , 2 ] ) ) )
+  
+  cutsX <- seq( from = VEC_xLim[ 1 ], to = VEC_xLim[ 2 ], length = INT_xbins + 1 )
+  cutsY <- seq( from = VEC_yLim[ 1 ], to = VEC_yLim[ 2 ], length = INT_ybins + 1 )
+  indicesX <- cut( MAT_input[ , 1 ], cutsX, include.lowest = TRUE)
+  indicesY <- cut( MAT_input[ , 2 ], cutsY, include.lowest = TRUE)
+  freq2D <- tapply( MAT_input[ , 1 ], list( indicesX, indicesY ), base::length )
+  freq2D[ is.na( freq2D ) ] <- 0  
+  
+  return( list( xBins = cutsX,
+                yBins = cutsY,
+                freq2D = freq2D ) )
+}

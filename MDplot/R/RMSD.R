@@ -44,7 +44,7 @@ MDplot_RMSD_average <- function( LIST_input,
   axis( 1,
         at = PLOT_positions,
         labels = rownames( MAT_result ),
-        cex.axis = 0.95,
+        cex.axis = 0.9,
         tick = FALSE )
   #########
   
