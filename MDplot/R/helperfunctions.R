@@ -283,8 +283,20 @@ fill_bins <- function( MAT_input,
   cutsY <- seq( from = VEC_yLim[ 1 ], to = VEC_yLim[ 2 ], length = INT_ybins + 1 )
   indicesX <- cut( MAT_input[ , 1 ], cutsX, include.lowest = TRUE)
   indicesY <- cut( MAT_input[ , 2 ], cutsY, include.lowest = TRUE)
-  freq2D <- tapply( MAT_input[ , 1 ], list( indicesX, indicesY ), base::length )
-  freq2D[ is.na( freq2D ) ] <- 0  
+  
+  freq2D <- NA
+  if( ncol( MAT_input ) == 2 )
+  {
+    freq2D[ is.na( freq2D ) ] <- 0
+    freq2D <- tapply( MAT_input[ , 1 ], list( indicesX, indicesY ), base::length )
+  } else {
+    if( ncol( MAT_input ) == 3 )
+    {
+      freq2D <- tapply( MAT_input[ , 3 ], list( indicesX, indicesY ), mean )
+    } else {
+      stop( "Error because the number of columns in input matrix is not either two or three!" )
+    }
+  }
   
   return( list( xBins = cutsX,
                 yBins = cutsY,

@@ -52,30 +52,36 @@ if( isKeySet( LIST_arguments, "resolution" ) )
 
 # define plot device and options
 if( STRING_outformat == "pdf" )
+{
   pdf( file = paste( STRING_outfile ),
        width = as.numeric( VEC_size[ 1 ] ) / 96,
        height = as.numeric( VEC_size[ 2 ] ) / 96 )
-else
+} else {
   if( STRING_outformat == "png" )
+  {
     png( paste( STRING_outfile ),
          width = as.numeric( VEC_size[ 1 ] ),
          height = as.numeric( VEC_size[ 2 ] ),
          units = "px",
          res = REAL_resolution,
          type = "cairo" )
-  else
+  } else {
     if( STRING_outformat == "tiff" )
+    {
       tiff( filename = paste( STRING_outfile ),
             width = as.numeric( VEC_size[ 1 ] ),
             height = as.numeric( VEC_size[ 2 ] ),
             units = "px",
             compression = "none",
             res = REAL_resolution )
-    else
+    } else {
       stop( paste( "Error, the specified output format '",
                    STRING_outformat,
                    "' is not known.",
                    sep = "" ) )
+    }
+  }
+}
 #########
 
 # check, which plot has been selected
@@ -223,7 +229,14 @@ if( STRING_function == "MDplot_ramachandran" )
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_allowedForAll,
-                  "bins" ), LIST_arguments )
+                  "bins",
+                  "anglecolumns",
+                  "heatcolumn",
+                  "plottype",
+                  "heatfunction",
+                  "heatunits",
+                  "contour",
+                  "shiftangles" ), LIST_arguments )
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -236,11 +249,43 @@ if( STRING_function == "MDplot_ramachandran" )
     VEC_bins <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "bins" ),
                                               ",",
                                               fixed = TRUE ) ) )
+  VEC_angleColumns <- c( 1, 2 )
+  if( isKeySet( LIST_arguments, "anglecolumns" ) )
+    VEC_angleColumns <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "anglecolumns" ),
+                                                      ",",
+                                                      fixed = TRUE ) ) )
+  STRING_heatfunction <- "log"
+  if( isKeySet( LIST_arguments, "heatfunction" ) )
+    STRING_heatfunction <- getValue( LIST_arguments, "heatfunction" )
   
+  STRING_plotType <- "comic"
+  if( isKeySet( LIST_arguments, "plottype" ) )
+    STRING_plotType <- getValue( LIST_arguments, "plottype" )
+  
+  STRING_heatUnits <- NA
+  if( isKeySet( LIST_arguments, "heatunits" ) )
+    STRING_heatUnits <- paste( "[", getValue( LIST_arguments, "heatunits" ), "]", sep = "" )
+
   # plot
-  MDplot_ramachandran( MDplot_load_ramachandran( VEC_files ),
+  MDplot_ramachandran( MDplot_load_ramachandran( VEC_files,
+                                                 VEC_angleColumns = VEC_angleColumns,
+                                                 REAL_shiftAngles = ifelse( isKeySet( LIST_arguments, "shiftangles" ),
+                                                                            as.numeric( getValue( LIST_arguments, "shiftangles" ) ),
+                                                                            NA ),
+                                                 INT_heatColumn = ifelse( isKeySet( LIST_arguments, "heatcolumn" ),
+                                                                          as.numeric( getValue( LIST_arguments, "heatcolumn" ) ),
+                                                                          NA ) ),
                        xbins = VEC_bins[ 1 ],
                        ybins = VEC_bins[ 2 ],
+                       STRING_plotType = STRING_plotType,
+                       heatFun = STRING_heatfunction,
+                       BOOL_printLegend = ifelse( isKeySet( LIST_arguments, "printlegend" ),
+                                                  TRUE,
+                                                  FALSE ),
+                       BOOL_plotContour = ifelse( isKeySet( LIST_arguments, "contour" ),
+                                                  TRUE,
+                                                  FALSE ),
+                       STRING_heatUnits = STRING_heatUnits,
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
                                       NA ) )
