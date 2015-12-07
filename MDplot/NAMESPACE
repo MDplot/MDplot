@@ -57,7 +57,8 @@ export(
          translate_aminoacids,
          plot_segments,
          get_sign_digits,
-         fill_bins
+         fill_bins,
+         print_help
       )
 
 # export classes

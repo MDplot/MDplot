@@ -192,10 +192,11 @@ isKeySet <- function( arguments, STRING_key )
 # test, whether all required input arguments are given with the script call
 testRequired <- function( VEC_required, LIST_provided )
 {
-  for( i in 1:length( VEC_required ) )
-    if( !isKeySet( LIST_provided, VEC_required[ i ] ) )
-      stop( paste( "Error while checking the proper provision of all required parameters (",
-                   VEC_required, "). One or more missing." ) )
+  if( length( VEC_required ) >= 1 )
+    for( i in 1:length( VEC_required ) )
+      if( !isKeySet( LIST_provided, VEC_required[ i ] ) )
+        stop( paste( "Error while checking the proper provision of all required parameters (",
+                     VEC_required, "). One or more missing." ) )
 }
 
 # hack to get value of key-value pair (fix for release please)
@@ -223,17 +224,14 @@ getFiles <- function( STRING_input )
 testAllowed <- function( VEC_allowed, LIST_provided )
 {
   VEC_providedKeys <- getListOfKeys( LIST_provided )
-  for( i in 1:length( VEC_providedKeys ) )
-  {
-    if( !( isKeySet( VEC_allowed, VEC_providedKeys[ i ] ) ) )
-    {
-      warning( paste( "Warning while checking provided parameters, since parameter",
-                      VEC_providedKeys[ i ],
-                      "is not in the list of allowed parameters (",
-                      paste( VEC_allowed, collapse = ', ' ),
-                      ") and therefore will be ignored for this call." ) )
-    }
-  }
+  if( length( VEC_allowed ) >= 1 )
+    for( i in 1:length( VEC_providedKeys ) )
+      if( !( isKeySet( VEC_allowed, VEC_providedKeys[ i ] ) ) )
+        warning( paste( "Warning while checking provided parameters, since parameter",
+                        VEC_providedKeys[ i ],
+                        "is not in the list of allowed parameters (",
+                        paste( VEC_allowed, collapse = ', ' ),
+                        ") and therefore will be ignored for this call." ) )
 }
 
 # plot the error segments
@@ -301,4 +299,30 @@ fill_bins <- function( MAT_input,
   return( list( xBins = cutsX,
                 yBins = cutsY,
                 freq2D = freq2D ) )
+}
+
+# print help information here
+print_help <- function( STRING_functionName,
+                        VEC_arguments,
+                        VEC_descriptions )
+{
+  if( length( VEC_arguments ) != length( VEC_descriptions ) )
+    stop( paste( "Could not print help for function '",
+                 STRING_functionName,
+                 "' since lengths of arguments and descriptions does not match!",
+                 sep = "" ) )
+  writeLines( "------------------------" )
+  writeLines( paste( "Function: '",
+                     STRING_functionName,
+                     "'",
+                     sep = "" ) )
+  writeLines( "------------------------" )
+  for( i in 1:length( VEC_arguments ) )
+    writeLines( paste( "\t",
+                       VEC_arguments[ i ],
+                       ifelse( ( nchar( VEC_arguments[ i ] ) < 8 ), "\t\t\t", "\t\t" ),
+                       VEC_descriptions[ i ],
+                       sep = "" ) )
+  writeLines( "------------------------" )
+  writeLines( "MDplot, christian.margreitter@boku.ac.at\n\n" )
 }

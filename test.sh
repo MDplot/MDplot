@@ -6,8 +6,8 @@
 #acroread clusters.pdf &
 
 # ramachandran
-#Rscript MDplot/bash/MDplot_bash.R MDplot_ramachandran files=MDplot/inst/extdata/MDplot_ramachandran_example.txt title="Ramachandran plot" size=1400,1400 resolution=175 outformat=png outfile=ramachandran.png anglecolumns=1,2 bins=75,75 heatfunction=norm heatcolumn=3 printlegend=TRUE heatunits=kJ/mol
-#eog ramachandran.png &
+Rscript MDplot/bash/MDplot_bash.R MDplot_ramachandran files=MDplot/inst/extdata/MDplot_ramachandran_example.txt title="Ramachandran plot" size=1400,1400 resolution=175 outformat=tiff outfile=ramachandran.tiff angleColumns=1,2 bins=125,125 heatFun=norm printLegend=TRUE plotType=fancy
+eog ramachandran.tiff &
 
 # hbond
 #Rscript MDplot/bash/MDplot_bash.R MDplot_hbond files=MDplot/inst/extdata/MDplot_hbond_example.txt title="Hbonds plot" size=1200,900 resolution=165 outformat=tiff outfile=hbond.tiff

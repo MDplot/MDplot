@@ -11,12 +11,17 @@ LIST_arguments <- parse_arguments( VEC_inputArguments[ -1 ] ) # -1: function nam
 #########
 
 # prepare vectors for checks
-VEC_requiredForAll <- c( "files" )
-VEC_allowedForAll <- c( VEC_requiredForAll, "size", "outformat",
+VEC_requiredForAll <- c(  )
+VEC_allowedForAll <- c( VEC_requiredForAll, "files", "size", "outformat",
                         "outfile", "title", "subtitle",
-                        "xaxislabel", "yaxislabel", "enableprotocol",
-                        "colours", "resolution", "axisnames",
-                        "datanames", "printlegend" )
+                        "enableprotocol", "colours", "resolution",
+                        "axisnames", "datanames", "printLegend",
+                        "help" )
+VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>", "<dimensions of the plot> (optional)", "['png'/'pdf'/'tiff'] (optional)",
+                            "<outputfile> (optional)", "<plot main title> (optional)", "<plot subtitle> (optional)",
+                            "<protocol steps in plot generation> (optional)", "<vector of colours used, separated by ','> (optional)", "<resolution> (optional)",
+                            "<vector of names for the axes> (optional)", "<vector of names for the data sets> (optional)", "['true'/'false'] (optional)",
+                            "<if set to 'true', all other options are ignored and help is printed> (optional)" )
 #########
 
 # set settings for all plots to be followed
@@ -39,7 +44,7 @@ if( isKeySet( LIST_arguments, "axisnames" ) )
   VEC_axisNames <- unlist( strsplit( getValue( LIST_arguments, "axisnames" ),
                                      ",",
                                      fixed = TRUE ) )
-STRING_outformat <- "pdf"
+STRING_outformat <- "png"
 if( isKeySet( LIST_arguments, "outformat" ) )
   STRING_outformat <- getValue( LIST_arguments, "outformat" )
 STRING_outfile <- "MDplot_out"
@@ -227,16 +232,32 @@ if( STRING_function == "MDplot_RMSD_average" )
 if( STRING_function == "MDplot_ramachandran" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_ramaAll <- c( "bins",
+                    "angleColumns",
+                    "heatColumn",
+                    "plotType",
+                    "heatFun",
+                    "heatUnits",
+                    "plotContour",
+                    "shiftAngles",
+                    VEC_allowedForAll )
+  if( isKeySet( LIST_arguments, "help" ) )
+  {
+    print_help( STRING_function,
+                VEC_ramaAll,
+                c( "<number of bins to divide data in (x, y)> (optional)",
+                   "<columns in file containing dihedrals>",
+                   "<column in file containing heat> (optional)",
+                   "['sparse'/'comic'/'fancy'] (optional)",
+                   "<function to treat heat with, default 'log'> (optional)",
+                   "<units, in which heat is given> (optional)",
+                   "<plot contour as well, default 'false'> (optional)",
+                   "<if angle interval is not -180 to 180, a shift can be specified> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_allowedForAll,
-                  "bins",
-                  "anglecolumns",
-                  "heatcolumn",
-                  "plottype",
-                  "heatfunction",
-                  "heatunits",
-                  "contour",
-                  "shiftangles" ), LIST_arguments )
+  testAllowed( VEC_ramaAll, LIST_arguments )
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -250,42 +271,42 @@ if( STRING_function == "MDplot_ramachandran" )
                                               ",",
                                               fixed = TRUE ) ) )
   VEC_angleColumns <- c( 1, 2 )
-  if( isKeySet( LIST_arguments, "anglecolumns" ) )
-    VEC_angleColumns <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "anglecolumns" ),
+  if( isKeySet( LIST_arguments, "angleColumns" ) )
+    VEC_angleColumns <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "angleColumns" ),
                                                       ",",
                                                       fixed = TRUE ) ) )
   STRING_heatfunction <- "log"
-  if( isKeySet( LIST_arguments, "heatfunction" ) )
-    STRING_heatfunction <- getValue( LIST_arguments, "heatfunction" )
+  if( isKeySet( LIST_arguments, "heatFun" ) )
+    STRING_heatfunction <- getValue( LIST_arguments, "heatFun" )
   
   STRING_plotType <- "comic"
-  if( isKeySet( LIST_arguments, "plottype" ) )
-    STRING_plotType <- getValue( LIST_arguments, "plottype" )
+  if( isKeySet( LIST_arguments, "plotType" ) )
+    STRING_plotType <- getValue( LIST_arguments, "plotType" )
   
   STRING_heatUnits <- NA
-  if( isKeySet( LIST_arguments, "heatunits" ) )
-    STRING_heatUnits <- paste( "[", getValue( LIST_arguments, "heatunits" ), "]", sep = "" )
+  if( isKeySet( LIST_arguments, "heatUnits" ) )
+    STRING_heatUnits <- paste( "[", getValue( LIST_arguments, "heatUnits" ), "]", sep = "" )
 
   # plot
   MDplot_ramachandran( MDplot_load_ramachandran( VEC_files,
-                                                 VEC_angleColumns = VEC_angleColumns,
-                                                 REAL_shiftAngles = ifelse( isKeySet( LIST_arguments, "shiftangles" ),
-                                                                            as.numeric( getValue( LIST_arguments, "shiftangles" ) ),
-                                                                            NA ),
-                                                 INT_heatColumn = ifelse( isKeySet( LIST_arguments, "heatcolumn" ),
-                                                                          as.numeric( getValue( LIST_arguments, "heatcolumn" ) ),
-                                                                          NA ) ),
-                       xbins = VEC_bins[ 1 ],
-                       ybins = VEC_bins[ 2 ],
-                       STRING_plotType = STRING_plotType,
+                                                 angleColumns = VEC_angleColumns,
+                                                 shiftAngles = ifelse( isKeySet( LIST_arguments, "shiftAngles" ),
+                                                                       as.numeric( getValue( LIST_arguments, "shiftAngles" ) ),
+                                                                       NA ),
+                                                 heatColumn = ifelse( isKeySet( LIST_arguments, "heatColumn" ),
+                                                                      as.numeric( getValue( LIST_arguments, "heatColumn" ) ),
+                                                                     NA ) ),
+                       xBins = VEC_bins[ 1 ],
+                       yBins = VEC_bins[ 2 ],
+                       plotType = STRING_plotType,
                        heatFun = STRING_heatfunction,
-                       BOOL_printLegend = ifelse( isKeySet( LIST_arguments, "printlegend" ),
-                                                  TRUE,
-                                                  FALSE ),
-                       BOOL_plotContour = ifelse( isKeySet( LIST_arguments, "contour" ),
-                                                  TRUE,
-                                                  FALSE ),
-                       STRING_heatUnits = STRING_heatUnits,
+                       printLegend = ifelse( isKeySet( LIST_arguments, "printLegend" ),
+                                             TRUE,
+                                             FALSE ),
+                       plotContour = ifelse( isKeySet( LIST_arguments, "plotContour" ),
+                                             TRUE,
+                                             FALSE ),
+                       heatUnits = STRING_heatUnits,
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
                                       NA ) )
