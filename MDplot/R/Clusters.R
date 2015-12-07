@@ -26,7 +26,7 @@ MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names
 
 # plot timeseries of the clusters
 MDplot_clusters_timeseries <- function( LIST_timeseries,
-                                        INT_numberClusters = NA,
+                                        clustersNumber = NA,
                                         VEC_selectTraj = NA,
                                         VEC_selectTime = NA,
                                         BOOL_printNanoseconds = FALSE,
@@ -36,8 +36,8 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
   
   # check all the input specified and select from data if necessary
   # in addition, generate the fake plotting matrix for the timeseries plot to generate the properly spanned area
-  if( is.na( INT_numberClusters ) )
-    INT_numberClusters <- max( unlist( lapply( LIST_timeseries, FUN = function( x ) unlist( x[[ 2 ]] ) ) ) )
+  if( is.na( clustersNumber ) )
+    clustersNumber <- max( unlist( lapply( LIST_timeseries, FUN = function( x ) unlist( x[[ 2 ]] ) ) ) )
   if( !is.na( VEC_selectTraj ) )
     LIST_timeseries <- LIST_timeseries[ VEC_selectTraj ] 
   if( !is.na( VEC_selectTime ) )
@@ -50,14 +50,14 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
   
   # do the colors
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, "Spectral" ) )
-  COLOURS_clusters <- PALETTE_colours( INT_numberClusters )
+  COLOURS_clusters <- PALETTE_colours( clustersNumber )
   #########
 
   # occurences and plot device division indeed
   par( mar = c( 2.0, 6.0, 7.5, 2.0 ) )
-  REAL_widthOfOccurences <- ifelse( ( INT_numberClusters / 10 ) > 1.0,
+  REAL_widthOfOccurences <- ifelse( ( clustersNumber / 10 ) > 1.0,
                                     1.0,
-                                    INT_numberClusters / 10 )
+                                    clustersNumber / 10 )
   layout( matrix( c( 1, 0, 2, 2 ), nrow = 2, byrow = TRUE ),
           widths = c( REAL_widthOfOccurences,
                       1.0 - REAL_widthOfOccurences,
@@ -68,7 +68,7 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
   # calculate the percentages for the clusters
   VEC_occurences <- c()
   VEC_allClusterIDs <- unlist( lapply( LIST_timeseries, function( x ) x[[ 2 ]] ) )
-  for( i in 1:INT_numberClusters )
+  for( i in 1:clustersNumber )
     VEC_occurences <- c( VEC_occurences,
                          sum( VEC_allClusterIDs == i ) / length( VEC_allClusterIDs ) * 100 )
   #########
@@ -138,7 +138,7 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
     {
       VEC_clusterIDs <- unlist( LIST_timeseries[[ i ]][[ 2 ]] )
       VEC_xTicks <- seq( 1, length( LIST_timeseries[[ i ]][[ 2 ]] ) )
-      for( j in 1:INT_numberClusters )
+      for( j in 1:clustersNumber )
         segments( VEC_xTicks[ VEC_clusterIDs == j ],
                   rep( i - 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
                   VEC_xTicks[ VEC_clusterIDs == j ],
@@ -162,26 +162,26 @@ MDplot_load_clusters <- function( STRING_path )
 }
 
 # plot the clusters
-MDplot_clusters <- function( MAT_clusters,
-                             INT_numberClusters = NA,
-                             STRING_legend_title = "trajectories",
-                             BOOL_ownTrajectoryNames = FALSE,
+MDplot_clusters <- function( clusters,
+                             clustersNumber = NA,
+                             legendTitle = "trajectories",
+                             ownTrajectoryNames = FALSE,
                              ... )
 {
   # reduce number of clusters, in case specified and take care of the trajectory names
-  if( !is.na( INT_numberClusters ) )
-    MAT_clusters <- MAT_clusters[ , 1:INT_numberClusters ]
-  colnames( MAT_clusters ) <- 1:ncol( MAT_clusters )
-  if( !BOOL_ownTrajectoryNames )
-    rownames( MAT_clusters ) <- 1:nrow( MAT_clusters )
+  if( !is.na( clustersNumber ) )
+    clusters <- clusters[ , 1:clustersNumber ]
+  colnames( clusters ) <- 1:ncol( clusters )
+  if( !ownTrajectoryNames )
+    rownames( clusters ) <- 1:nrow( clusters )
   #########
   
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  COLOURS_CLUSTERS <- PALETTE_clusters( nrow( MAT_clusters ) )
-  names( MAT_clusters ) <- 1:nrow( MAT_clusters )
-  barplot( MAT_clusters, col = COLOURS_CLUSTERS, ... )
-  legend( "topright", inset = 0.045, legend = rownames( MAT_clusters ),
-          title = STRING_legend_title, box.lty = 0, box.lwd = 0, 
+  COLOURS_CLUSTERS <- PALETTE_clusters( nrow( clusters ) )
+  names( clusters ) <- 1:nrow( clusters )
+  barplot( clusters, col = COLOURS_CLUSTERS, ... )
+  legend( "topright", inset = 0.045, legend = rownames( clusters ),
+          title = legendTitle, box.lty = 0, box.lwd = 0, 
           col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
   #########
 }

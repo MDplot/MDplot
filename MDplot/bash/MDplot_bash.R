@@ -14,8 +14,8 @@ LIST_arguments <- parse_arguments( VEC_inputArguments[ -1 ] ) # -1: function nam
 VEC_requiredForAll <- c(  )
 VEC_allowedForAll <- c( VEC_requiredForAll, "files", "size", "outformat",
                         "outfile", "title", "subtitle",
-                        "enableprotocol", "colours", "resolution",
-                        "axisnames", "datanames", "printLegend",
+                        "enableProtocol", "colours", "resolution",
+                        "axisNames", "dataNames", "printLegend",
                         "help" )
 VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>", "<dimensions of the plot> (optional)", "['png'/'pdf'/'tiff'] (optional)",
                             "<outputfile> (optional)", "<plot main title> (optional)", "<plot subtitle> (optional)",
@@ -26,8 +26,8 @@ VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>", "<dimensions of
 
 # set settings for all plots to be followed
 BOOL_printLegend = TRUE
-if( isKeySet( LIST_arguments, "printlegend" ) )
-  if( getValue( LIST_arguments, "printlegend" ) == "FALSE" )
+if( isKeySet( LIST_arguments, "printLegend" ) )
+  if( getValue( LIST_arguments, "printLegend" ) == "FALSE" )
     BOOL_printLegend = FALSE
 VEC_size <- c( 640, 640 )
 if( isKeySet( LIST_arguments, "size" ) )
@@ -35,13 +35,13 @@ if( isKeySet( LIST_arguments, "size" ) )
                                 ",",
                                 fixed = TRUE ) )
 VEC_dataNames <- NA
-if( isKeySet( LIST_arguments, "datanames" ) )
-  VEC_dataNames <- unlist( strsplit( getValue( LIST_arguments, "datanames" ),
+if( isKeySet( LIST_arguments, "dataNames" ) )
+  VEC_dataNames <- unlist( strsplit( getValue( LIST_arguments, "dataNames" ),
                                 ",",
                                 fixed = TRUE ) )
 VEC_axisNames <- NA
-if( isKeySet( LIST_arguments, "axisnames" ) )
-  VEC_axisNames <- unlist( strsplit( getValue( LIST_arguments, "axisnames" ),
+if( isKeySet( LIST_arguments, "axisNames" ) )
+  VEC_axisNames <- unlist( strsplit( getValue( LIST_arguments, "axisNames" ),
                                      ",",
                                      fixed = TRUE ) )
 STRING_outformat <- "png"
@@ -345,11 +345,22 @@ if( STRING_function == "MDplot_TIcurve" )
 if( STRING_function == "MDplot_clusters" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_clustAll <- c( "clustersNumber",
+                     "trajectoryNames" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_allowedForAll,
-                  "clusternumber",
-                  "trajectorynames" ),
+  testAllowed( c( VEC_clustAll,
+                  VEC_allowedForAll ),
                LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" ) )
+  {
+    print_help( STRING_function,
+                c( VEC_clustAll,
+                   VEC_allowedForAll ),
+                c( "<number of clusters (sorted by population) to be shown in the plot> (optional)",
+                   "<vector of trajectory names, separated by ','> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
     if( !file.exists( VEC_files[ i ] ) )
@@ -358,9 +369,9 @@ if( STRING_function == "MDplot_clusters" )
   
   # load matrix and set names
   MAT_input <- MDplot_load_clusters( VEC_files )
-  if( isKeySet( LIST_arguments, "trajectorynames" ) )
+  if( isKeySet( LIST_arguments, "trajectoryNames" ) )
   {
-    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectorynames" ),
+    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectoryNames" ),
                                    ",",
                                    fixed = TRUE ) )
     if( length( VEC_names ) != nrow( MAT_input ) )
@@ -376,13 +387,13 @@ if( STRING_function == "MDplot_clusters" )
 
   # plot
   MDplot_clusters( MAT_input,
-                   INT_numberClusters = ifelse( isKeySet( LIST_arguments, "clusternumber" ),
-                                                getValue( LIST_arguments, "clusternumber" ),
-                                                NA ),
-                   BOOL_ownTrajectoryNames = ifelse( isKeySet( LIST_arguments,
-                                                               "trajectorynames" ),
-                                                     TRUE,
-                                                     FALSE ),
+                   clustersNumber = ifelse( isKeySet( LIST_arguments, "clustersNumber" ),
+                                            getValue( LIST_arguments, "clustersNumber" ),
+                                            NA ),
+                   ownTrajectoryNames = ifelse( isKeySet( LIST_arguments,
+                                                          "trajectoryNames" ),
+                                                TRUE,
+                                                FALSE ),
                    xlab = ifelse( is.na( VEC_axisNames ), "clusters", VEC_axisNames[ 1 ] ),
                    ylab = ifelse( is.na( VEC_axisNames ), "# configurations", VEC_axisNames[ 2 ] ),
                    main = ifelse( isKeySet( LIST_arguments, "title" ),

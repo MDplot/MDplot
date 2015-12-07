@@ -5,14 +5,14 @@
 \description{
 This plotting function divides a full rotation (360 degrees) into x- and y- bins and colors them according to the number of angle pairs that are provided in the input, a so-called Ramachandran plot.}
 \usage{
-MDplot_ramachandran( MAT_dihedrals,
+MDplot_ramachandran( dihedrals,
                      xbins = 450,
                      ybins = 450,
                      heatFun = "log", 
                      LIST_areas = c(),
                      ... )}
 \arguments{
-  \item{MAT_dihedrals}{Matrix with angles (two rows maximum).}
+  \item{dihedrals}{Matrix with angles (two rows maximum).}
   \item{xbins}{Number of bins used to plot (on the x-axis).}
   \item{ybins}{Number of bins used to plot (on the y-axis).}
   \item{heatFun}{Function selector for calculation of the color, possible are either:

@@ -27,7 +27,7 @@ MDplot_load_ramachandran <- function( inputFile,
 
 
 # plot the angles on a x = ( -180, 180 ) to y = ( -180, 180 ) area
-MDplot_ramachandran <- function( MAT_dihedrals,
+MDplot_ramachandran <- function( dihedrals,
                                  xBins = 150,
                                  yBins = 150,
                                  heatFun = "norm", 
@@ -58,7 +58,7 @@ MDplot_ramachandran <- function( MAT_dihedrals,
   #########
   
   # plotting
-  LIST_filled <- fill_bins( MAT_dihedrals,
+  LIST_filled <- fill_bins( dihedrals,
                             INT_xbins = xBins,
                             INT_ybins = yBins,
                             VEC_xLim = c( -180, 180 ),
@@ -75,7 +75,7 @@ MDplot_ramachandran <- function( MAT_dihedrals,
   if( plotType == "sparse" )
   {
     VEC_palette <- PALETTE_sparse( 21 )
-    hist2d( MAT_dihedrals, nbins = c( xBins, yBins ), same.scale = FALSE, na.rm = TRUE, 
+    hist2d( dihedrals, nbins = c( xBins, yBins ), same.scale = FALSE, na.rm = TRUE, 
             show = TRUE, col = VEC_palette, xlab = "", ylab = "",
             xaxs = "i", xaxt = "n", yaxs = "i", yaxt = "n",
             ann = TRUE, xaxt = "n", yaxt = "n", FUN = function( x ) FUN_heatFun( length( x ) ),
@@ -100,11 +100,11 @@ MDplot_ramachandran <- function( MAT_dihedrals,
     
     # contour
     # TODO: separate this functionality somehow
-    if( plotContour && ncol( MAT_dihedrals ) < 3 )
+    if( plotContour && ncol( dihedrals ) < 3 )
     {
-      DF_frequencies <- as.data.frame( table( findInterval( MAT_dihedrals[ , 1 ],
+      DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
                                                             LIST_filled[[ "xBins" ]] ),
-                                              findInterval( MAT_dihedrals[ , 2 ],
+                                              findInterval( dihedrals[ , 2 ],
                                                             LIST_filled[[ "yBins" ]] ) ) )
       DF_frequencies[ , 1 ] <- as.numeric( DF_frequencies[ , 1 ] )
       DF_frequencies[ , 2 ] <- as.numeric( DF_frequencies[ , 2 ] )
@@ -125,9 +125,9 @@ MDplot_ramachandran <- function( MAT_dihedrals,
   }
   if( plotType == "fancy" )
   {
-    DF_frequencies <- as.data.frame( table( findInterval( MAT_dihedrals[ , 1 ],
+    DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
                                                           LIST_filled[[ "xBins" ]] ),
-                                            findInterval( MAT_dihedrals[ , 2 ],
+                                            findInterval( dihedrals[ , 2 ],
                                                           LIST_filled[[ "yBins" ]] ) ) )
     DF_frequencies[ , 1 ] <- as.numeric( DF_frequencies[ , 1 ] )
     DF_frequencies[ , 2 ] <- as.numeric( DF_frequencies[ , 2 ] )
@@ -211,8 +211,8 @@ MDplot_ramachandran <- function( MAT_dihedrals,
   # print legend if specified to do so
   if( printLegend )
   {
-    if( ncol( MAT_dihedrals ) == 3 )
-      VEC_heatValues <- MAT_dihedrals[ , 3 ]
+    if( ncol( dihedrals ) == 3 )
+      VEC_heatValues <- dihedrals[ , 3 ]
     if( plotType != "fancy" )
       VEC_palette <- c( "white",
                         VEC_palette )

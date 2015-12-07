@@ -2,15 +2,16 @@
 #!/bin/bash
 
 # clusters
-#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters files=MDplot/inst/extdata/MDplot_clusters_example.txt title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clusternumber=7 #trajectorynames=WT,variant1a,variantb,variant2,variant3,variant4
+#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters files=MDplot/inst/extdata/MDplot_clusters_example.txt title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clustersNumber=7 trajectoryNames=WT,variant1a,variantb,variant2,variant3,variant4
+Rscript MDplot/bash/MDplot_bash.R MDplot_clusters help=TRUE
 #acroread clusters.pdf &
 
 # ramachandran
-Rscript MDplot/bash/MDplot_bash.R MDplot_ramachandran files=MDplot/inst/extdata/MDplot_ramachandran_example.txt title="Ramachandran plot" size=1400,1400 resolution=175 outformat=tiff outfile=ramachandran.tiff angleColumns=1,2 bins=125,125 heatFun=norm printLegend=TRUE plotType=fancy
-eog ramachandran.tiff &
+#Rscript MDplot/bash/MDplot_bash.R MDplot_ramachandran files=MDplot/inst/extdata/MDplot_ramachandran_example.txt title="Ramachandran plot" size=1400,1400 resolution=175 outformat=tiff outfile=ramachandran.tiff angleColumns=1,2 bins=125,125 heatFun=norm printLegend=TRUE plotType=fancy
+#eog ramachandran.tiff &
 
 # hbond
-#Rscript MDplot/bash/MDplot_bash.R MDplot_hbond files=MDplot/inst/extdata/MDplot_hbond_example.txt title="Hbonds plot" size=1200,900 resolution=165 outformat=tiff outfile=hbond.tiff
+#Rscript MDplot/bash/MDplot_bash.R MDplot_hbond files=MDplot/inst/extdata/MDplot_hbond_example.txt title="Hbonds plot" size=1200,900 #resolution=165 outformat=tiff outfile=hbond.tiff
 #eog hbond.tiff &
 
 # TIcurve
