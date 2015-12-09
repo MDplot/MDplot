@@ -1,5 +1,5 @@
 # load function for "MDplot_clusters_timeseries"
-MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names = NA )
+load_clusters_ts <- function( STRING_path, VEC_lengths, VEC_names = NA )
 {
   
   # read input and get rid of column 2, which is unnecessary and pack everything in a list
@@ -25,13 +25,13 @@ MDplot_load_clusters_timeseries <- function( STRING_path, VEC_lengths, VEC_names
 }
 
 # plot timeseries of the clusters
-MDplot_clusters_timeseries <- function( LIST_timeseries,
-                                        clustersNumber = NA,
-                                        VEC_selectTraj = NA,
-                                        VEC_selectTime = NA,
-                                        BOOL_printNanoseconds = FALSE,
-                                        REAL_snapshotsPerNS = 1000,
-                                        ... )
+clusters_ts <- function( LIST_timeseries,
+                         clustersNumber = NA,
+                         VEC_selectTraj = NA,
+                         VEC_selectTime = NA,
+                         BOOL_printNanoseconds = FALSE,
+                         REAL_snapshotsPerNS = 1000,
+                         ... )
 {
   
   # check all the input specified and select from data if necessary
@@ -150,7 +150,7 @@ MDplot_clusters_timeseries <- function( LIST_timeseries,
 }
 
 # load function for "MDplot_clusters"
-MDplot_load_clusters <- function( STRING_path )
+load_clusters <- function( STRING_path )
 {
   
   # load and transpose matrix
@@ -162,11 +162,11 @@ MDplot_load_clusters <- function( STRING_path )
 }
 
 # plot the clusters
-MDplot_clusters <- function( clusters,
-                             clustersNumber = NA,
-                             legendTitle = "trajectories",
-                             ownTrajectoryNames = FALSE,
-                             ... )
+clusters <- function( clusters,
+                      clustersNumber = NA,
+                      legendTitle = "trajectories",
+                      ownTrajectoryNames = FALSE,
+                      ... )
 {
   # reduce number of clusters, in case specified and take care of the trajectory names
   if( !is.na( clustersNumber ) )

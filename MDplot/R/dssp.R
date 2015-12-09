@@ -1,11 +1,11 @@
 # plot multiple DSSP plots
-MDplot_multi_DSSP_summary <- function( LIST_input,
-                                       STRING_selectedMotif,
-                                       BOOL_printLegend = FALSE,
-                                       VEC_colours = NA,
-                                       VEC_showResidues = NA,
-                                       BOOL_barePlot = FALSE,
-                                       ... )
+dssp_summary_multi <- function( LIST_input,
+                                STRING_selectedMotif,
+                                BOOL_printLegend = FALSE,
+                                VEC_colours = NA,
+                                VEC_showResidues = NA,
+                                BOOL_barePlot = FALSE,
+                                ... )
 {
   if( length( LIST_input ) < 2 )
     stop( "Error occured since the length of the input list is less than two." )
@@ -52,7 +52,7 @@ MDplot_multi_DSSP_summary <- function( LIST_input,
 }
 
 # get average summary table
-MDplot_averaging_DSSP_summary <- function( VEC_files )
+averaging_dssp_summary <- function( VEC_files )
 {
   if( length( VEC_files ) < 2 )
     stop( "Error because no input files (two at least) have been specified!" )
@@ -70,26 +70,26 @@ MDplot_averaging_DSSP_summary <- function( VEC_files )
 }
 
 # load and return input
-MDplot_load_DSSP_summary <- function( STRING_input )
+load_dssp_summary <- function( STRING_input )
 {
   return( TABLE_input <- read.table( STRING_input ) )
 }
 
 # plot the summary over residues and values (selected)
 # WARNING because residues are renumbered if selected
-MDplot_DSSP_summary <- function( TABLE_datainput,
-                                 BOOL_printLegend = FALSE,
-                                 BOOL_useOwnLegend = FALSE,
-                                 VEC_namesLegend = NA,
-                                 VEC_colours = NA,
-                                 VEC_showValues = NA,
-                                 VEC_showResidues = NA,
-                                 STRING_plotType = "dots",
-                                 VEC_selectedMotifs = NA,
-                                 BOOL_barePlot = FALSE,
-                                 xlab = "residues",
-                                 ylab = "occurences [%]",
-                                 ... )
+dssp_summary <- function( TABLE_datainput,
+                          BOOL_printLegend = FALSE,
+                          BOOL_useOwnLegend = FALSE,
+                          VEC_namesLegend = NA,
+                          VEC_colours = NA,
+                          VEC_showValues = NA,
+                          VEC_showResidues = NA,
+                          STRING_plotType = "dots",
+                          VEC_selectedMotifs = NA,
+                          BOOL_barePlot = FALSE,
+                          xlab = "residues",
+                          ylab = "occurences [%]",
+                          ... )
 {
   
   # parse input table and get all values in a matrix
@@ -250,7 +250,7 @@ MDplot_DSSP_summary <- function( TABLE_datainput,
 }
 
 # load the time-series files
-MDplot_load_DSSP_timeseries <- function( STRING_folder )
+load_dssp_ts <- function( STRING_folder )
 {
   VEC_gromos_names <- c( "3-Helix", "4-Helix", "5-Helix",
                          "Bend", "Beta-Bridge", "Beta-Strand",
@@ -277,13 +277,13 @@ MDplot_load_DSSP_timeseries <- function( STRING_folder )
 
 # BUG: time in nanoseconds does not work!
 # plot the time-series files, that are specified
-MDplot_DSSP_timeseries <- function( LIST_timeseries,
-                                    BOOL_printLegend = TRUE,
-                                    VEC_timeBoundaries = NA,
-                                    VEC_residueBoundaries = NA,
-                                    BOOL_printNanoseconds = FALSE,
-                                    REAL_snapshotsPerNS = 1000,
-                                    ... )
+dssp_ts <- function( LIST_timeseries,
+                     BOOL_printLegend = TRUE,
+                     VEC_timeBoundaries = NA,
+                     VEC_residueBoundaries = NA,
+                     BOOL_printNanoseconds = FALSE,
+                     REAL_snapshotsPerNS = 1000,
+                     ... )
 {
   STRING_time_unit <- "snapshots"
   if( BOOL_printNanoseconds )

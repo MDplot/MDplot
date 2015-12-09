@@ -1,5 +1,5 @@
 # load the RMSF file(s)
-MDplot_load_RMSF <- function( VEC_files )
+load_rmsf <- function( VEC_files )
 {
   LIST_return <- list()
   for( i in 1:length( VEC_files ) )
@@ -19,14 +19,14 @@ MDplot_load_RMSF <- function( VEC_files )
 }
 
 # plot RMSF of one or multiple files, combined in one list here
-MDplot_RMSF <- function( LIST_datainput,
-                         BOOL_printLegend = TRUE,
-                         STRING_RMSFUnit = "nm",
-                         VEC_colours = NA,
-                         BOOL_residueWise = FALSE,
-                         INT_numberXLabels = 7,
-                         VEC_names = NA,
-                         ... )
+rmsf <- function( LIST_datainput,
+                  BOOL_printLegend = TRUE,
+                  STRING_RMSFUnit = "nm",
+                  VEC_colours = NA,
+                  BOOL_residueWise = FALSE,
+                  INT_numberXLabels = 7,
+                  VEC_names = NA,
+                  ... )
 {
   # set colours and names
   PALETTE_RMSF_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )

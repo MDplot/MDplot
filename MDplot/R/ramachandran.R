@@ -1,8 +1,8 @@
 # load ramachandran data into a matrix, select columns
-MDplot_load_ramachandran <- function( inputFile,
-                                      angleColumns = c( 1, 2 ),
-                                      heatColumn = NA,
-                                      shiftAngles = NA )
+load_ramachandran <- function( inputFile,
+                               angleColumns = c( 1, 2 ),
+                               heatColumn = NA,
+                               shiftAngles = NA )
 {
   
   # load and parse matrix, return result
@@ -27,16 +27,16 @@ MDplot_load_ramachandran <- function( inputFile,
 
 
 # plot the angles on a x = ( -180, 180 ) to y = ( -180, 180 ) area
-MDplot_ramachandran <- function( dihedrals,
-                                 xBins = 150,
-                                 yBins = 150,
-                                 heatFun = "norm", 
-                                 structureAreas = c(),
-                                 plotType = "comic",
-                                 printLegend = FALSE,
-                                 heatUnits = NA,
-                                 plotContour = FALSE,
-                                 ... )
+ramachandran <- function( dihedrals,
+                          xBins = 150,
+                          yBins = 150,
+                          heatFun = "norm", 
+                          structureAreas = c(),
+                          plotType = "comic",
+                          printLegend = FALSE,
+                          heatUnits = NA,
+                          plotContour = FALSE,
+                          ... )
 {
   
   # settings (small offset for label printing required)

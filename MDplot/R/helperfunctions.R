@@ -324,5 +324,6 @@ print_help <- function( STRING_functionName,
                        VEC_descriptions[ i ],
                        sep = "" ) )
   writeLines( "------------------------" )
-  writeLines( "MDplot, christian.margreitter@boku.ac.at\n\n" )
+  writeLines( "Package: MDplot" )
+  writeLines( "Author: christian.margreitter@boku.ac.at\n\n" )
 }

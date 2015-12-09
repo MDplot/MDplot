@@ -1,46 +1,46 @@
 # load the lambda point information here
-MDplot_load_TIcurve <- function( VEC_files )
+load_TIcurve <- function( files )
 {
   LIST_files <- list()
-  for( i in 1:length( VEC_files ) )
-    LIST_files[[ length( LIST_files ) + 1 ]] <- as.matrix( read.table( VEC_files[ i ] ) )
+  for( i in 1:length( files ) )
+    LIST_files[[ length( LIST_files ) + 1 ]] <- as.matrix( read.table( files[ i ] ) )
   return( LIST_files )
 }
 
 # plot the curve and calculate and plot the integral
-MDplot_TIcurve <- function( LIST_input,
-                            BOOL_invertedBackwards = TRUE,
-                            ... )
+TIcurve <- function( lambdas,
+                     invertedBackwards = FALSE,
+                     ... )
 {
   
   # calculate maximum / minimum and colours / do inversion if necessary
-  VEC_errorLimits <- c( min( unlist( lapply( LIST_input,
+  VEC_errorLimits <- c( min( unlist( lapply( lambdas,
                                              FUN = function( x ) min( x[ , 3 ] ) ) ) ),
-                        max( unlist( lapply( LIST_input,
+                        max( unlist( lapply( lambdas,
                                              FUN = function( x ) max( x[ , 3 ] ) ) ) ) )
-  VEC_valueLimits <- c( min( unlist( lapply( LIST_input,
+  VEC_valueLimits <- c( min( unlist( lapply( lambdas,
                                              FUN = function( x ) min( x[ , 2 ] ) ) ) ) -
                         VEC_errorLimits[ 2 ] * 1.25,
-                        max( unlist( lapply( LIST_input,
+                        max( unlist( lapply( lambdas,
                                              FUN = function( x ) max( x[ , 2 ] ) ) ) ) +
                         VEC_errorLimits[ 2 ] * 1.25 )
   VEC_colours <- c( "black", "red" )
-  if( length( LIST_input ) > 1 &&
-      BOOL_invertedBackwards )
-    LIST_input[[ 2 ]][ , 2 ] <- rev( sapply( LIST_input[[ 2 ]][ , 2 ],
+  if( length( lambdas ) > 1 &&
+      invertedBackwards )
+    lambdas[[ 2 ]][ , 2 ] <- rev( sapply( lambdas[[ 2 ]][ , 2 ],
                                              FUN = function( x ) x * ( -1 ) ) )
   #########
   
   # set proper outer margins and plot it
-  if( length( LIST_input ) > 1 )
+  if( length( lambdas ) > 1 )
     par( oma = c( 3.25, 3.00, 0.45, 0.0 ) )
   else
     par( oma = c( 1.35, 3.00, 0.45, 0.0 ) )
-  for( i in 1:length( LIST_input ) )
+  for( i in 1:length( lambdas ) )
   {
     if( i == 1 )
     {
-      TIplot <- plot( LIST_input[[ i ]],
+      TIplot <- plot( lambdas[[ i ]],
                       ylim = VEC_valueLimits,
                       ylab = "",
                       xaxs = "i", xlab = "",
@@ -57,19 +57,19 @@ MDplot_TIcurve <- function( LIST_input,
       abline( h = 0, lwd = 1, lty = 3 )
     }
     else
-      TIplot <- plot( LIST_input[[ i ]],
+      TIplot <- plot( lambdas[[ i ]],
                       ylim = VEC_valueLimits,
                       ylab = "", yaxt = "n",
                       xaxs = "i", xaxt = "n", xlab = "",
                       pch = 19, cex = 0.6,
                       col = VEC_colours[ i ],
                       ... )
-  plot_segments( LIST_input[[ i ]][ , 1:2 ],
-                 LIST_input[[ i ]][ , 3 ],
+  plot_segments( lambdas[[ i ]][ , 1:2 ],
+                 lambdas[[ i ]][ , 3 ],
                  0.01,
                  col = VEC_colours[ i ] )
   par( new = TRUE )
-  plot( LIST_input[[ i ]],
+  plot( lambdas[[ i ]],
         ylim = VEC_valueLimits, yaxt = "n", ylab = "",
         xaxs = "i", xaxt = "n", xlab = "",
         type = "l", lwd = 1, col = VEC_colours[ i ] )
@@ -78,8 +78,8 @@ MDplot_TIcurve <- function( LIST_input,
   #########
   
   # integrate over curves
-  REAL_forward_integral <- unlist( integrate_curve( LIST_input[[ 1 ]] )[ "integral" ] )
-  REAL_forward_error <- unlist( integrate_curve( LIST_input[[ 1 ]] )[ "error" ] )
+  REAL_forward_integral <- unlist( integrate_curve( lambdas[[ 1 ]] )[ "integral" ] )
+  REAL_forward_error <- unlist( integrate_curve( lambdas[[ 1 ]] )[ "error" ] )
   INT_significantForward <- get_sign_digits( REAL_forward_error )
   REAL_forward_integral_rounded <- round( REAL_forward_integral, digits = INT_significantForward )
   REAL_forward_error_rounded <- round( REAL_forward_error, digits = INT_significantForward )
@@ -91,10 +91,10 @@ MDplot_TIcurve <- function( LIST_input,
                                    " +/- ",
                                    REAL_forward_error_rounded,
                                    " [kJ/mol]" ) ) )
-  if( length( LIST_input ) > 1 )
+  if( length( lambdas ) > 1 )
   {
-    REAL_backward_integral <- unlist( integrate_curve( LIST_input[[ 2 ]] )[ "integral" ] )
-    REAL_backward_error <- unlist( integrate_curve( LIST_input[[ 2 ]] )[ "error" ] )
+    REAL_backward_integral <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "integral" ] )
+    REAL_backward_error <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "error" ] )
     INT_significantBackward <- get_sign_digits( REAL_backward_error )
     REAL_backward_integral_rounded <- round( REAL_backward_integral, digits = INT_significantBackward )
     REAL_backward_error_rounded <- round( REAL_backward_error, digits = INT_significantBackward )

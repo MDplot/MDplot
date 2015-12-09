@@ -1,8 +1,8 @@
 # plot the average RMSD of many runs with spread
-MDplot_RMSD_average <- function( LIST_input,
-                                 INT_skip = 0,
-                                 BOOL_printMeans = FALSE,
-                                 ... )
+rmsd_average <- function( LIST_input,
+                          INT_skip = 0,
+                          BOOL_printMeans = FALSE,
+                          ... )
 {
   
   # initialization
@@ -58,7 +58,7 @@ MDplot_RMSD_average <- function( LIST_input,
 }
 
 # load RMSD
-MDplot_load_RMSD <- function( VEC_files )
+load_rmsd <- function( VEC_files )
 {
   LIST_return <- list()
   for( i in 1:length( VEC_files ) )
@@ -76,15 +76,15 @@ MDplot_load_RMSD <- function( VEC_files )
 }
 
 # plot RMSD
-MDplot_RMSD <- function( LIST_datainput,
-                         BOOL_printLegend = TRUE,
-                         BOOL_frax = TRUE,
-                         REAL_divisionFactor = 1000,
-                         STRING_timeUnit = "ns",
-                         STRING_RMSDUnit = "nm",
-                         VEC_colours = NA,
-                         VEC_names = NA,
-                         ... )
+rmsd <- function( LIST_datainput,
+                  BOOL_printLegend = TRUE,
+                  BOOL_frax = TRUE,
+                  REAL_divisionFactor = 1000,
+                  STRING_timeUnit = "ns",
+                  STRING_RMSDUnit = "nm",
+                  VEC_colours = NA,
+                  VEC_names = NA,
+                  ... )
 {
   # get boundaries
   REAL_max_RMSD = max( unlist( lapply( LIST_datainput,

@@ -1,45 +1,45 @@
 # load and parse GROMOS hbond timeseries
-MDplot_load_hbond_timeseries <- function( STRING_path )
+load_hbond_ts <- function( path )
 {
-  TABLE_timeseries <- read.table( STRING_path )
-  return( TABLE_timeseries )
+  timeseries <- read.table( path )
+  return( timeseries )
 }
 
 # plot hbond timeseries
-MDplot_hbond_timeseries <- function( TABLE_timeseries,
-                                     TABLE_summary,
-                                     VEC_acceptorRange = NA,
-                                     VEC_donorRange = NA,
-                                     BOOL_plotOccurences = FALSE,
-                                     REAL_scalingFactorPlot = NA,
-                                     BOOL_printNames = FALSE,
-                                     BOOL_namesToSingle = FALSE,
-                                     BOOL_timeInNS = FALSE,
-                                     REAL_divisionFactor = 1000,
-                                     VEC_timeRange = NA,
-                                     VEC_hbondIndices = NA,
-                                     ... )
+hbond_ts <- function( timeseries,
+                      summary,
+                      acceptorRange = NA,
+                      donorRange = NA,
+                      plotOccurences = FALSE,
+                      scalingFactorPlot = NA,
+                      printNames = FALSE,
+                      namesToSingle = FALSE,
+                      timeInNS = FALSE,
+                      divisionFactor = 1000,
+                      timeRange = NA,
+                      hbondIndices = NA,
+                      ... )
 {
   
   # set all ranges to full, in case they are not specified
-  if( is.na( VEC_acceptorRange ) )
-    VEC_acceptorRange <- c( min( TABLE_summary[ , 4 ] ), max( TABLE_summary[ , 4 ] ) )
-  if( is.na( VEC_donorRange ) )
-    VEC_donorRange <- c( min( TABLE_summary[ , 2 ] ), max( TABLE_summary[ , 2 ] ) )
-  if( is.na( VEC_hbondIndices ) )
-    VEC_hbondIndices <- c( min( TABLE_summary[ , 1 ] ), max( TABLE_summary[ , 1 ] ) )
+  if( is.na( acceptorRange ) )
+    acceptorRange <- c( min( summary[ , 4 ] ), max( summary[ , 4 ] ) )
+  if( is.na( donorRange ) )
+    donorRange <- c( min( summary[ , 2 ] ), max( summary[ , 2 ] ) )
+  if( is.na( hbondIndices ) )
+    hbondIndices <- c( min( summary[ , 1 ] ), max( summary[ , 1 ] ) )
   #########
   
   # select the hbond-IDs of those hbonds, that match all criteria
   VEC_hbondIDs <- c()
-  for( i in 1:nrow( TABLE_summary ) )
+  for( i in 1:nrow( summary ) )
   {
-    if( TABLE_summary[ i, 2 ] >= VEC_donorRange[ 1 ] &&
-        TABLE_summary[ i, 2 ] <= VEC_donorRange[ 2 ] &&
-        TABLE_summary[ i, 4 ] >= VEC_acceptorRange[ 1 ] &&
-        TABLE_summary[ i, 4 ] <= VEC_acceptorRange[ 2 ] &&
-        TABLE_summary[ i, 1 ] >= VEC_hbondIndices[ 1 ] &&
-        TABLE_summary[ i, 1 ] <= VEC_hbondIndices[ 2 ] )
+    if( summary[ i, 2 ] >= donorRange[ 1 ] &&
+        summary[ i, 2 ] <= donorRange[ 2 ] &&
+        summary[ i, 4 ] >= acceptorRange[ 1 ] &&
+        summary[ i, 4 ] <= acceptorRange[ 2 ] &&
+        summary[ i, 1 ] >= hbondIndices[ 1 ] &&
+        summary[ i, 1 ] <= hbondIndices[ 2 ] )
       VEC_hbondIDs <- c( VEC_hbondIDs, i )
   }
   #########
@@ -47,19 +47,19 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
   # check, that one or more hbonds match the criteria
   # remove all hbonds from the timeseries table, that do not match the criteria
   if( length( VEC_hbondIDs ) == 0 )
-    stop( paste( "The selection of acceptor residues ", VEC_acceptorRange[ 1 ], ":",
-                 VEC_acceptorRange[ 2 ], " with donor residues ", VEC_donorRange[ 1 ], ":",
-                 VEC_donorRange[ 2 ], " does not contain any hbonds.", sep = "" ) )
-  TABLE_timeseries <- TABLE_timeseries[ ( TABLE_timeseries[ , 2 ] %in% VEC_hbondIDs ), ,
+    stop( paste( "The selection of acceptor residues ", acceptorRange[ 1 ], ":",
+                 acceptorRange[ 2 ], " with donor residues ", donorRange[ 1 ], ":",
+                 donorRange[ 2 ], " does not contain any hbonds.", sep = "" ) )
+  timeseries <- timeseries[ ( timeseries[ , 2 ] %in% VEC_hbondIDs ), ,
                                         drop = FALSE ]
   #########
 
   # set time axis
-  VEC_timeLimits = c( min( TABLE_timeseries[ , 1 ] ),
-                      max( TABLE_timeseries[ , 1 ] ) )
+  VEC_timeLimits = c( min( timeseries[ , 1 ] ),
+                      max( timeseries[ , 1 ] ) )
   VEC_timeTicks <- VEC_timeLimits
-  if( BOOL_timeInNS )
-    VEC_timeTicks <- VEC_timeTicks / REAL_divisionFactor
+  if( timeInNS )
+    VEC_timeTicks <- VEC_timeTicks / divisionFactor
   #########
 
   # get the vector for the names (left plot)
@@ -68,14 +68,14 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
                                                        max( VEC_hbondIDs ) ),
                                        n = 5 )
   VEC_hbondNamesPositions <- VEC_hbondNames
-  if( BOOL_printNames )
+  if( printNames )
   {
     VEC_hbondNames <- c()
     VEC_hbondNamesPositions <- VEC_hbondIDs
     for( i in 1:length( VEC_hbondIDs ) )
     {
-      LIST_tableLine <- TABLE_summary[ TABLE_summary[ , 1 ] == VEC_hbondIDs[ i ], ]
-      if( BOOL_namesToSingle )
+      LIST_tableLine <- summary[ summary[ , 1 ] == VEC_hbondIDs[ i ], ]
+      if( namesToSingle )
       {
         LIST_tableLine[[ "ResDonorName" ]] <- translate_aminoacids( LIST_tableLine[[ "ResDonorName" ]],
                                                                     INT_switch = 1 )
@@ -95,26 +95,26 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
   #########
 
   # calculate a scaling factor in dependence of the number of hbonds to be plotted
-  if( is.na( REAL_scalingFactorPlot ) )
-    REAL_scalingFactorPlot <- 0.75 / log( length( VEC_hbondIDs ) )
+  if( is.na( scalingFactorPlot ) )
+    scalingFactorPlot <- 0.75 / log( length( VEC_hbondIDs ) )
   #########
 
   # in case the occurences are to be plotted, make some space
   # do make sure, that the y axis has enough space for long labels
   par( mar = c( 4.0,
-                ifelse( !BOOL_namesToSingle && BOOL_printNames,
+                ifelse( !namesToSingle && printNames,
                         7.95,
                         5.25 ),
                 3.25,
-                ifelse( BOOL_plotOccurences,
+                ifelse( plotOccurences,
                         0.0,
                         2.0 ) ) )
-  if( BOOL_plotOccurences )
+  if( plotOccurences )
     layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
   #########
   
   # plot (left graph)
-  plot( TABLE_timeseries,
+  plot( timeseries,
         xlim = VEC_timeLimits, xaxs = "i", xaxt = "n", xlab = "",
         ylim = c( min( VEC_hbondIDs ), max( VEC_hbondIDs ) ), yaxt = "n", ylab = "",
         type = "n" )
@@ -123,14 +123,14 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
          text = ifelse( is.na( LIST_ellipsis[[ "main" ]] ),
                         "Hbond timeseries",
                         LIST_ellipsis[[ "main" ]] ),
-         adj = ifelse( BOOL_plotOccurences,
+         adj = ifelse( plotOccurences,
                        0.795,
                        0.5 ) )
   mtext( side = 1, line = 2.45, cex = 1.0, text = paste( "time",
-                                                         ifelse( BOOL_timeInNS,
+                                                         ifelse( timeInNS,
                                                                  "[ns]",
                                                                  "[snapshots]" ) ) )
-  if( !BOOL_printNames )
+  if( !printNames )
     mtext( side = 2, line = 2.45, cex = 1, text = "hbonds [#]" )
   axis( 1,
         at = split_equidistant( VEC_values = VEC_timeLimits,
@@ -144,26 +144,26 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
   axis( 2,
         at = VEC_hbondNamesPositions,
         label = VEC_hbondNames,
-        las = ifelse( BOOL_printNames,
+        las = ifelse( printNames,
                       1,
                       0 ),
-        cex.axis = ifelse( BOOL_printNames,
-                           REAL_scalingFactorPlot * 2.45,
+        cex.axis = ifelse( printNames,
+                           scalingFactorPlot * 2.45,
                            1 ) )
-  segments( TABLE_timeseries[ , 1 ],
-            TABLE_timeseries[ , 2 ] - REAL_scalingFactorPlot,
-            TABLE_timeseries[ , 1 ],
-            TABLE_timeseries[ , 2 ] + REAL_scalingFactorPlot,
+  segments( timeseries[ , 1 ],
+            timeseries[ , 2 ] - scalingFactorPlot,
+            timeseries[ , 1 ],
+            timeseries[ , 2 ] + scalingFactorPlot,
             lwd = 0.15 )
   #########
 
   # in case the occurences are to be plotted, add them on the right hand side
-  if( BOOL_plotOccurences )
+  if( plotOccurences )
   {
     VEC_occurences <- c()
     for( i in 1:length( VEC_hbondIDs ) )
     {
-      INT_numberAppearances <- sum( TABLE_timeseries[ , 2 ] == VEC_hbondIDs[ i ] )
+      INT_numberAppearances <- sum( timeseries[ , 2 ] == VEC_hbondIDs[ i ] )
       
       # calculate percent from the time limits
       # CAUTION: might differ from the overall score out of the summary file
@@ -187,18 +187,18 @@ MDplot_hbond_timeseries <- function( TABLE_timeseries,
               VEC_hbondIDs,
               lwd = 2.0 )
     segments( VEC_occurences,
-              VEC_hbondIDs - REAL_scalingFactorPlot * 0.65,
+              VEC_hbondIDs - scalingFactorPlot * 0.65,
               VEC_occurences,
-              VEC_hbondIDs + REAL_scalingFactorPlot * 0.65,
+              VEC_hbondIDs + scalingFactorPlot * 0.65,
               lwd = 2.0 )
   }
   #########
 }
 
 # load and parse GROMOS hbond output
-MDplot_load_hbond <- function( STRING_path )
+load_hbond <- function( path )
 {
-  CON_input <- file( STRING_path, open = "r" )
+  CON_input <- file( path, open = "r" )
   
   #skip first comments
   readLines( CON_input, n = 23, warn = FALSE )
@@ -223,50 +223,50 @@ MDplot_load_hbond <- function( STRING_path )
   # the important columns only
   DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 21, byrow = TRUE ),
                            stringsAsFactors = FALSE )
-  TABLE_input <- DF_buffer[ , c( -20, -19, -18, -17, -15, -14, -12, -11, -7, -6, -3, -1 ) ]
+  input <- DF_buffer[ , c( -20, -19, -18, -17, -15, -14, -12, -11, -7, -6, -3, -1 ) ]
   STRING_tempFile <- tempfile( "MDplot_Hbonds" )
   on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
-  write.table( TABLE_input, file = STRING_tempFile )
-  TABLE_input <- read.table( STRING_tempFile )
+  write.table( input, file = STRING_tempFile )
+  input <- read.table( STRING_tempFile )
   #########
   
   # update column names
-  colnames( TABLE_input ) <- c( "HbondID", "ResDonor", "ResDonorName",
-                                "ResAcceptor", "ResAcceptorName", "AtomDonor",
-                                "AtomH", "AtomAcceptor", "Percentage" )
+  colnames( input ) <- c( "hbondID", "resDonor", "resDonorName",
+                           "resAcceptor", "resAcceptorName", "atomDonor",
+                           "atomH", "atomAcceptor", "percentage" )
   #########
-  return( TABLE_input )
+  return( input )
 }
 
 # plot the hbond information
-MDplot_hbond <- function( TABLE_input,
-                          STRING_plotMethod = "residue-wise",
-                          VEC_acceptorRange = NA,
-                          VEC_donorRange = NA,
-                          BOOL_printLegend = TRUE,
-                          ... )
+hbond <- function( hbonds,
+                   plotMethod = "residue-wise",
+                   acceptorRange = NA,
+                   donorRange = NA,
+                   printLegend = TRUE,
+                   ... )
 {
   
   # residue-wise: sum all residue-to-residue hbonds up (per-atom contributions)
-  if( STRING_plotMethod == "residue-wise" )
+  if( plotMethod == "residue-wise" )
   {
-    TABLE_result <- as.data.frame( NA )
-    VEC_boundariesDonor <- c( min( TABLE_input[ , 2 ] ), max( TABLE_input[ , 2 ] ) )
-    VEC_boundariesAcceptor <- c( min( TABLE_input[ , 4 ] ), max( TABLE_input[ , 4 ] ) )
+    MAT_result <- matrix()[ -1, -1, drop = FALSE ]
+    VEC_boundariesDonor <- c( min( hbonds[ , 2 ] ), max( hbonds[ , 2 ] ) )
+    VEC_boundariesAcceptor <- c( min( hbonds[ , 4 ] ), max( hbonds[ , 4 ] ) )
     
     # identify, whether hbond belongs to already identified hbond and add
     # the percentage there
-    for( i in 1:nrow( TABLE_input ) )
+    for( i in 1:nrow( hbonds ) )
     {
       BOOL_found = FALSE
-      if( nrow( TABLE_result ) != 0 )
+      if( nrow( MAT_result ) != 0 )
       {
-        for( j in 1:nrow( TABLE_result ) )
+        for( j in 1:nrow( MAT_result ) )
         {
-          if( TABLE_result[ j, 2 ] == TABLE_input[ i, 2 ] &&
-                TABLE_result[ j, 4 ] == TABLE_input[ i, 4 ] )
+          if( ( MAT_result[ j, 2 ] == hbonds[ i, 2 ] ) &&
+              ( MAT_result[ j, 4 ] == hbonds[ i, 4 ] ) )
           {
-            TABLE_result[ j, 9 ] <- TABLE_result[ j, 9 ] + TABLE_input[ i, 9 ]
+            MAT_result[ j, 9 ] <- MAT_result[ j, 9 ] + hbonds[ i, 9 ]
             BOOL_found = TRUE
             break
           }
@@ -274,44 +274,44 @@ MDplot_hbond <- function( TABLE_input,
       }
       if( !BOOL_found )
       {
-        TABLE_result <- rbind( TABLE_result, TABLE_input[ i, ] )
+        MAT_result <- rbind( MAT_result, hbonds[ i, ] )
       }
     }
     #########
     
     # remove unused columns and define zoom area if specified
-    TABLE_result <- TABLE_result[ , c( -8, -7, -6, -5, -3, -1 ) ]
-    TABLE_result <- TABLE_result[ order( TABLE_result[ , 1 ], TABLE_result[ , 2 ] ), ]
+    MAT_result <- MAT_result[ , c( -8, -7, -6, -5, -3, -1 ) ]
+    MAT_result <- MAT_result[ order( MAT_result[ , 1 ], MAT_result[ , 2 ] ), ]
     PALETTE_residuewise <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    if( !is.na( VEC_acceptorRange ) )
+    if( !is.na( acceptorRange ) )
     {
-      TABLE_result <- TABLE_result[ TABLE_result[ , 2 ] >= VEC_acceptorRange[ 1 ], , drop = FALSE ]
-      TABLE_result <- TABLE_result[ TABLE_result[ , 2 ] <= VEC_acceptorRange[ 2 ], , drop = FALSE ]
+      MAT_result <- MAT_result[ MAT_result[ , 2 ] >= acceptorRange[ 1 ], , drop = FALSE ]
+      MAT_result <- MAT_result[ MAT_result[ , 2 ] <= acceptorRange[ 2 ], , drop = FALSE ]
     }
-    if( !is.na( VEC_donorRange ) )
+    if( !is.na( donorRange ) )
     {
-      TABLE_result <- TABLE_result[ TABLE_result[ , 1 ] >= VEC_donorRange[ 1 ], , drop = FALSE ]
-      TABLE_result <- TABLE_result[ TABLE_result[ , 1 ] <= VEC_donorRange[ 2 ], , drop = FALSE ]
+      MAT_result <- MAT_result[ MAT_result[ , 1 ] >= donorRange[ 1 ], , drop = FALSE ]
+      MAT_result <- MAT_result[ MAT_result[ , 1 ] <= donorRange[ 2 ], , drop = FALSE ]
     }
     #########
     
     # normalize values to 0 to 100% and plot graph and legend (in case)
-    VEC_normalized <- lapply( as.list( TABLE_result[ , 3 ] ), function( x ) x / 100 )
-    if( BOOL_printLegend )
+    VEC_normalized <- lapply( as.list( MAT_result[ , 3 ] ), function( x ) x / 100 )
+    if( printLegend )
     {
       par( mar = c( 4.25, 4.25, 3.25, 0.25 ) )
       layout( matrix( 1:2, ncol = 2 ), width = c( 2.5, 0.5 ), height = c( 1.0, 1.0 ) )
     }
     PALETTE_colors <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
     PALETTE_colors_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    plot( TABLE_result[ , 1:2 ],
+    plot( MAT_result[ , 1:2 ],
           col = PALETTE_colors_rev( 10 )[ as.numeric( cut( as.numeric( VEC_normalized ), breaks = 10 ) )  ],
           pch = 19,
           cex = 0.75,
           xlab = "Donor [residue number]",
           ylab = "Acceptor [residue number]",
           ... )
-    if( BOOL_printLegend )
+    if( printLegend )
     {
       par( mar = c( 4.25, 0.25, 3.25, 1.0 ) )
       legend_image <- as.raster( matrix( PALETTE_colors( 10 ), ncol = 1 ) )
@@ -324,6 +324,6 @@ MDplot_hbond <- function( TABLE_input,
   }
   else
   {
-    stop( paste( "Error: plot method ", STRING_plotMethod, " is unknown. Process aborted!" ) )
+    stop( paste( "Error: plot method ", plotMethod, " is unknown. Process aborted!" ) )
   }
 }

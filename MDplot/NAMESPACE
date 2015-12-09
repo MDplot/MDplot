@@ -9,39 +9,39 @@ import( lattice )
 
 # export plotting functions
 export( 
-         MDplot_DSSP_summary,
-         MDplot_DSSP_timeseries,
-         MDplot_RMSD,
-         MDplot_RMSF,
-         MDplot_clusters,
-         MDplot_TIcurve,
-         MDplot_hbond,
-         MDplot_ramachandran,
-         MDplot_XRMSD,
-         MDplot_hbond_timeseries,
-         MDplot_clusters_timeseries,
-         MDplot_RMSD_average,
-         MDplot_multi_DSSP_summary
+         dssp_summary,
+         dssp_ts,
+         rmsd,
+         rmsf,
+         clusters,
+         TIcurve,
+         hbond,
+         ramachandran,
+         xrmsd,
+         hbond_ts,
+         clusters_ts,
+         rmsd_average,
+         dssp_summary_multi
        )
 
 # export loading functions
 export(
-         MDplot_load_hbond,
-         MDplot_load_ramachandran,
-         MDplot_load_clusters,
-         MDplot_load_TIcurve,
-         MDplot_load_DSSP_summary,
-         MDplot_load_DSSP_timeseries,
-         MDplot_load_RMSF,
-         MDplot_load_RMSD,
-         MDplot_load_XRMSD,
-         MDplot_load_hbond_timeseries,
-         MDplot_load_clusters_timeseries
+         load_hbond,
+         load_ramachandran,
+         load_clusters,
+         load_TIcurve,
+         load_dssp_summary,
+         load_dssp_ts,
+         load_rmsf,
+         load_rmsd,
+         load_xrmsd,
+         load_hbond_ts,
+         load_clusters_ts
       )
 
 # export data manipulation functions
 export(
-         MDplot_averaging_DSSP_summary
+         averaging_dssp_summary
       )
 # export other functions
 export(

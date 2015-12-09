@@ -229,7 +229,7 @@ if( STRING_function == "MDplot_RMSD_average" )
 
 
 
-if( STRING_function == "MDplot_ramachandran" )
+if( STRING_function == "ramachandran" )
 {
   # check, if input is sane for this plot and get input files
   VEC_ramaAll <- c( "bins",
@@ -241,7 +241,8 @@ if( STRING_function == "MDplot_ramachandran" )
                     "plotContour",
                     "shiftAngles",
                     VEC_allowedForAll )
-  if( isKeySet( LIST_arguments, "help" ) )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
   {
     print_help( STRING_function,
                 VEC_ramaAll,
@@ -288,39 +289,50 @@ if( STRING_function == "MDplot_ramachandran" )
     STRING_heatUnits <- paste( "[", getValue( LIST_arguments, "heatUnits" ), "]", sep = "" )
 
   # plot
-  MDplot_ramachandran( MDplot_load_ramachandran( VEC_files,
-                                                 angleColumns = VEC_angleColumns,
-                                                 shiftAngles = ifelse( isKeySet( LIST_arguments, "shiftAngles" ),
-                                                                       as.numeric( getValue( LIST_arguments, "shiftAngles" ) ),
-                                                                       NA ),
-                                                 heatColumn = ifelse( isKeySet( LIST_arguments, "heatColumn" ),
-                                                                      as.numeric( getValue( LIST_arguments, "heatColumn" ) ),
-                                                                     NA ) ),
-                       xBins = VEC_bins[ 1 ],
-                       yBins = VEC_bins[ 2 ],
-                       plotType = STRING_plotType,
-                       heatFun = STRING_heatfunction,
-                       printLegend = ifelse( isKeySet( LIST_arguments, "printLegend" ),
-                                             TRUE,
-                                             FALSE ),
-                       plotContour = ifelse( isKeySet( LIST_arguments, "plotContour" ),
-                                             TRUE,
-                                             FALSE ),
-                       heatUnits = STRING_heatUnits,
-                       main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                      getValue( LIST_arguments, "title" ),
-                                      NA ) )
+  MDplot::ramachandran( MDplot::load_ramachandran( VEC_files,
+                                                   angleColumns = VEC_angleColumns,
+                                                   shiftAngles = ifelse( isKeySet( LIST_arguments, "shiftAngles" ),
+                                                                         as.numeric( getValue( LIST_arguments, "shiftAngles" ) ),
+                                                                         NA ),
+                                                   heatColumn = ifelse( isKeySet( LIST_arguments, "heatColumn" ),
+                                                                        as.numeric( getValue( LIST_arguments, "heatColumn" ) ),
+                                                                       NA ) ),
+                        xBins = VEC_bins[ 1 ],
+                        yBins = VEC_bins[ 2 ],
+                        plotType = STRING_plotType,
+                        heatFun = STRING_heatfunction,
+                        printLegend = ifelse( isKeySet( LIST_arguments, "printLegend" ),
+                                              TRUE,
+                                              FALSE ),
+                        plotContour = ifelse( isKeySet( LIST_arguments, "plotContour" ),
+                                              TRUE,
+                                              FALSE ),
+                        heatUnits = STRING_heatUnits,
+                        main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                       getValue( LIST_arguments, "title" ),
+                                       NA ) )
 }
 
 
 
-if( STRING_function == "MDplot_TIcurve" )
+if( STRING_function == "TIcurve" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_TIcAll <- c( "invertedBackwards" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_allowedForAll,
-                  "invert" ),
+  testAllowed( c( VEC_TIcAll,
+                  VEC_allowedForAll ),
                LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_TIcAll,
+                   VEC_allowedForAll),
+                c( "<if 'TRUE', the backward points are inverted> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -328,21 +340,23 @@ if( STRING_function == "MDplot_TIcurve" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  BOOL_inverted = FALSE
+  if( isKeySet( LIST_arguments, "invertedBackwards" ) )
+    BOOL_inverted = ifelse( getValue( LIST_arguments, "invertedBackwards" ) == "TRUE",
+                            TRUE,
+                            FALSE )
   
   # plot
-  MDplot_TIcurve( MDplot_load_TIcurve( VEC_files ),
-                  BOOL_invertedBackwards = ifelse( isKeySet( LIST_arguments,
-                                                             "invert" ),
-                                                   TRUE,
-                                                   FALSE ),
-                  main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                 getValue( LIST_arguments, "title" ),
-                                 NA ) )
+  MDplot::TIcurve( MDplot::load_TIcurve( VEC_files ),
+                   invertedBackwards = BOOL_inverted,
+                   main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                  getValue( LIST_arguments, "title" ),
+                                  NA ) )
 }
 
 
 
-if( STRING_function == "MDplot_clusters" )
+if( STRING_function == "clusters" )
 {
   # check, if input is sane for this plot and get input files
   VEC_clustAll <- c( "clustersNumber",
@@ -351,7 +365,8 @@ if( STRING_function == "MDplot_clusters" )
   testAllowed( c( VEC_clustAll,
                   VEC_allowedForAll ),
                LIST_arguments )
-  if( isKeySet( LIST_arguments, "help" ) )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
   {
     print_help( STRING_function,
                 c( VEC_clustAll,
@@ -368,7 +383,7 @@ if( STRING_function == "MDplot_clusters" )
                    VEC_files[ i ], "does not exist." ) )
   
   # load matrix and set names
-  MAT_input <- MDplot_load_clusters( VEC_files )
+  MAT_input <- MDplot::load_clusters( VEC_files )
   if( isKeySet( LIST_arguments, "trajectoryNames" ) )
   {
     VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectoryNames" ),
@@ -386,19 +401,19 @@ if( STRING_function == "MDplot_clusters" )
   }
 
   # plot
-  MDplot_clusters( MAT_input,
-                   clustersNumber = ifelse( isKeySet( LIST_arguments, "clustersNumber" ),
-                                            getValue( LIST_arguments, "clustersNumber" ),
-                                            NA ),
-                   ownTrajectoryNames = ifelse( isKeySet( LIST_arguments,
+  MDplot::clusters( MAT_input,
+                    clustersNumber = ifelse( isKeySet( LIST_arguments, "clustersNumber" ),
+                                             getValue( LIST_arguments, "clustersNumber" ),
+                                             NA ),
+                    ownTrajectoryNames = ifelse( isKeySet( LIST_arguments,
                                                           "trajectoryNames" ),
-                                                TRUE,
-                                                FALSE ),
-                   xlab = ifelse( is.na( VEC_axisNames ), "clusters", VEC_axisNames[ 1 ] ),
-                   ylab = ifelse( is.na( VEC_axisNames ), "# configurations", VEC_axisNames[ 2 ] ),
-                   main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                  getValue( LIST_arguments, "title" ),
-                                  NA ) )
+                                                 TRUE,
+                                                 FALSE ),
+                    xlab = ifelse( is.na( VEC_axisNames ), "clusters", VEC_axisNames[ 1 ] ),
+                    ylab = ifelse( is.na( VEC_axisNames ), "# configurations", VEC_axisNames[ 2 ] ),
+                    main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                   getValue( LIST_arguments, "title" ),
+                                   NA ) )
 }
 
 
@@ -464,11 +479,23 @@ if( STRING_function == "MDplot_clusters_timeseries" )
 
 
 
-if( STRING_function == "MDplot_hbond" )
+if( STRING_function == "hbond" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_hbAll <- c( )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_hbAll,
+                  VEC_allowedForAll ),
+               LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_hbAll,
+                   VEC_allowedForAll ),
+                c( VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -478,10 +505,10 @@ if( STRING_function == "MDplot_hbond" )
   }
   
   # plot
-  MDplot_hbond( MDplot_load_hbond( VEC_files ),
-                main = ifelse( isKeySet( LIST_arguments, "title" ),
-                               getValue( LIST_arguments, "title" ),
-                               NA ) )
+  MDplot::hbond( MDplot::load_hbond( VEC_files ),
+                 main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                getValue( LIST_arguments, "title" ),
+                                NA ) )
 }
 
 
