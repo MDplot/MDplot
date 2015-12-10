@@ -17,17 +17,17 @@
 #eog hbond.tiff &
 
 # TIcurve
-Rscript MDplot/bash/MDplot_bash.R TIcurve files=MDplot/inst/extdata/TIcurve_fb_forward_example.txt,MDplot/inst/extdata/TIcurve_fb_backward_example.txt title="TIcurve plotted" size=900,900 invertedBackwards=TRUE resolution=145 outformat=png outfile=TIcurve.png
-Rscript MDplot/bash/MDplot_bash.R TIcurve help=TRUE
-eog TIcurve.png &
+#Rscript MDplot/bash/MDplot_bash.R TIcurve files=MDplot/inst/extdata/TIcurve_fb_forward_example.txt,MDplot/inst/extdata/TIcurve_fb_backward_example.txt title="TIcurve plotted" size=900,900 invertedBackwards=TRUE resolution=145 outformat=png outfile=TIcurve.png
+#Rscript MDplot/bash/MDplot_bash.R TIcurve help=TRUE
+#eog TIcurve.png &
 
 # RMSD
-#Rscript MDplot/bash/MDplot_bash.R rmsd files=MDplot/inst/extdata/MDplot_rmsd1_example.txt,MDplot/inst/extdata/MDplot_rmsd2_example.txt title="RMSD" size=900,900 resolution=100 outformat=tiff outfile=RMSD.tiff datanames=wtSIM,mutSIM
+#Rscript MDplot/bash/MDplot_bash.R rmsd files=MDplot/inst/extdata/rmsd1_example.txt,MDplot/inst/extdata/rmsd2_example.txt title="RMSD" size=900,900 resolution=100 outformat=tiff outfile=RMSD.tiff names=wtSIM,mutSIM
 #Rscript MDplot/bash/MDplot_bash.R rmsd help=TRUE
 #eog RMSD.tiff &
 
 # RMSF
-#Rscript MDplot/bash/MDplot_bash.R rmsf files=MDplot/inst/extdata/MDplot_rmsf1_example.txt,MDplot/inst/extdata/MDplot_rmsf2_example.txt title="RMSF" size=900,750 resolution=125 outformat=tiff outfile=RMSF.tiff
+#Rscript MDplot/bash/MDplot_bash.R rmsf files=MDplot/inst/extdata/rmsf1_example.txt,MDplot/inst/extdata/rmsf2_example.txt title="RMSF" outformat=tiff outfile=RMSF.tiff residuewise=TRUE
 #Rscript MDplot/bash/MDplot_bash.R rmsf help=TRUE
 #eog RMSF.tiff &
 

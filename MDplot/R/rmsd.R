@@ -6,14 +6,14 @@ rmsd_average <- function( LIST_input,
 {
   
   # initialization
-  VEC_names <- rep( NA, length( LIST_input ) )
+  names <- rep( NA, length( LIST_input ) )
   MAT_result <- NULL
   #########
   
   # calculate the average RMSD and the standard deviation
   for( i in 1:length( LIST_input ) )
   {
-    VEC_names[ i ] <- LIST_input[[ i ]][[ "name" ]]
+    names[ i ] <- LIST_input[[ i ]][[ "name" ]]
     VEC_files <- LIST_input[[ i ]][[ "files" ]]
     VEC_values <- c()
     for( j in 1:length( VEC_files ) )
@@ -29,7 +29,7 @@ rmsd_average <- function( LIST_input,
   
   # set the column and row names
   colnames( MAT_result ) <- c( "values", "sds" )
-  rownames( MAT_result ) <- VEC_names
+  rownames( MAT_result ) <- names
   #########
   
   # plot the bars and the errors
@@ -58,12 +58,12 @@ rmsd_average <- function( LIST_input,
 }
 
 # load RMSD
-load_rmsd <- function( VEC_files )
+load_rmsd <- function( files )
 {
   LIST_return <- list()
-  for( i in 1:length( VEC_files ) )
+  for( i in 1:length( files ) )
   {
-    TABLE_input <- read.table( VEC_files[ i ] )
+    TABLE_input <- read.table( files[ i ] )
     if( length( LIST_return ) == 0 )
       LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
     else
@@ -76,48 +76,47 @@ load_rmsd <- function( VEC_files )
 }
 
 # plot RMSD
-rmsd <- function( LIST_datainput,
-                  BOOL_printLegend = TRUE,
-                  BOOL_frax = TRUE,
-                  REAL_divisionFactor = 1000,
-                  STRING_timeUnit = "ns",
-                  STRING_RMSDUnit = "nm",
-                  VEC_colours = NA,
-                  VEC_names = NA,
+rmsd <- function( rmsdData,
+                  printLegend = TRUE,
+                  divisionFactor = 1000,
+                  timeUnit = "ns",
+                  rmsdUnit = "nm",
+                  colours = NA,
+                  names = NA,
                   ... )
 {
   # get boundaries
-  REAL_max_RMSD = max( unlist( lapply( LIST_datainput,
-                                       FUN = function( x ) max( x[[ 2 ]] ) ) ) )
-  INT_max_atomnumber = max( unlist( lapply( LIST_datainput,
-                                            FUN = function( x ) max( x[[ 1 ]] ) ) ) )
+  REAL_max_RMSD = max( unlist( lapply( rmsdData[ c( F, T ) ],
+                                       FUN = function( x ) max( x ) ) ) )
+  INT_max_snapshot = max( unlist( lapply( rmsdData[ c( T, F ) ],
+                                           FUN = function( x ) max( x ) ) ) )
   #########
   
   # set colours and names
   PALETTE_RMSD_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  if( is.na( VEC_colours ) )
-    VEC_colours <- PALETTE_RMSD_colours( length( LIST_datainput ) / 2 )
-  if( is.na( VEC_names ) )
-    VEC_names = 1:( length( LIST_datainput ) / 2 )
+  if( is.na( colours ) )
+    colours <- PALETTE_RMSD_colours( length( rmsdData ) / 2 )
+  if( all( is.na( names ) ) )
+    names = 1:( length( rmsdData ) / 2 )
   #########
   
   # transpose and get rid of first column before you do
   # plot
   #TS_datainput <- as.ts( MAT_MDplot_RMSD_example[ , -1 ] )
-  for( i in 1:length( LIST_datainput ) )
+  for( i in 1:length( rmsdData ) )
   {
     if( i %% 2 == 1 )
     {
       if( i == 1 )
-        plot( LIST_datainput[[ i ]], LIST_datainput[[ ( i + 1 ) ]], type = "l",
-              col = VEC_colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
+        plot( rmsdData[[ i ]], rmsdData[[ ( i + 1 ) ]], type = "l",
+              col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
               xaxt = "n",  xlab = "", ylab = "",
-              ylim = c( 0, REAL_max_RMSD ), xlim = c( 0, INT_max_atomnumber ), ... )
+              ylim = c( 0, REAL_max_RMSD * 1.05 ), xlim = c( 0, INT_max_snapshot ), ... )
       else
-        plot( LIST_datainput[[ i ]], LIST_datainput[[ ( i + 1 ) ]], type = "l",
-              col = VEC_colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
+        plot( rmsdData[[ i ]], rmsdData[[ ( i + 1 ) ]], type = "l",
+              col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
               xaxt = "n", yaxt = "n", xlab = "", ylab = "",
-              ylim = c( 0, REAL_max_RMSD ), xlim = c( 0, INT_max_atomnumber ) )
+              ylim = c( 0, REAL_max_RMSD * 1.05 ), xlim = c( 0, INT_max_snapshot ) )
       par( new = TRUE )
     }
   }
@@ -125,18 +124,18 @@ rmsd <- function( LIST_datainput,
   
   # plot the rest
   axis( 1,
-        at = split_equidistant( c( 1, length( LIST_datainput[[ 1 ]] ) ), 7 ),
-        labels = split_equidistant( c( 1, ( length( LIST_datainput[[ 1 ]] ) / REAL_divisionFactor ) ), 7 ),
+        at = split_equidistant( c( 1, length( rmsdData[[ 1 ]] ) ), 7 ),
+        labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / divisionFactor ) ), 7 ),
         cex.axis = 1 )
-  mtext( side = 1, text = paste( "time [", STRING_timeUnit, "]", sep = "" ), line = 3,
+  mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
          cex = 1.25 )
-  mtext( side = 2, text = paste( "RMSD [", STRING_RMSDUnit, "]", sep = "" ), line = 2.4,
+  mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.4,
          cex = 1.25 )
-  if( BOOL_printLegend )
+  if( printLegend )
     legend( "bottomright",
             title = "Legend",
-            legend = VEC_names,
-            col = VEC_colours,
+            legend = names,
+            col = colours,
             lty = 1.0, lwd = 2.0,
             cex = 1.0 )
   #########

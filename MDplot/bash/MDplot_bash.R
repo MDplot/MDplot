@@ -15,7 +15,7 @@ VEC_requiredForAll <- c(  )
 VEC_allowedForAll <- c( VEC_requiredForAll, "files", "size", "outformat",
                         "outfile", "title", "subtitle",
                         "enableProtocol", "colours", "resolution",
-                        "axisNames", "dataNames", "printLegend",
+                        "axisNames", "names", "printLegend",
                         "help" )
 VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>", "<dimensions of the plot> (optional)", "['png'/'pdf'/'tiff'] (optional)",
                             "<outputfile> (optional)", "<plot main title> (optional)", "<plot subtitle> (optional)",
@@ -35,8 +35,8 @@ if( isKeySet( LIST_arguments, "size" ) )
                                 ",",
                                 fixed = TRUE ) )
 VEC_dataNames <- NA
-if( isKeySet( LIST_arguments, "dataNames" ) )
-  VEC_dataNames <- unlist( strsplit( getValue( LIST_arguments, "dataNames" ),
+if( isKeySet( LIST_arguments, "names" ) )
+  VEC_dataNames <- unlist( strsplit( getValue( LIST_arguments, "names" ),
                                 ",",
                                 fixed = TRUE ) )
 VEC_axisNames <- NA
@@ -167,11 +167,23 @@ if( STRING_function == "MDplot_XRMSD" )
 
 
 
-if( STRING_function == "MDplot_RMSF" )
+if( STRING_function == "rmsf" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_rmsfAll <- c( "residuewise" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_rmsfAll,
+                  VEC_allowedForAll ), LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_rmsfAll,
+                   VEC_allowedForAll ),
+                c( "<specifies, whether the protein is given in atoms or residues> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -179,36 +191,54 @@ if( STRING_function == "MDplot_RMSF" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  BOOL_resWise <- FALSE
+  if( isKeySet( LIST_arguments, "residuewise" ) )
+    BOOL_resWise <- ifelse( ( getValue( LIST_arguments, "residuewise" ) == "TRUE" ),
+                            TRUE,
+                            FALSE )
   
   # plot
-  MDplot_RMSF( MDplot_load_RMSF( VEC_files ),
-               VEC_names = VEC_dataNames,
-               main = ifelse( isKeySet( LIST_arguments, "title" ),
-                              getValue( LIST_arguments, "title" ),
-                              NA ) )
+  MDplot::rmsf( MDplot::load_rmsf( VEC_files ),
+                names = VEC_dataNames,
+                residuewise = BOOL_resWise,
+                main = ifelse( isKeySet( LIST_arguments, "title" ),
+                               getValue( LIST_arguments, "title" ),
+                               NA ) )
 }
 
 
 
-if( STRING_function == "MDplot_RMSD" )
+if( STRING_function == "rmsd" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_rmsdAll <- c( )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_rmsdAll,
+                  VEC_allowedForAll ), LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_rmsdAll,
+                   VEC_allowedForAll ),
+                c( VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
+
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
     if( !file.exists( VEC_files[ i ] ) )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
-  }
+  }    
   
   # plot
-  MDplot_RMSD( MDplot_load_RMSD( VEC_files ),
-               VEC_names = VEC_dataNames,
-               main = ifelse( isKeySet( LIST_arguments, "title" ),
-                              getValue( LIST_arguments, "title" ),
-                              NA ) )
+  MDplot::rmsd( MDplot::load_rmsd( VEC_files ),
+                names = VEC_dataNames,
+                main = ifelse( isKeySet( LIST_arguments, "title" ),
+                               getValue( LIST_arguments, "title" ),
+                               NA ) )
 }
 
 
