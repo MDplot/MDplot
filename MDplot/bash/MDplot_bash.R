@@ -90,13 +90,26 @@ if( STRING_outformat == "pdf" )
 #########
 
 # check, which plot has been selected
-if( STRING_function == "MDplot_DSSP_summary" )
+if( STRING_function == "dssp_summary" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_dsspSumAll <- c( "plotType", "showResidues", "showValues" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_allowedForAll,
-                  "residues" ),
+  testAllowed( c( VEC_dsspSumAll,
+                  VEC_allowedForAll ),
                LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_dsspSumAll,
+                   VEC_allowedForAll ),
+                c( "['dots'/'curves'/'bars'] (optional)",
+                   "<range of residues to show, separated by ','> (optional)",
+                   "<range of values to show, separated by ','> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -105,27 +118,48 @@ if( STRING_function == "MDplot_DSSP_summary" )
                    VEC_files[ i ], "does not exist." ) )
   }
   VEC_residues <- NA
-  if( isKeySet( LIST_arguments, "residues" ) )
-    VEC_residues <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "residues" ),
+  if( isKeySet( LIST_arguments, "showResidues" ) )
+    VEC_residues <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "showResidues" ),
                                                   ",",
                                                   fixed = TRUE ) ) )
+  VEC_values <- NA
+  if( isKeySet( LIST_arguments, "showValues" ) )
+    VEC_values <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "showValues" ),
+                                                ",",
+                                                fixed = TRUE ) ) )
   
   # plot
-  MDplot_DSSP_summary( MDplot_load_DSSP_summary( VEC_files ),
-                       BOOL_printLegend = BOOL_printLegend,
-                       VEC_showResidues = VEC_residues,
-                       main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                      getValue( LIST_arguments, "title" ),
-                                      NA ) )
+  MDplot::dssp_summary( MDplot::load_dssp_summary( VEC_files ),
+                        printLegend = BOOL_printLegend,
+                        showResidues = VEC_residues,
+                        showValues = VEC_values,
+                        main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                       getValue( LIST_arguments, "title" ),
+                                       NA ) )
 }
 
 
 
-if( STRING_function == "MDplot_DSSP_timeseries" )
+if( STRING_function == "dssp_ts" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_dsspTSAll <- c( "timeBoundaries", "residueBoundaries", "timeUnit", "snapshotsPerTimeInt" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_dsspTSAll,
+                  VEC_allowedForAll ), LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_dsspTSAll,
+                   VEC_allowedForAll ),
+                c( "<range of time plotted, separated by ','> (optional)",
+                   "<range of residues plotted, separated by ','> (optional)",
+                   "<time unit, often: 'ns'> (optional)",
+                   "<snapshots per time unit> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -135,19 +169,32 @@ if( STRING_function == "MDplot_DSSP_timeseries" )
   }
   
   # plot
-  MDplot_DSSP_timeseries( MDplot_load_DSSP_timeseries( VEC_files ),
-                          main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                         getValue( LIST_arguments, "title" ),
-                                         NA ) )
+  MDplot::dssp_ts( MDplot::load_dssp_ts( VEC_files ),
+                   main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                  getValue( LIST_arguments, "title" ),
+                                  NA ) )
 }
 
 
 
-if( STRING_function == "MDplot_XRMSD" )
+if( STRING_function == "xrmsd" )
 {
   # check, if input is sane for this plot and get input files
+  VEC_xrmsdAll <- c( "xaxisRange", "yaxisRange" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( VEC_allowedForAll, LIST_arguments )
+  testAllowed( c( VEC_xrmsdAll,
+                  VEC_allowedForAll ), LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_xrmsdAll,
+                   VEC_allowedForAll ),
+                c( "<range of x-axis data points plotted, separated by ','> (optional)",
+                   "<range of y-axis data points plotted, separated by ','> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -157,12 +204,12 @@ if( STRING_function == "MDplot_XRMSD" )
   }
   
   # plot
-  MDplot_XRMSD( MDplot_load_XRMSD( VEC_files ),
-                main = ifelse( isKeySet( LIST_arguments, "title" ),
-                               getValue( LIST_arguments, "title" ),
-                               NA ),
-                xlab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 1 ] ),
-                ylab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 2 ] ) )
+  MDplot::xrmsd( MDplot::load_xrmsd( VEC_files ),
+                 main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                getValue( LIST_arguments, "title" ),
+                                NA ),
+                 xlab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 1 ] ),
+                 ylab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 2 ] ) )
 }
 
 

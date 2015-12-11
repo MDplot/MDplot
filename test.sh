@@ -32,19 +32,19 @@
 #eog RMSF.tiff &
 
 # DSSP summary
-#Rscript MDplot/bash/MDplot_bash.R MDplot_DSSP_summary files=MDplot/inst/extdata/MDplot_DSSP_summary_example.txt title="DSSP summary" size=900,750 outformat=pdf outfile=DSSP_summary.pdf printlegend=TRUE
-#Rscript MDplot/bash/MDplot_bash.R MDplot_DSSP_summary help=TRUE
+#Rscript MDplot/bash/MDplot_bash.R dssp_summary files=MDplot/inst/extdata/dssp_summary_example.txt title="DSSP summary" size=900,750 outformat=pdf outfile=DSSP_summary.pdf printLegend=TRUE plotType=dots
+#Rscript MDplot/bash/MDplot_bash.R dssp_summary help=TRUE
 #acroread DSSP_summary.pdf &
 
 # DSSP timeseries
-#Rscript MDplot/bash/MDplot_bash.R MDplot_DSSP_timeseries files=MDplot/inst/extdata title="DSSP timeseries" size=1200,750 outformat=tiff outfile=DSSP_timeseries.tiff
-#Rscript MDplot/bash/MDplot_bash.R MDplot_DSSP_timeseries help=TRUE
+#Rscript MDplot/bash/MDplot_bash.R dssp_ts files=MDplot/inst/extdata title="DSSP timeseries" size=1200,750 outformat=tiff outfile=DSSP_timeseries.tiff
+#Rscript MDplot/bash/MDplot_bash.R dssp_ts help=TRUE
 #eog DSSP_timeseries.tiff &
 
 # XRMSD
-#Rscript MDplot/bash/MDplot_bash.R MDplot_XRMSD files=MDplot/inst/extdata/MDplot_XRMSD_example.txt title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf
-#Rscript MDplot/bash/MDplot_bash.R MDplot_XRMSD help=TRUE
-#acroread XRMSD.pdf &
+Rscript MDplot/bash/MDplot_bash.R xrmsd files=MDplot/inst/extdata/xrmsd_example.txt title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf
+Rscript MDplot/bash/MDplot_bash.R xrmsd help=TRUE
+acroread XRMSD.pdf &
 
 # hbond timeseries
 #Rscript MDplot/bash/MDplot_bash.R MDplot_hbond_timeseries files=MDplot/inst/extdata/MDplot_hbond_timeseries_example.txt,MDplot/inst/extdata/MDplot_hbond_example.txt acceptors=61,64 donors=64,72 title="HBOND timeseries" size=1450,950 plotoccurences=TRUE outformat=tiff printnames=TRUE outfile=hbond_timeseries.tiff single=TRUE timeNS=TRUE
