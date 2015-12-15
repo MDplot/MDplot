@@ -1,50 +1,52 @@
 # load function for "MDplot_clusters_timeseries"
-load_clusters_ts <- function( STRING_path, VEC_lengths, VEC_names = NA )
+load_clusters_ts <- function( path,
+                              lengths,
+                              names = NA )
 {
   
   # read input and get rid of column 2, which is unnecessary and pack everything in a list
   # of lists, where the first element is the name of the trajectory and the second is the
   # list of clusterIDs between the boundaries specified by the lengths of every trajectory
-  TABLE_buf <- read.table( STRING_path )[ , -2 ]
+  TABLE_buf <- read.table( path )[ , -2 ]
   LIST_return <- list()
   INT_startLine <- 1  
-  if( is.na( VEC_names ) ||
-      length( VEC_lengths ) != length( VEC_names ) )
-    VEC_names <- sapply( seq( 1, length( VEC_lengths ) ),
+  if( is.na( names ) ||
+      length( lengths ) != length( names ) )
+    names <- sapply( seq( 1, length( lengths ) ),
                          function( x ) paste( "trajectory",
                                               x,
                                               sep = "" ) )
-  for( i in 1:length( VEC_lengths ) )
+  for( i in 1:length( lengths ) )
   {
-    LIST_return[[ length( LIST_return ) + 1 ]] <- list( VEC_names[ i ], TABLE_buf[ INT_startLine:( INT_startLine + ( VEC_lengths[ i ] - 1 ) ),
+    LIST_return[[ length( LIST_return ) + 1 ]] <- list( names[ i ], TABLE_buf[ INT_startLine:( INT_startLine + ( lengths[ i ] - 1 ) ),
                                                                                2 ] )
-    INT_startLine <- INT_startLine + VEC_lengths[ i ]
+    INT_startLine <- INT_startLine + lengths[ i ]
   }
   #########
   return( LIST_return )
 }
 
 # plot timeseries of the clusters
-clusters_ts <- function( LIST_timeseries,
+clusters_ts <- function( clustersDataTS,
                          clustersNumber = NA,
-                         VEC_selectTraj = NA,
-                         VEC_selectTime = NA,
-                         BOOL_printNanoseconds = FALSE,
-                         REAL_snapshotsPerNS = 1000,
+                         selectTraj = NA,
+                         selectTime = NA,
+                         printNanoseconds = FALSE,
+                         snapshotsPerNS = 1000,
                          ... )
 {
   
   # check all the input specified and select from data if necessary
   # in addition, generate the fake plotting matrix for the timeseries plot to generate the properly spanned area
   if( is.na( clustersNumber ) )
-    clustersNumber <- max( unlist( lapply( LIST_timeseries, FUN = function( x ) unlist( x[[ 2 ]] ) ) ) )
-  if( !is.na( VEC_selectTraj ) )
-    LIST_timeseries <- LIST_timeseries[ VEC_selectTraj ] 
-  if( !is.na( VEC_selectTime ) )
-    for( i in 1:length( LIST_timeseries ) )
-      LIST_timeseries[[ i ]][[ 2 ]] <- LIST_timeseries[[ i ]][[ 2 ]][ VEC_selectTime[ 1 ]:VEC_selectTime[ 2 ] ]
-  INT_maxSnapshots <- max( unlist( lapply( LIST_timeseries, FUN = function( x ) length( unlist( x[[ 2 ]] ) ) ) ) )
-  MAT_plotSpan <- matrix( nrow = length( LIST_timeseries ),
+    clustersNumber <- max( unlist( lapply( clustersDataTS, FUN = function( x ) unlist( x[[ 2 ]] ) ) ) )
+  if( !is.na( selectTraj ) )
+    clustersDataTS <- clustersDataTS[ selectTraj ] 
+  if( !is.na( selectTime ) )
+    for( i in 1:length( clustersDataTS ) )
+      clustersDataTS[[ i ]][[ 2 ]] <- clustersDataTS[[ i ]][[ 2 ]][ selectTime[ 1 ]:selectTime[ 2 ] ]
+  INT_maxSnapshots <- max( unlist( lapply( clustersDataTS, FUN = function( x ) length( unlist( x[[ 2 ]] ) ) ) ) )
+  MAT_plotSpan <- matrix( nrow = length( clustersDataTS ),
                           ncol = INT_maxSnapshots )
   #########
   
@@ -67,7 +69,7 @@ clusters_ts <- function( LIST_timeseries,
   
   # calculate the percentages for the clusters
   VEC_occurences <- c()
-  VEC_allClusterIDs <- unlist( lapply( LIST_timeseries, function( x ) x[[ 2 ]] ) )
+  VEC_allClusterIDs <- unlist( lapply( clustersDataTS, function( x ) x[[ 2 ]] ) )
   for( i in 1:clustersNumber )
     VEC_occurences <- c( VEC_occurences,
                          sum( VEC_allClusterIDs == i ) / length( VEC_allClusterIDs ) * 100 )
@@ -100,32 +102,38 @@ clusters_ts <- function( LIST_timeseries,
   plot( MAT_plotSpan,
         xlim = c( 1, INT_maxSnapshots ),
         xaxs = "i", xaxt = "n", xlab = "",
-        ylim = c( 0.575, length( LIST_timeseries ) + 0.425 ),
+        ylim = c( 0.575, length( clustersDataTS ) + 0.425 ),
         yaxt = "n", ylab = "", yaxs = "i",
         bty = "n", type = "n" )
-  mtext( side = 3, line = 14.0, cex = 1.45,
-         text = ifelse( is.na( list( ... )[[ "main" ]] ),
-                        "Cluster timeseries plot",
-                        list( ... )[[ "main" ]] ) )
+  if( !is.null( list( ... )[[ "main"]] ) )
+  {
+    mtext( side = 3, line = 19.0, cex = 1.45,
+           text = list( ... )[[ "main" ]] )
+  }
+  else
+  {
+    mtext( side = 3, line = 19.0, cex = 1.45,
+           text = "Timeseries of clusters" )
+  }
   axis( 1,
         at = split_equidistant( VEC_values = c( 0, INT_maxSnapshots ),
                                 n = 5 ),
         labels = split_equidistant( VEC_values = c( 0, INT_maxSnapshots ),
                                     n = 5 ) /
-                 ifelse( BOOL_printNanoseconds,
-                         REAL_snapshotsPerNS,
+                 ifelse( printNanoseconds,
+                         snapshotsPerNS,
                          1 ),
         tick = FALSE,
         line = -0.45 )
   axis( 2,
-        at = 1:length( LIST_timeseries ),
-        label = unlist( lapply( LIST_timeseries,
+        at = 1:length( clustersDataTS ),
+        label = unlist( lapply( clustersDataTS,
                                 function( x ) x[[ 1 ]] ) ),
         tick = FALSE,
         las = 1 )
   mtext( side = 1, line = 1.75, cex = 1.0,
          text = paste( "time [",
-                       ifelse( BOOL_printNanoseconds,
+                       ifelse( printNanoseconds,
                                "ns",
                                "snapshots" ),
                        "]",
@@ -133,11 +141,11 @@ clusters_ts <- function( LIST_timeseries,
   #########
   
   # plot the coloured lines representing the cluster occurences over time here
-  if( length( LIST_timeseries ) > 1 )
-    for( i in 1:length( LIST_timeseries ) )
+  if( length( clustersDataTS ) > 1 )
+    for( i in 1:length( clustersDataTS ) )
     {
-      VEC_clusterIDs <- unlist( LIST_timeseries[[ i ]][[ 2 ]] )
-      VEC_xTicks <- seq( 1, length( LIST_timeseries[[ i ]][[ 2 ]] ) )
+      VEC_clusterIDs <- unlist( clustersDataTS[[ i ]][[ 2 ]] )
+      VEC_xTicks <- seq( 1, length( clustersDataTS[[ i ]][[ 2 ]] ) )
       for( j in 1:clustersNumber )
         segments( VEC_xTicks[ VEC_clusterIDs == j ],
                   rep( i - 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
@@ -150,11 +158,11 @@ clusters_ts <- function( LIST_timeseries,
 }
 
 # load function for "MDplot_clusters"
-load_clusters <- function( STRING_path )
+load_clusters <- function( path )
 {
   
   # load and transpose matrix
-  MAT_pre <- as.matrix( read.table( STRING_path ) )[ , -1  ]
+  MAT_pre <- as.matrix( read.table( path ) )[ , -1  ]
   MAT_pre <- MAT_pre[ , ( ( ncol( MAT_pre ) / 2 ) + 1 ):ncol( MAT_pre ) ]
   MAT_pre <- t( MAT_pre )
   #########

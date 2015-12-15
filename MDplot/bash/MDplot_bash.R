@@ -495,19 +495,35 @@ if( STRING_function == "clusters" )
 
 
 
-if( STRING_function == "MDplot_clusters_timeseries" )
+if( STRING_function == "clusters_ts" )
 {
   # check, if input is sane for this plot and get input files
-  testRequired( c( VEC_requiredForAll,
-                   "lengths" ),
+  VEC_clustTSAll <- c( "clustersNumber",
+                       "selectTraj",
+                       "selectTime",
+                       "printNanoseconds",
+                       "snapshotsPerNS",
+                       "lengths" )
+  testRequired( c( VEC_requiredForAll ),
                 LIST_arguments )
-  testAllowed( c( VEC_allowedForAll,
-                  "clusternumber",
-                  "trajectorynames",
-                  "timeNS",
-                  "snapshotsNS",
-                  "lengths" ),
+  testAllowed( c( VEC_clustTSAll,
+                  VEC_allowedForAll ),
                LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_clustTSAll,
+                   VEC_allowedForAll ),
+                c( "<number of cluster printed> (optional)",
+                   "<vector of selected trajectories, separated by ','> (optional)",
+                   "<range of selected time, separated by ','> (optional)",
+                   "<print time in ns> (optional)",
+                   "<number of snapshots per ns> (optional)",
+                   "<vector of trajectory-lengths, separated by ','>",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
     if( !file.exists( VEC_files[ i ] ) )
@@ -515,15 +531,15 @@ if( STRING_function == "MDplot_clusters_timeseries" )
                    VEC_files[ i ], "does not exist." ) )
   
   # load matrix and set names
-  LIST_input <- MDplot_load_clusters_timeseries( STRING_path = VEC_files,
-                                                VEC_lengths = as.numeric( unlist( strsplit( getValue( LIST_arguments,
-                                                                                           "lengths" ),
-                                                                                           split = ",",
-                                                                                           fixed = TRUE ) ) ),
-                                                VEC_names = NA )
-  if( isKeySet( LIST_arguments, "trajectorynames" ) )
+  LIST_input <- MDplot::load_clusters_ts( path = VEC_files,
+                                          lengths = as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                                                  "lengths" ),
+                                                                                  split = ",",
+                                                                                  fixed = TRUE ) ) ),
+                                          names = NA )
+  if( isKeySet( LIST_arguments, "names" ) )
   {
-    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectorynames" ),
+    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "names" ),
                                    ",",
                                    fixed = TRUE ) )
     if( length( VEC_names ) != length( LIST_input ) )
@@ -539,19 +555,19 @@ if( STRING_function == "MDplot_clusters_timeseries" )
   }
   
   # plot
-  MDplot_clusters_timeseries( LIST_input,
-                              INT_numberClusters = ifelse( isKeySet( LIST_arguments, "clusternumber" ),
-                                                           as.numeric( getValue( LIST_arguments, "clusternumber" ) ),
-                                                           NA ),
-                              BOOL_printNanoseconds = ifelse( isKeySet( LIST_arguments, "timeNS" ),
-                                                              TRUE,
-                                                              FALSE ),
-                              REAL_snapshotsNS = ifelse( isKeySet( LIST_arguments, "snapshotsperNS" ),
-                                                         as.numeric( getValue( LIST_arguments, "snapshotsperNS" ) ),
-                                                         1000 ),
-                              main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                             getValue( LIST_arguments, "title" ),
-                                             NA ) )
+  MDplot::clusters_ts( LIST_input,
+                       clustersNumber = ifelse( isKeySet( LIST_arguments, "clustersNumber" ),
+                                                as.numeric( getValue( LIST_arguments, "clustersNumber" ) ),
+                                                NA ),
+                       printNanoseconds = ifelse( isKeySet( LIST_arguments, "printNanoseconds" ),
+                                                  TRUE,
+                                                  FALSE ),
+                       snapshotsPerNS = ifelse( isKeySet( LIST_arguments, "snapshotsPerNS" ),
+                                                as.numeric( getValue( LIST_arguments, "snapshotsPerNS" ) ),
+                                                1000 ),
+                       main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                      getValue( LIST_arguments, "title" ),
+                                      NA ) )
 }
 
 

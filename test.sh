@@ -42,9 +42,9 @@
 #eog DSSP_timeseries.tiff &
 
 # XRMSD
-Rscript MDplot/bash/MDplot_bash.R xrmsd files=MDplot/inst/extdata/xrmsd_example.txt title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf
-Rscript MDplot/bash/MDplot_bash.R xrmsd help=TRUE
-acroread XRMSD.pdf &
+#Rscript MDplot/bash/MDplot_bash.R xrmsd files=MDplot/inst/extdata/xrmsd_example.txt title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf
+#Rscript MDplot/bash/MDplot_bash.R xrmsd help=TRUE
+#acroread XRMSD.pdf &
 
 # hbond timeseries
 #Rscript MDplot/bash/MDplot_bash.R MDplot_hbond_timeseries files=MDplot/inst/extdata/MDplot_hbond_timeseries_example.txt,MDplot/inst/extdata/MDplot_hbond_example.txt acceptors=61,64 donors=64,72 title="HBOND timeseries" size=1450,950 plotoccurences=TRUE outformat=tiff printnames=TRUE outfile=hbond_timeseries.tiff single=TRUE timeNS=TRUE
@@ -52,6 +52,6 @@ acroread XRMSD.pdf &
 #eog hbond_timeseries.tiff
 
 # clusters timeseries
-#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters_timeseries files=MDplot/inst/extdata/MDplot_clusters_timeseries_example.txt title="CLUSTERS timeseries" size=1200,1000 outformat=png outfile=clusters_timeseries.png timeNS=TRUE lengths=4000,4000,4000,4000,4000,4000 clusternumber=9
-#Rscript MDplot/bash/MDplot_bash.R MDplot_clusters_timeseries help=TRUE
-#eog clusters_timeseries.png
+Rscript MDplot/bash/MDplot_bash.R clusters_ts files=MDplot/inst/extdata/clusters_ts_example.txt title="CLUSTERS timeseries" size=1200,1000 outformat=png outfile=clusters_ts.png printNanoseconds=TRUE lengths=4000,4000,4000,4000,4000,4000 clustersNumber=15
+Rscript MDplot/bash/MDplot_bash.R clusters_ts help=TRUE
+eog clusters_ts.png
