@@ -10,7 +10,7 @@ load_clusters_ts <- function( path,
   TABLE_buf <- read.table( path )[ , -2 ]
   LIST_return <- list()
   INT_startLine <- 1  
-  if( is.na( names ) ||
+  if( all( is.na( names ) ) ||
       length( lengths ) != length( names ) )
     names <- sapply( seq( 1, length( lengths ) ),
                          function( x ) paste( "trajectory",
@@ -56,15 +56,29 @@ clusters_ts <- function( clustersDataTS,
   #########
 
   # occurences and plot device division indeed
-  par( mar = c( 2.0, 6.0, 7.5, 2.0 ) )
+  par( mar = c( 3.0, 7.0, 4.5, 2.0 ) )
   REAL_widthOfOccurences <- ifelse( ( clustersNumber / 10 ) > 1.0,
                                     1.0,
                                     clustersNumber / 10 )
-  layout( matrix( c( 1, 0, 2, 2 ), nrow = 2, byrow = TRUE ),
-          widths = c( REAL_widthOfOccurences,
-                      1.0 - REAL_widthOfOccurences,
-                      1.0 ),
-          heights = c( 1.5, 1.5, 1.5 ) )
+  if( !is.null( list( ... )[[ "main"]] ) )
+  {
+    layout( matrix( c( 1, 1, 2, 0, 3, 3 ), nrow = 3, byrow = TRUE ),
+            widths = c( 1.0,
+                        REAL_widthOfOccurences,
+                        1.0 - REAL_widthOfOccurences,
+                        1.0 ),
+            heights = c( 0.4, 1.5, 1.5, 1.5 ) )
+    plot.new()
+    mtext( side = 3, padj = 0, cex = 1.45, text = list( ... )[[ "main" ]] )
+  }
+  else
+  {
+    layout( matrix( c( 1, 0, 2, 2 ), nrow = 2, byrow = TRUE ),
+            widths = c( REAL_widthOfOccurences,
+                        1.0 - REAL_widthOfOccurences,
+                        1.0 ),
+            heights = c( 1.5, 1.5, 1.5 ) )
+  }
   #########
   
   # calculate the percentages for the clusters
@@ -98,23 +112,13 @@ clusters_ts <- function( clustersDataTS,
   
   # reset margins
   # plot the bottom plot: set the framework for the plotting later on
-  par( mar = c( 3.0, 6.0, 0.0, 2.0 ) )
+  par( mar = c( 4.0, 7.0, 0.0, 2.0 ) )
   plot( MAT_plotSpan,
         xlim = c( 1, INT_maxSnapshots ),
         xaxs = "i", xaxt = "n", xlab = "",
         ylim = c( 0.575, length( clustersDataTS ) + 0.425 ),
         yaxt = "n", ylab = "", yaxs = "i",
         bty = "n", type = "n" )
-  if( !is.null( list( ... )[[ "main"]] ) )
-  {
-    mtext( side = 3, line = 19.0, cex = 1.45,
-           text = list( ... )[[ "main" ]] )
-  }
-  else
-  {
-    mtext( side = 3, line = 19.0, cex = 1.45,
-           text = "Timeseries of clusters" )
-  }
   axis( 1,
         at = split_equidistant( VEC_values = c( 0, INT_maxSnapshots ),
                                 n = 5 ),
@@ -131,7 +135,7 @@ clusters_ts <- function( clustersDataTS,
                                 function( x ) x[[ 1 ]] ) ),
         tick = FALSE,
         las = 1 )
-  mtext( side = 1, line = 1.75, cex = 1.0,
+  mtext( side = 1, line = 2.0, cex = 1.25,
          text = paste( "time [",
                        ifelse( printNanoseconds,
                                "ns",
