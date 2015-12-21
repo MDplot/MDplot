@@ -162,13 +162,23 @@ clusters_ts <- function( clustersDataTS,
 }
 
 # load function for "MDplot_clusters"
-load_clusters <- function( path )
+load_clusters <- function( path,
+                           names = NA )
 {
   
   # load and transpose matrix
   MAT_pre <- as.matrix( read.table( path ) )[ , -1  ]
   MAT_pre <- MAT_pre[ , ( ( ncol( MAT_pre ) / 2 ) + 1 ):ncol( MAT_pre ) ]
   MAT_pre <- t( MAT_pre )
+  if( all( !is.na( names ) ) &&
+      length( names ) == nrow( MAT_pre ) )
+  {
+    rownames( MAT_pre ) <- names
+  }
+  else
+  {
+    rownames( MAT_pre ) <- 1:nrow( MAT_pre )
+  }
   #########
   return( MAT_pre )
 }
@@ -177,21 +187,25 @@ load_clusters <- function( path )
 clusters <- function( clusters,
                       clustersNumber = NA,
                       legendTitle = "trajectories",
-                      ownTrajectoryNames = FALSE,
                       ... )
 {
   # reduce number of clusters, in case specified and take care of the trajectory names
   if( !is.na( clustersNumber ) )
     clusters <- clusters[ , 1:clustersNumber ]
   colnames( clusters ) <- 1:ncol( clusters )
-  if( !ownTrajectoryNames )
-    rownames( clusters ) <- 1:nrow( clusters )
   #########
   
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_CLUSTERS <- PALETTE_clusters( nrow( clusters ) )
-  names( clusters ) <- 1:nrow( clusters )
-  barplot( clusters, col = COLOURS_CLUSTERS, ... )
+  defaultArguments <- list( xlab = "clusters",
+                            main = "",
+                            col = COLOURS_CLUSTERS )
+  ellipsis <- list( ... )
+  defaultArguments[ names( ellipsis ) ] <- ellipsis
+  ellipsis[ names( defaultArguments ) ] <- defaultArguments
+  do.call( what = barplot,
+           c( list( height = clusters ),
+              ellipsis ) )
   legend( "topright", inset = 0.045, legend = rownames( clusters ),
           title = legendTitle, box.lty = 0, box.lwd = 0, 
           col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )

@@ -52,6 +52,6 @@
 #eog hbond_timeseries.tiff
 
 # clusters timeseries
-Rscript MDplot/bash/MDplot_bash.R clusters_ts files=MDplot/inst/extdata/clusters_ts_example.txt title="CLUSTERS timeseries" size=1200,1000 outformat=png outfile=clusters_ts.png printNanoseconds=TRUE lengths=4000,4000,4000,4000,4000,4000 clustersNumber=15
-Rscript MDplot/bash/MDplot_bash.R clusters_ts help=TRUE
-eog clusters_ts.png
+#Rscript MDplot/bash/MDplot_bash.R clusters_ts files=MDplot/inst/extdata/clusters_ts_example.txt title="CLUSTERS timeseries" size=1200,1000 outformat=png outfile=clusters_ts.png printNanoseconds=TRUE lengths=4000,4000,4000,4000,4000,4000 clustersNumber=15
+#Rscript MDplot/bash/MDplot_bash.R clusters_ts help=TRUE
+#eog clusters_ts.png

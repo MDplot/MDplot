@@ -1,26 +1,26 @@
 # plot the average RMSD of many runs with spread
-rmsd_average <- function( LIST_input,
-                          INT_skip = 0,
-                          BOOL_printMeans = FALSE,
+rmsd_average <- function( rmsdAvInput,
+                          skip = 0,
+                          printMeans = FALSE,
                           ... )
 {
   
   # initialization
-  names <- rep( NA, length( LIST_input ) )
+  names <- rep( NA, length( rmsdAvInput ) )
   MAT_result <- NULL
   #########
   
   # calculate the average RMSD and the standard deviation
-  for( i in 1:length( LIST_input ) )
+  for( i in 1:length( rmsdAvInput ) )
   {
-    names[ i ] <- LIST_input[[ i ]][[ "name" ]]
-    VEC_files <- LIST_input[[ i ]][[ "files" ]]
+    names[ i ] <- rmsdAvInput[[ i ]][[ "name" ]]
+    VEC_files <- rmsdAvInput[[ i ]][[ "files" ]]
     VEC_values <- c()
     for( j in 1:length( VEC_files ) )
     {
       VEC_buffer <- read.table( VEC_files[ j ] )[ , 2 ]
-      if( INT_skip > 0 )
-        VEC_buffer <- VEC_buffer[ INT_skip:length( VEC_buffer ) ]
+      if( skip > 0 )
+        VEC_buffer <- VEC_buffer[ skip:length( VEC_buffer ) ]
       VEC_values <- c( VEC_values, VEC_buffer )
     }
     MAT_result <- rbind( MAT_result, c( mean( VEC_values ), sd( VEC_values ) ) )
