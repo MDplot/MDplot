@@ -1,13 +1,13 @@
 # plot multiple DSSP plots
-dssp_summary_multi <- function( LIST_input,
-                                STRING_selectedMotif,
+dssp_summary_multi <- function( dsspSumMultInput,
+                                selectedMotifs,
                                 printLegend = FALSE,
                                 colours = NA,
                                 showResidues = NA,
                                 barePlot = FALSE,
                                 ... )
 {
-  if( length( LIST_input ) < 2 )
+  if( length( dsspSumMultInput ) < 2 )
     stop( "Error occured since the length of the input list is less than two." )
   
   # specify graphical settings and colours, in case a legend has been requested (or not)
@@ -16,21 +16,21 @@ dssp_summary_multi <- function( LIST_input,
   if( all( is.na( colours ) ) )
   {
     PALETTE_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    colours <- PALETTE_colours( length( LIST_input ) )
+    colours <- PALETTE_colours( length( dsspSumMultInput ) )
   }
   #########
-  MDplot_DSSP_summary( LIST_input[[ 1 ]][[ "matrix" ]],
-                       selectedMotifs = c( STRING_selectedMotif ),
+  MDplot_DSSP_summary( dsspSumMultInput[[ 1 ]][[ "matrix" ]],
+                       selectedMotifs = c( selectedMotifs ),
                        barePlot = barePlot,
                        plotType = "curves",
                        colours = c( colours[ 1 ] ),
                        showResidues = showResidues,
                        ... )
-  for( i in 2:length( LIST_input ) )
+  for( i in 2:length( dsspSumMultInput ) )
   {
     par( new = TRUE )
-    MDplot_DSSP_summary( LIST_input[[ i ]][[ "matrix" ]],
-                         selectedMotifs = c( STRING_selectedMotif ),
+    MDplot_DSSP_summary( dsspSumMultInput[[ i ]][[ "matrix" ]],
+                         selectedMotifs = c( selectedMotifs ),
                          barePlot = TRUE,
                          plotType = "curves",
                          colours = c( colours[ i ] ),
@@ -43,10 +43,10 @@ dssp_summary_multi <- function( LIST_input,
   {
     plot.new()
     legend( "right",
-            legend = unlist( lapply( LIST_input, function( x ) x[[ "name" ]] ) ),
+            legend = unlist( lapply( dsspSumMultInput, function( x ) x[[ "name" ]] ) ),
             col = colours,
             lty = 0, lwd = 0, bty = "n",
-            pch = 19, cex = 1, xpd = TRUE )
+            pch = 19, cex = 1.0, xpd = TRUE )
   }
   #########
 }
@@ -206,16 +206,21 @@ dssp_summary <- function( dsspData,
   # bars plot variant
   if( plotType == "bars" )
   {
-    do.call( what = barplot,
-             c( list( height = t( MAT_data ),
-                      xaxs = "i",
-                      xaxt = ifelse( barePlot, "n", "s" ),
-                      ylim = c( 0, 100 ),
-                      yaxs = "i",
-                      yaxt = ifelse( barePlot, "n", "s" ),
-                      col = colours,
-                      bty = ifelse( barePlot, "n", "o" ) ),
-                ellipsis ) )
+    PLOT_bar <- do.call( what = barplot,
+                         c( list( height = t( MAT_data ),
+                                  xaxs = "i",
+                                  xaxt = ifelse( barePlot, "n", "s" ),
+                                  ylim = c( 0, 100 ),
+                                  yaxs = "i",
+                                  yaxt = ifelse( barePlot, "n", "s" ),
+                                  col = colours,
+                                  bty = ifelse( barePlot, "n", "o" ) ),
+                         ellipsis ) )
+    VEC_atTicks <- PLOT_bar[ c( F, F, F, F, T ) ]
+    VEC_atLabels <- seq( 5, by = 5, length.out = length( VEC_atTicks ) )
+    axis( side = 1,
+          at = VEC_atTicks,
+          labels = VEC_atLabels )
   }
   #########
   
@@ -256,7 +261,7 @@ dssp_summary <- function( dsspData,
             legend = colnames( MAT_data ),
             col = colours,
             lty = 0, lwd = 0, bty = "n",
-            pch = 19, cex = 1.0, xpd = TRUE,
+            pch = 15, cex = 0.9, xpd = TRUE,
             pt.cex = 1.45 )
   }
   #########
@@ -321,7 +326,12 @@ dssp_ts <- function( tsData,
   colours <- PALETTE_DSSP_timeseries_colours( length( tsData ) )
   
   # specify graphical settings, in case a legend has been requested (or not)
-  par( mar = c( 4.5, 4.5, 2.5, ifelse( printLegend, 10.0, 2.5 ) ) )
+  par( mar = c( 4.5, 4.5, 2.5, 0.0 ) )
+  if( printLegend )
+    layout( matrix( c( 1, 2 ), nrow = 1, byrow = TRUE ),
+            widths = c( 0.8,
+                        0.2 ),
+            heights = c( 1.0, 1.0 ) )
 
   #########
   for( i in 1:length( tsData )  )
@@ -353,15 +363,15 @@ dssp_ts <- function( tsData,
   # print legend, if flag is set
   if( printLegend )
   {
-    par( xpd = TRUE )
-    legend( "topright", inset = c( -0.325, 0.3 ),
+    par( mar = c( 4.5, 0.0, 2.5, 1.0 ) )
+    plot.new()
+    legend( "left",
             legend = unlist( lapply( tsData,
                                      function( x ) x[[ "name" ]] ) ),
-            pch = 22, col = colours, pt.bg = colours, pt.cex = 1.25,
+            pch = 15, col = colours, pt.bg = colours, pt.cex = 1.25,
             lty = 0, lwd = 0,
-            cex = 1,
+            cex = 0.75,
             bty = "n" )
-    par( xpd = FALSE )
   }
   #########
 }

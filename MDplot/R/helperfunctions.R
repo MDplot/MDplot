@@ -20,7 +20,7 @@ if( length( LIST_packages ) > 0 ) install.packages( LIST_packages )
 
 # translate amino acids in the context of the GROMOS framework
 translate_aminoacids <- function( VEC_input,
-                                 INT_switch )
+                                  INT_switch )
 {
   VEC_GROMOS_triple = c( "ALA", "ARG", "ASN",
                          "ASP", "ASPH", "CYS",
@@ -59,8 +59,8 @@ translate_aminoacids <- function( VEC_input,
     for( i in 1:length( VEC_input ) )
       VEC_return <- c( VEC_return,
                        ifelse( VEC_input[ i ] %in% VEC_GROMOS_triple,
-                       VEC_canonical_single[ VEC_GROMOS_triple == VEC_input[ i ] ],
-                       VEC_input[ i ] ) )
+                               VEC_canonical_single[ VEC_GROMOS_triple == VEC_input[ i ] ],
+                               VEC_input[ i ] ) )
   #########
   
   # read GROMOS three lettercode and return canonical three letter code 

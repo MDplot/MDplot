@@ -80,10 +80,31 @@ ramachandran <- function( dihedrals,
             xaxs = "i", xaxt = "n", yaxs = "i", yaxt = "n",
             ann = TRUE, xaxt = "n", yaxt = "n", FUN = function( x ) FUN_heatFun( length( x ) ),
             xlim = c( -180, 180 ), ylim = c( -180, 180 ), ... )
-    axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.25 )
-    axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.25 )
-    mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.75, cex = 1.45 )
-    mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.45, cex = 1.45 )
+    axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+    axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+    mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.8, cex = 1.45 )
+    mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.3, cex = 1.45 )
+    
+    # contour
+    # TODO: separate this functionality somehow
+    if( plotContour && ncol( dihedrals ) < 3 )
+    {
+      DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
+                                                            LIST_filled[[ "xBins" ]] ),
+                                              findInterval( dihedrals[ , 2 ],
+                                                            LIST_filled[[ "yBins" ]] ) ) )
+      DF_frequencies[ , 1 ] <- as.numeric( DF_frequencies[ , 1 ] )
+      DF_frequencies[ , 2 ] <- as.numeric( DF_frequencies[ , 2 ] )
+      freq2D <- diag( LIST_filled[[ "xBins" ]] ) * 0
+      freq2D[ cbind( DF_frequencies[ , 1 ], DF_frequencies[ , 2 ] ) ] <- DF_frequencies[ , 3 ]
+      contour( LIST_filled[[ "xBins" ]],
+               LIST_filled[[ "yBins" ]],
+               freq2D,
+               add = TRUE,
+               drawlabels = FALSE,
+               xaxs = "i", yaxs = "i" )
+    }
+    #########
   }
   if( plotType == "comic" )
   {
@@ -93,8 +114,8 @@ ramachandran <- function( dihedrals,
            LIST_filled[[ "yBins" ]],
            FUN_heatFun( LIST_filled[[ "freq2D" ]] ),
            col = VEC_palette,
-           xaxs = "i", xaxt = "n", xlab = "",
-           yaxs = "i", yaxt = "n", ylab = "",
+            xaxt = "n", xlab = "",
+            yaxt = "n", ylab = "",
            ... )
     ##########
     
@@ -114,14 +135,15 @@ ramachandran <- function( dihedrals,
                LIST_filled[[ "yBins" ]],
                freq2D,
                add = TRUE,
-               drawlabels = FALSE )
+               drawlabels = FALSE,
+               xaxs = "i", yaxs = "i" )
     }
     #########
     
-    axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.25 )
-    axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.25 )
-    mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.75, cex = 1.45 )
-    mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.45, cex = 1.45 )
+    axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+    axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+    mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.8, cex = 1.45 )
+    mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.3, cex = 1.45 )
   }
   if( plotType == "fancy" )
   {
@@ -161,7 +183,7 @@ ramachandran <- function( dihedrals,
     labels <- c( -135, -90, -45, 0, 45, 90, 135 )
     label.pos <- trans3d( seq( 1 / 8, 7 / 8, by = 1 / 8 ), -0.09, 0, perspMatrix )
     text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 0.9 )
-    text( label.pos$x[ 4 ], label.pos$y[ 4 ] - 0.025,
+    text( label.pos$x[ 4 ], label.pos$y[ 4 ] - 0.0225,
           labels = c( expression( paste( phi, " [", degree, "]" ) ) ),
           cex = 1.25 )
     

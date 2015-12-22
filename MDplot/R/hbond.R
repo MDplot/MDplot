@@ -6,6 +6,7 @@ load_hbond_ts <- function( path )
 }
 
 # plot hbond timeseries
+# WARNING: "timeRange" does not work
 hbond_ts <- function( timeseries,
                       summary,
                       acceptorRange = NA,
@@ -14,22 +15,22 @@ hbond_ts <- function( timeseries,
                       scalingFactorPlot = NA,
                       printNames = FALSE,
                       namesToSingle = FALSE,
-                      timeInNS = FALSE,
-                      divisionFactor = 1000,
+                      timeUnit = NA,
+                      snapshotsPerTimeInt = 1000,
                       timeRange = NA,
                       hbondIndices = NA,
                       ... )
 {
   
   # set all ranges to full, in case they are not specified
-  if( is.na( acceptorRange ) )
+  if( all( is.na( acceptorRange ) ) )
     acceptorRange <- c( min( summary[ , 4 ] ), max( summary[ , 4 ] ) )
-  if( is.na( donorRange ) )
+  if( all( is.na( donorRange ) ) )
     donorRange <- c( min( summary[ , 2 ] ), max( summary[ , 2 ] ) )
-  if( is.na( hbondIndices ) )
+  if( all( is.na( hbondIndices ) ) )
     hbondIndices <- c( min( summary[ , 1 ] ), max( summary[ , 1 ] ) )
   #########
-  
+
   # select the hbond-IDs of those hbonds, that match all criteria
   VEC_hbondIDs <- c()
   for( i in 1:nrow( summary ) )
@@ -55,15 +56,17 @@ hbond_ts <- function( timeseries,
   #########
 
   # set time axis
-  VEC_timeLimits = c( min( timeseries[ , 1 ] ),
-                      max( timeseries[ , 1 ] ) )
+  VEC_timeLimits <- c( min( timeseries[ , 1 ] ),
+                       max( timeseries[ , 1 ] ) )
+  if( !all( is.na( timeRange ) ) )
+    VEC_timeLimits <- timeRange
   VEC_timeTicks <- VEC_timeLimits
-  if( timeInNS )
-    VEC_timeTicks <- VEC_timeTicks / divisionFactor
+  if( !is.na( timeUnit ) )
+    VEC_timeTicks <- VEC_timeTicks / snapshotsPerTimeInt
   #########
 
   # get the vector for the names (left plot)
-  # in case, names are selected transform the hbond-ID into three or two letter constructs
+  # in case, names are selected transform the hbond-ID into three or one letter constructs
   VEC_hbondNames <- split_equidistant( VEC_values = c( min( VEC_hbondIDs ),
                                                        max( VEC_hbondIDs ) ),
                                        n = 5 )
@@ -77,18 +80,18 @@ hbond_ts <- function( timeseries,
       LIST_tableLine <- summary[ summary[ , 1 ] == VEC_hbondIDs[ i ], ]
       if( namesToSingle )
       {
-        LIST_tableLine[[ "ResDonorName" ]] <- translate_aminoacids( LIST_tableLine[[ "ResDonorName" ]],
+        LIST_tableLine[[ "resDonorName" ]] <- translate_aminoacids( LIST_tableLine[[ "resDonorName" ]],
                                                                     INT_switch = 1 )
-        LIST_tableLine[[ "ResAcceptorName" ]] <- translate_aminoacids( LIST_tableLine[[ "ResAcceptorName" ] ],
+        LIST_tableLine[[ "resAcceptorName" ]] <- translate_aminoacids( LIST_tableLine[[ "resAcceptorName" ]],
                                                                        INT_switch = 1 ) 
       }
       VEC_hbondNames <- c( VEC_hbondNames,
-                           paste( paste( LIST_tableLine[[ "ResDonorName" ]],
-                                        LIST_tableLine[[ "ResDonor" ]],
+                           paste( paste( LIST_tableLine[[ "resDonorName" ]],
+                                        LIST_tableLine[[ "resDonor" ]],
                                         sep = "" ),
                                   "->",
-                                  paste( LIST_tableLine[[ "ResAcceptorName" ]],
-                                        LIST_tableLine[[ "ResAcceptor" ]],
+                                  paste( LIST_tableLine[[ "resAcceptorName" ]],
+                                        LIST_tableLine[[ "resAcceptor" ]],
                                         sep = "" ) ) )
     }
   }
@@ -120,15 +123,18 @@ hbond_ts <- function( timeseries,
         type = "n" )
   LIST_ellipsis <- list( ... )
   mtext( side = 3, line = 1.25, cex = 2.0,
-         text = ifelse( is.na( LIST_ellipsis[[ "main" ]] ),
+         text = ifelse( is.null( LIST_ellipsis[[ "main" ]] ),
                         "Hbond timeseries",
                         LIST_ellipsis[[ "main" ]] ),
          adj = ifelse( plotOccurences,
                        0.795,
                        0.5 ) )
   mtext( side = 1, line = 2.45, cex = 1.0, text = paste( "time",
-                                                         ifelse( timeInNS,
-                                                                 "[ns]",
+                                                         ifelse( !is.na( timeUnit ),
+                                                                 paste( "[",
+                                                                        timeUnit,
+                                                                        "]",
+                                                                        sep = "" ),
                                                                  "[snapshots]" ) ) )
   if( !printNames )
     mtext( side = 2, line = 2.45, cex = 1, text = "hbonds [#]" )
@@ -283,12 +289,12 @@ hbond <- function( hbonds,
     MAT_result <- MAT_result[ , c( -8, -7, -6, -5, -3, -1 ) ]
     MAT_result <- MAT_result[ order( MAT_result[ , 1 ], MAT_result[ , 2 ] ), ]
     PALETTE_residuewise <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    if( !is.na( acceptorRange ) )
+    if( all( !is.na( acceptorRange ) ) )
     {
       MAT_result <- MAT_result[ MAT_result[ , 2 ] >= acceptorRange[ 1 ], , drop = FALSE ]
       MAT_result <- MAT_result[ MAT_result[ , 2 ] <= acceptorRange[ 2 ], , drop = FALSE ]
     }
-    if( !is.na( donorRange ) )
+    if( all( !is.na( donorRange ) ) )
     {
       MAT_result <- MAT_result[ MAT_result[ , 1 ] >= donorRange[ 1 ], , drop = FALSE ]
       MAT_result <- MAT_result[ MAT_result[ , 1 ] <= donorRange[ 2 ], , drop = FALSE ]
