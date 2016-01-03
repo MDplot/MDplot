@@ -35,12 +35,13 @@ xrmsd <- function( xrmsdValues,
                           max( xrmsdValues[ , 1 ] ) )
   if( is.na( yaxisRange ) )
     yaxisRange <- c( min( xrmsdValues[ , 2 ] ),
-                          max( xrmsdValues[ , 2 ] ) )
+                     max( xrmsdValues[ , 2 ] ) )
   colours <- c( 0, 
-                         max( xrmsdValues[ , 3 ] ) )
+                max( xrmsdValues[ , 3 ] ) )
   #########
   
   # colour values accordingly
+  par( mar = c( 2.5, 2.5, 2.5, 0.5 ) )
   if( printLegend )
     layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )

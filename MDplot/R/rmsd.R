@@ -128,15 +128,15 @@ rmsd <- function( rmsdData,
         labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / divisionFactor ) ), 7 ),
         cex.axis = 1 )
   mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
-         cex = 1.25 )
-  mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.4,
-         cex = 1.25 )
+         cex = 1 )
+  mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,
+         cex = 1 )
   if( printLegend )
     legend( "bottomright",
             title = "Legend",
             legend = names,
             col = colours,
             lty = 1.0, lwd = 2.0,
-            cex = 1.0 )
+            cex = 1 )
   #########
 }

@@ -26,21 +26,27 @@ rmsf <- function( rmsfData,
                   residuewise = FALSE,
                   numberXLabels = 7,
                   names = NA,
+                  range = NA,
                   ... )
 {
   # set colours and names
   PALETTE_RMSF_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  if( is.na( colours ) )
+  if( all( is.na( colours ) ) )
     colours <- PALETTE_RMSF_colours( length( rmsfData ) / 2 )
-  if( is.na( names ) )
+  if( all( is.na( names ) ) )
     names <- 1:( length( rmsfData ) / 2 )
   #########
   
   # get boundaries
   REAL_maxRMSF = max( unlist( lapply( rmsfData[ c( F, T ) ],
                                       FUN = function( x ) max( x ) ) ) )
+  INT_minAtomnumber = min( unlist( lapply( rmsfData[ c( T, F ) ],
+                                           FUN = function( x ) min( x ) ) ) )
   INT_maxAtomnumber = max( unlist( lapply( rmsfData[ c( T, F ) ],
                                            FUN = function( x ) max( x ) ) ) )
+  if( all( is.na( range ) ) )
+    range <- c( INT_minAtomnumber - 1,
+                INT_maxAtomnumber )
   #########
   
   # plot the RMSF for all elements of the list containing the data
@@ -52,13 +58,13 @@ rmsf <- function( rmsfData,
         plot( rmsfData[[ i ]], rmsfData[[ ( i + 1 ) ]], type = "l",
               col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
               xaxt = "n", xlab = "", ylab = "",
-              ylim = c( 0, REAL_maxRMSF * 1.05 ), xlim = c( 0, INT_maxAtomnumber ),
+              ylim = c( 0, REAL_maxRMSF * 1.05 ), xlim = range,
               ... )
       else
         plot( rmsfData[[ i ]], rmsfData[[ ( i + 1 ) ]], type = "l",
               col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
               xaxt = "n", yaxt = "n", xlab = "", ylab = "",
-              ylim = c( 0, REAL_maxRMSF * 1.05 ), xlim = c( 0, INT_maxAtomnumber ) )
+              ylim = c( 0, REAL_maxRMSF * 1.05 ), xlim = range )
       par( new = TRUE )
     }
   }
@@ -66,18 +72,18 @@ rmsf <- function( rmsfData,
   
   # plot axis labels and ticks, which are calculated either atom- or residuewise
   mtext( side = 2, text = paste( "RMSF [", rmsfUnit, "]", sep = "" ), line = 2.4, cex = 1.25 )
-  VEC_atomNumbers <- 0:INT_maxAtomnumber
+  VEC_atomNumbers <- range
   if( !residuewise )
   {
     mtext( side = 1, text = "atom number", line = 3, cex = 1.25 )
-    axis( 1, at = split_equidistant( c( 0, INT_maxAtomnumber ), numberXLabels ),
-          label = split_equidistant( c( 0, INT_maxAtomnumber ), numberXLabels ) )
+    axis( 1, at = split_equidistant( range, numberXLabels ),
+          label = split_equidistant( range, numberXLabels ) )
   }
   else
   {
     mtext( side = 1, text = "residue number", line = 3, cex = 1.25 )
-    axis( 1, at = split_equidistant( c( 0, INT_maxAtomnumber ), numberXLabels ),
-          label = as.integer( split_equidistant( c( 0, INT_maxAtomnumber ), numberXLabels )
+    axis( 1, at = split_equidistant( range, numberXLabels ),
+          label = as.integer( split_equidistant( range, numberXLabels )
                               / 3 ) )
   }
   #########

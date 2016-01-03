@@ -10,6 +10,7 @@ load_TIcurve <- function( files )
 # plot the curve and calculate and plot the integral
 TIcurve <- function( lambdas,
                      invertedBackwards = FALSE,
+                     energyUnit = "kJ/mol",
                      ... )
 {
   
@@ -50,10 +51,14 @@ TIcurve <- function( lambdas,
       mtext( side = 1, text = expression( lambda ), line = 3, cex = 1.45 )
       mtext( side = 2, 
              text = expression( atop( "<"*frac( paste( partialdiff, "H" ),
-                                                paste( partialdiff, lambda ) )*">",
-                                      atop( "[kJ/mol]",
-                                            "" ) ) ),
+                                                paste( partialdiff, lambda ) )*">", ) ),
              line = 2.4, cex = 1.75, las = 1 )
+      mtext( side = 2,
+             text = paste( "[",
+                           energyUnit,
+                           "]",
+                           sep = "" ),
+             line = 2.4, cex = 1.0, las = 1, padj = 2.25 )
       abline( h = 0, lwd = 1, lty = 3 )
     }
     else
@@ -90,7 +95,10 @@ TIcurve <- function( lambdas,
                                    #" \u00b1 ",
                                    " +/- ",
                                    REAL_forward_error_rounded,
-                                   " [kJ/mol]" ) ) )
+                                   paste( " [",
+                                          energyUnit,
+                                          "]",
+                                          sep = "" ) ) ) )
   if( length( lambdas ) > 1 )
   {
     REAL_backward_integral <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "integral" ] )
@@ -105,7 +113,10 @@ TIcurve <- function( lambdas,
                                      #" \u00b1 ",
                                      " +/- ",
                                      REAL_backward_error_rounded,
-                                     " [kJ/mol]" ) ) )
+                                     paste( " [",
+                                            energyUnit,
+                                            "]",
+                                            sep = "" ) ) ) )
     REAL_hysteresis <- round( REAL_forward_integral - REAL_backward_integral,
                               digits = min( c( INT_significantForward,
                                                INT_significantBackward ) ) )
@@ -113,7 +124,10 @@ TIcurve <- function( lambdas,
            adj = 1,
            text = substitute( paste( "hysteresis = ",
                                      REAL_hysteresis,
-                                     " [kJ/mol]" ) ) )
+                                     paste( " [",
+                                            energyUnit,
+                                            "]",
+                                            sep = "" ) ) ) )
   }
   #########
 }
