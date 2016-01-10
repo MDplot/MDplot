@@ -1,13 +1,18 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_load_DSSP_timeseries}
-\alias{MDplot_load_DSSP_timeseries}
-\title{DSSP timeseries plot loading}
+\name{load_dssp_summary}
+\alias{load_dssp_summary}
+\title{Load DSSP information}
 \description{
-Loads DSSP output files from a specified directory and combined it into a list construct suitable for \link{MDplot_DSSP_timeseries}.}
+Loads dssp summary output files from a specified directory and combines it into a list.}
 \usage{
-MDplot_load_DSSP_timeseries( STRING_folder )}
+load_dssp_summary( path )
+}
 \arguments{
-  \item{STRING_folder}{Folder, in which the DSSP output files are located.}
+  \item{path}{Folder, in which the dssp output files are located.}
+}
+\examples{
+# see "extdata" for format information and file names
+MDplot::load_dssp_summary( system.file( "extdata", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
-\keyword{DSSP}
+\keyword{dssp}

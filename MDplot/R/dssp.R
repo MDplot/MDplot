@@ -56,10 +56,10 @@ averaging_dssp_summary <- function( VEC_files )
 {
   if( length( VEC_files ) < 2 )
     stop( "Error because no input files (two at least) have been specified!" )
-  MAT_average <- MDplot::load_DSSP_summary( VEC_files[ 1 ] )
+  MAT_average <- MDplot::load_dssp_summary( VEC_files[ 1 ] )
   for( i in 2:length( VEC_files ) )
     MAT_average <- MAT_average +
-                   MDplot::load_DSSP_summary( VEC_files[ i ] )
+                   MDplot::load_dssp_summary( VEC_files[ i ] )
   MAT_average <- MAT_average / length( VEC_files )
   colnames( MAT_average ) <- c( "residuenumber", "# 3-Helix", "3-Helix",
                                 "# 4-Helix", "4-Helix", "# 5-Helix",
@@ -300,7 +300,7 @@ dssp_ts <- function( tsData,
                      timeBoundaries = NA,
                      residueBoundaries = NA,
                      timeUnit = NA,
-                     snapshotsPerTimeInt = 1000,
+                     snapshotsPerTime = 1000,
                      ... )
 {
   STRING_time_unit <- "snapshots"
@@ -308,9 +308,9 @@ dssp_ts <- function( tsData,
   {
     for( i in 1:length( tsData ) )
       tsData[[ i ]][[ "values" ]][ 1 ] <- tsData[[ i ]][[ "values" ]][ 1 ] /
-                                                   snapshotsPerTimeInt
+                                                   snapshotsPerTime
     STRING_time_unit <- timeUnit
-    timeBoundaries <- timeBoundaries / snapshotsPerTimeInt
+    timeBoundaries <- timeBoundaries / snapshotsPerTime
   }
   if( is.na( timeBoundaries ) )
     timeBoundaries <- c( min( unlist( lapply( tsData,

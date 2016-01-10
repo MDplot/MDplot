@@ -1,24 +1,20 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{clusters}
-\alias{clusters}
-\title{Cluster bar plot}
+\name{load_clusters}
+\alias{load_clusters}
+\title{Loading cluster information}
 \description{
-This function plots clusters over a set of trajectories as joint, coloured bar plots. The clusters are sorted beginning with the most populated one and then descending. Selections can be made.}
+This function loads clusters from a plain text file and stores them in a matrix. The trajectories can be named by the user.}
 \usage{
-clusters( clusters,
-          clustersNumber = NA,
-          legendTitle = "trajectories",
-          ownTrajectoryNames = FALSE,
-          ... )}
+load_clusters( path,
+               names = NA ) 
+}
 \arguments{
-  \item{dihedrals}{Matrix with clusters. Trajectories in rows, clusters in columns.}
-  \item{clustersNumber}{When specified, only this number of clusters is shown.}
-  \item{legendTitle}{The title of the legend.}
-  \item{ownTrajectoryNames}{Boolean, specifying whether rownames of \code{dihedrals} are used in the legend.}
+  \item{path}{Specified the path of the text input file.}
+  \item{names}{Optional vector of trajectory names. Needs to be of the same length as the number of clusters to be plotted.}
 }
 \examples{
 # see "extdata/clusters_example.txt" for format information
-MDplot::clusters( MDplot::load_clusters( system.file( "extdata/clusters_example.txt", package = "MDplot" ) ) )
+MDplot::load_clusters( system.file( "extdata/clusters_example.txt", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{Clusters}

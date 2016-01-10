@@ -32,7 +32,7 @@ clusters_ts <- function( clustersDataTS,
                          selectTraj = NA,
                          selectTime = NA,
                          printNanoseconds = FALSE,
-                         snapshotsPerNS = 1000,
+                         snapshotsPerTime = 1000,
                          ... )
 {
   
@@ -125,7 +125,7 @@ clusters_ts <- function( clustersDataTS,
         labels = split_equidistant( VEC_values = c( 0, INT_maxSnapshots ),
                                     n = 5 ) /
                  ifelse( printNanoseconds,
-                         snapshotsPerNS,
+                         snapshotsPerTime,
                          1 ),
         tick = FALSE,
         line = -0.45 )
