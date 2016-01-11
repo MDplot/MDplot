@@ -5,10 +5,12 @@
 \description{
 Loads dssp summary output files from a specified directory and combines it into a list.}
 \usage{
-load_dssp_summary( path )
+load_dssp_summary( path,
+                   mdEngine = "GROMOS" )
 }
 \arguments{
   \item{path}{Folder, in which the dssp output files are located.}
+  \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
 # see "extdata" for format information and file names

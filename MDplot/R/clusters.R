@@ -1,7 +1,8 @@
 # load function for "MDplot_clusters_timeseries"
 load_clusters_ts <- function( path,
                               lengths,
-                              names = NA )
+                              names = NA,
+                              mdEngine = "GROMOS" )
 {
   
   # read input and get rid of column 2, which is unnecessary and pack everything in a list
@@ -163,7 +164,8 @@ clusters_ts <- function( clustersDataTS,
 
 # load function for "MDplot_clusters"
 load_clusters <- function( path,
-                           names = NA )
+                           names = NA,
+                           mdEngine = "GROMOS" )
 {
   
   # load and transpose matrix

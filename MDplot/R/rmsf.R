@@ -1,5 +1,6 @@
 # load the RMSF file(s)
-load_rmsf <- function( files )
+load_rmsf <- function( files,
+                       mdEngine = "GROMOS" )
 {
   LIST_return <- list()
   for( i in 1:length( files ) )

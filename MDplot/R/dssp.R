@@ -70,7 +70,8 @@ averaging_dssp_summary <- function( VEC_files )
 }
 
 # load and return input
-load_dssp_summary <- function( path )
+load_dssp_summary <- function( path,
+                               mdEngine = "GROMOS" )
 {
   return( read.table( path ) )
 }
@@ -268,7 +269,8 @@ dssp_summary <- function( dsspData,
 }
 
 # load the time-series files
-load_dssp_ts <- function( folder )
+load_dssp_ts <- function( folder,
+                          mdEngine = "GROMOS" )
 {
   VEC_gromos_names <- c( "3-Helix", "4-Helix", "5-Helix",
                          "Bend", "Beta-Bridge", "Beta-Strand",

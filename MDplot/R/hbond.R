@@ -1,5 +1,6 @@
 # load and parse GROMOS hbond timeseries
-load_hbond_ts <- function( path )
+load_hbond_ts <- function( path,
+                           mdEngine = "GROMOS" )
 {
   timeseries <- read.table( path )
   return( timeseries )
@@ -202,7 +203,8 @@ hbond_ts <- function( timeseries,
 }
 
 # load and parse GROMOS hbond output
-load_hbond <- function( path )
+load_hbond <- function( path,
+                        mdEngine = "GROMOS" )
 {
   CON_input <- file( path, open = "r" )
   

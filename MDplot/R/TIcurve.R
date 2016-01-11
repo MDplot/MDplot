@@ -1,5 +1,6 @@
 # load the lambda point information here
-load_TIcurve <- function( files )
+load_TIcurve <- function( files,
+                          mdEngine = "GROMOS" )
 {
   LIST_files <- list()
   for( i in 1:length( files ) )

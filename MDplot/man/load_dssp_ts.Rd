@@ -5,7 +5,8 @@
 \description{
 Loads DSSP output files from a specified directory and combined it into a list construct suitable for \link{MDplot_DSSP_timeseries}.}
 \usage{
-MDplot_load_DSSP_timeseries( STRING_folder )}
+MDplot_load_DSSP_timeseries( STRING_folder,
+                             mdEngine = "GROMOS" )}
 \arguments{
   \item{STRING_folder}{Folder, in which the DSSP output files are located.}
 }

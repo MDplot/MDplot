@@ -2,7 +2,8 @@
 # WARNING: very sensitive to proper file format (line skipping and end ignoring)
 load_xrmsd <- function( path,
                         skipBeginning = 8,
-                        factor = 10000 )
+                        factor = 10000,
+                        mdEngine = "GROMOS" )
 {
   
   # get total line number and subtract end and header after header skipping

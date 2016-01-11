@@ -2,7 +2,8 @@
 load_ramachandran <- function( inputFile,
                                angleColumns = c( 1, 2 ),
                                heatColumn = NA,
-                               shiftAngles = NA )
+                               shiftAngles = NA,
+                               mdEngine = "GROMOS" )
 {
   
   # load and parse matrix, return result
