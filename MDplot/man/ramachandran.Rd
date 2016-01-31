@@ -10,7 +10,7 @@ ramachandran( dihedrals,
               yBins = 150,
               heatFun = "norm", 
               structureAreas = c(),
-              plotType = "comic",
+              plotType = "sparse",
               printLegend = FALSE,
               heatUnits = NA,
               plotContour = FALSE,
@@ -26,7 +26,7 @@ ramachandran( dihedrals,
                          }
                 }
   \item{structureAreas}{List of secondary structure areas, by default there are no regions specified.}
-  \item{plotType}{Type of plot to be used, either "comic" (default), "sparse" or "fancy".}
+  \item{plotType}{Type of plot to be used, either "sparse" (default) or "fancy". The latter is a 3D representation.}
   \item{printLegend}{Boolean (default: false) specifying, whether a heat lengend is to be plotted or not.}
   \item{heatUnits}{String, containing a the unit of heat.}
   \item{plotContour}{Boolean (default: false) specifying, whether a contour should be plotted or no.}

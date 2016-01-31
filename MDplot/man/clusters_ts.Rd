@@ -23,7 +23,7 @@ clusters_ts <- function( clustersDataTS,
 }
 \examples{
 # see "extdata/clusters_ts_example.txt" for format information
-MDplot::clusters_ts( MDplot::load_clusters_ts( system.file( "extdata/clusters_ts_example.txt", package = "MDplot" ) ) )
+MDplot::clusters_ts( MDplot::load_clusters_ts( system.file( "extdata/clusters_ts_example.txt", package = "MDplot" ), lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) ), clustersNumber = 7 )
 }
 \author{Christian Margreitter}
 \keyword{clusters_ts}

@@ -1,26 +1,6 @@
-# install required packages
-LIST_packages <- c( "methods", "MASS", "RColorBrewer",
-                    "gplots", "calibrate", "gtools",
-                    "grDevices" )
-LIST_packages <- LIST_packages[ !( LIST_packages
-                                   %in% installed.packages()[ , "Package" ] ) ]
-if( length( LIST_packages ) > 0 ) install.packages( LIST_packages )
-#########
-
-# load required packages
-#library( Unicode )
-#library( methods )
-#library( MASS )
-#library( RColorBrewer )
-#library( gplots )
-#library( calibrate )
-#library( gtools )
-#library( grDevices )
-#########
-
 # translate amino acids in the context of the GROMOS framework
-translate_aminoacids <- function( VEC_input,
-                                  INT_switch )
+translate_aminoacids <- function( input,
+                                  switchMode )
 {
   VEC_GROMOS_triple = c( "ALA", "ARG", "ASN",
                          "ASP", "ASPH", "CYS",
@@ -55,21 +35,21 @@ translate_aminoacids <- function( VEC_input,
   VEC_return <- c()
   
   # read three letter code and return canonical single letter code
-  if( INT_switch == 1 )
-    for( i in 1:length( VEC_input ) )
+  if( switchMode == 1 )
+    for( i in 1:length( input ) )
       VEC_return <- c( VEC_return,
-                       ifelse( VEC_input[ i ] %in% VEC_GROMOS_triple,
-                               VEC_canonical_single[ VEC_GROMOS_triple == VEC_input[ i ] ],
-                               VEC_input[ i ] ) )
+                       ifelse( input[ i ] %in% VEC_GROMOS_triple,
+                               VEC_canonical_single[ VEC_GROMOS_triple == input[ i ] ],
+                               input[ i ] ) )
   #########
   
   # read GROMOS three lettercode and return canonical three letter code 
-  if( INT_switch == 2 )
-    for( i in 1:length( VEC_input ) )
+  if( switchMode == 2 )
+    for( i in 1:length( input ) )
       VEC_return <- c( VEC_return,
-                       ifelse( VEC_input[ i ] %in% VEC_GROMOS_triple,
-                               VEC_canonical_triple[ VEC_GROMOS_triple == VEC_input[ i ] ],
-                               VEC_input[ i ] ) )
+                       ifelse( input[ i ] %in% VEC_GROMOS_triple,
+                               VEC_canonical_triple[ VEC_GROMOS_triple == input[ i ] ],
+                               input[ i ] ) )
   #########
   
   return( VEC_return )

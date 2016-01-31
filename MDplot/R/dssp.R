@@ -12,30 +12,30 @@ dssp_summary_multi <- function( dsspSumMultInput,
   
   # specify graphical settings and colours, in case a legend has been requested (or not)
   if( printLegend )
-    layout( matrix( 1:2, ncol = 2 ), width = c( 0.825, 0.175 ), height = c( 1, 1 ) )
+    layout( matrix( 1:2, ncol = 2 ), widths = c( 0.825, 0.175 ), heights = c( 1, 1 ) )
   if( all( is.na( colours ) ) )
   {
     PALETTE_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
     colours <- PALETTE_colours( length( dsspSumMultInput ) )
   }
   #########
-  MDplot_DSSP_summary( dsspSumMultInput[[ 1 ]][[ "matrix" ]],
-                       selectedMotifs = c( selectedMotifs ),
-                       barePlot = barePlot,
-                       plotType = "curves",
-                       colours = c( colours[ 1 ] ),
-                       showResidues = showResidues,
-                       ... )
+  MDplot::dssp_summary( dsspSumMultInput[[ 1 ]][[ "matrix" ]],
+                        selectedMotifs = c( selectedMotifs ),
+                        barePlot = barePlot,
+                        plotType = "curves",
+                        colours = c( colours[ 1 ] ),
+                        showResidues = showResidues,
+                        ... )
   for( i in 2:length( dsspSumMultInput ) )
   {
     par( new = TRUE )
-    MDplot_DSSP_summary( dsspSumMultInput[[ i ]][[ "matrix" ]],
-                         selectedMotifs = c( selectedMotifs ),
-                         barePlot = TRUE,
-                         plotType = "curves",
-                         colours = c( colours[ i ] ),
-                         showResidues = showResidues,
-                         ... )
+    MDplot::dssp_summary( dsspSumMultInput[[ i ]][[ "matrix" ]],
+                          selectedMotifs = c( selectedMotifs ),
+                          barePlot = TRUE,
+                          plotType = "curves",
+                          colours = c( colours[ i ] ),
+                          showResidues = showResidues,
+                          ... )
   }
   
   # print legend, if flag is set

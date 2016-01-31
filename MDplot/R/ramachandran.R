@@ -1,5 +1,5 @@
 # load ramachandran data into a matrix, select columns
-load_ramachandran <- function( inputFile,
+load_ramachandran <- function( path,
                                angleColumns = c( 1, 2 ),
                                heatColumn = NA,
                                shiftAngles = NA,
@@ -7,12 +7,12 @@ load_ramachandran <- function( inputFile,
 {
   
   # load and parse matrix, return result
-  MAT_buffer <- as.matrix( read.table( inputFile ) )
+  MAT_buffer <- as.matrix( read.table( path ) )
   if( ncol( MAT_buffer ) < ifelse( is.na( heatColumn ),
                                    max( angleColumns ),
                                    max( angleColumns, heatColumn ) ) )
     stop( paste( "Error while loading and parsing file '",
-                 inputFile, "' since the number of columns is less than ",
+                 path, "' since the number of columns is less than ",
                  "the maximum column number specified.",
                  sep = "" ) )
   MAT_input <- MAT_buffer[ , angleColumns ]
@@ -33,7 +33,7 @@ ramachandran <- function( dihedrals,
                           yBins = 150,
                           heatFun = "norm", 
                           structureAreas = c(),
-                          plotType = "comic",
+                          plotType = "sparse",
                           printLegend = FALSE,
                           heatUnits = NA,
                           plotContour = FALSE,
@@ -68,7 +68,7 @@ ramachandran <- function( dihedrals,
   VEC_palette <- NA
   if( printLegend )
   {
-    layout( matrix( 1:2, ncol = 2 ), width = c( 0.75, 0.25 ), height = c( 1, 1 ) )
+    layout( matrix( 1:2, ncol = 2 ), widths = c( 0.75, 0.25 ), heights = c( 1, 1 ) )
     par( mar = c( 4.0, 4.0, 4.0, 0.0 ) )
     VEC_heatValues <- LIST_filled[[ "freq2D" ]]
     VEC_heatValues[ is.na( VEC_heatValues ) ] <- 0

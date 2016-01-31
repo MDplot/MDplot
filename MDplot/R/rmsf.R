@@ -78,14 +78,14 @@ rmsf <- function( rmsfData,
   {
     mtext( side = 1, text = "atom number", line = 3, cex = 1.25 )
     axis( 1, at = split_equidistant( range, numberXLabels ),
-          label = split_equidistant( range, numberXLabels ) )
+          labels = split_equidistant( range, numberXLabels ) )
   }
   else
   {
     mtext( side = 1, text = "residue number", line = 3, cex = 1.25 )
     axis( 1, at = split_equidistant( range, numberXLabels ),
-          label = as.integer( split_equidistant( range, numberXLabels )
-                              / 3 ) )
+          labels = as.integer( split_equidistant( range, numberXLabels )
+                               / 3 ) )
   }
   #########
   

@@ -2,7 +2,7 @@
 \name{hbond}
 \alias{hbond}
 \title{Plot hydrogen bond summary}
-\description{This function plot the summary output of hydrogen bond calculations and allows selection of donor and acceptor residues and atoms. Occurence over the whole trajectory is indicated by a colour scale. A legend indicating the colour scale can be printed.}
+\description{This function plots the summary output of hydrogen bond calculations and allows selection of donor and acceptor residues and atoms. Occurence over the whole trajectory is indicated by a colour scale. A legend indicating the colour scale can be printed.}
 \usage{
 hbond( hbonds,
        plotMethod = "residue-wise",

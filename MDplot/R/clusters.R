@@ -132,7 +132,7 @@ clusters_ts <- function( clustersDataTS,
         line = -0.45 )
   axis( 2,
         at = 1:length( clustersDataTS ),
-        label = unlist( lapply( clustersDataTS,
+        labels = unlist( lapply( clustersDataTS,
                                 function( x ) x[[ 1 ]] ) ),
         tick = FALSE,
         las = 1 )

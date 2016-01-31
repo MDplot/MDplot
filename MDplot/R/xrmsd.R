@@ -1,17 +1,19 @@
 # load the XRMSD data
 # WARNING: very sensitive to proper file format (line skipping and end ignoring)
 load_xrmsd <- function( path,
-                        skipBeginning = 8,
                         factor = 10000,
                         mdEngine = "GROMOS" )
 {
   
   # get total line number and subtract end and header after header skipping
+  INT_skipBeginning <- NA
+  if( mdEngine == "GROMOS" )
+    INT_skipBeginning <- 8
   InputFile <- readLines( path )
   MAT_return <- as.matrix( read.table( path,
-                                       skip = skipBeginning,
+                                       skip = INT_skipBeginning,
                                        nrows = length( InputFile ) -
-                                               ( skipBeginning + 2 ) ) )
+                                               ( INT_skipBeginning + 2 ) ) )
   #########
   
   # divide RMSD integer values by the proper factor (usually 10000) and return resulting matrix
@@ -44,7 +46,7 @@ xrmsd <- function( xrmsdValues,
   # colour values accordingly
   par( mar = c( 2.5, 2.5, 2.5, 0.5 ) )
   if( printLegend )
-    layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
+    layout( matrix( 1:2, ncol = 2 ), widths = c( 2, 1 ), heights = c( 1, 1 ) )
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
   PALETTE_colours_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   VEC_coloursPlot <- PALETTE_colours_rev( 11 )[ as.numeric( cut( as.numeric( xrmsdValues[ , 3 ] ), breaks = 10 ) ) ]

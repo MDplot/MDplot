@@ -1,21 +1,21 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_load_XRMSD}
-\alias{MDplot_load_XRMSD}
-\title{Loading function for \link{MDplot_XRMSD}}
+\name{translate_aminoacids}
+\alias{translate_aminoacids}
+\title{Function to translate between canonical and GROMOS amino acid abbreviations}
 \description{
-Loads matrix information from the specified file. Caution: the function is in beta-state and extremely sensitive to format changes.}
+Converts an aminoacid naming scheme in the context of GROMOS (e.g. containing HISH) into canonical three- or one-letter codes.}
 \usage{
-MDplot_load_XRMSD <- function( STRING_path,
-                               INT_skipBeginning = 8,
-                               INT_factor = 10000 )
+translate_aminoacids <- function( input,
+                                  switchMode)
+}
 \arguments{
-  \item{STRING_path}{Specifies the input file.}
-  \item{INT_skipBeginning}{Determines, how many lines are ignored (format dependent).}
-  \item{INT_factor}{In case the RMSD values are given in \deqn{nm * INT_factor}, the factor can be specified. If the unit is already in nanometers, 1 is the appropriate value.}
+\item{input}{Vector of GROMOS abbreviations.}
+\item{switchMode}{Type "1" results in three letter, type "2" in single-letter code.}
 }
 \examples{
-# load and return matrix
-MDplot_load_XRMSD( system.file( "extdata/MDplot_DSSP_summary_example.txt", package = "MDplot" ) )
+# to one letter code
+test <- c( "ALA", "HISA", "SER" )
+translate_aminoacids( test, switchMode = 2 )
 }
 \author{Christian Margreitter}
-\keyword{DSSP}
+\keyword{aminoacids}

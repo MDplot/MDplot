@@ -82,9 +82,9 @@ hbond_ts <- function( timeseries,
       if( namesToSingle )
       {
         LIST_tableLine[[ "resDonorName" ]] <- translate_aminoacids( LIST_tableLine[[ "resDonorName" ]],
-                                                                    INT_switch = 1 )
+                                                                    switchMode = 1 )
         LIST_tableLine[[ "resAcceptorName" ]] <- translate_aminoacids( LIST_tableLine[[ "resAcceptorName" ]],
-                                                                       INT_switch = 1 ) 
+                                                                       switchMode = 1 ) 
       }
       VEC_hbondNames <- c( VEC_hbondNames,
                            paste( paste( LIST_tableLine[[ "resDonorName" ]],
@@ -114,7 +114,7 @@ hbond_ts <- function( timeseries,
                         0.0,
                         2.0 ) ) )
   if( plotOccurences )
-    layout( matrix( 1:2, ncol = 2 ), width = c( 2, 1 ), height = c( 1, 1 ) )
+    layout( matrix( 1:2, ncol = 2 ), widths = c( 2, 1 ), heights = c( 1, 1 ) )
   #########
   
   # plot (left graph)
@@ -150,7 +150,7 @@ hbond_ts <- function( timeseries,
                                     BOOL_roundDown = TRUE ) )
   axis( 2,
         at = VEC_hbondNamesPositions,
-        label = VEC_hbondNames,
+        labels = VEC_hbondNames,
         las = ifelse( printNames,
                       1,
                       0 ),
@@ -308,7 +308,7 @@ hbond <- function( hbonds,
     if( printLegend )
     {
       par( mar = c( 4.25, 4.25, 3.25, 0.25 ) )
-      layout( matrix( 1:2, ncol = 2 ), width = c( 2.5, 0.5 ), height = c( 1.0, 1.0 ) )
+      layout( matrix( 1:2, ncol = 2 ), widths = c( 2.5, 0.5 ), heights = c( 1.0, 1.0 ) )
     }
     PALETTE_colors <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
     PALETTE_colors_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )

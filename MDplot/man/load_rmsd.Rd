@@ -1,21 +1,19 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_load_XRMSD}
-\alias{MDplot_load_XRMSD}
-\title{Loading function for \link{MDplot_XRMSD}}
+\name{load_rmsd}
+\alias{load_rmsd}
+\title{Loading function for MDplot::rmsd()}
 \description{
-Loads matrix information from the specified file. Caution: the function is in beta-state and extremely sensitive to format changes.}
+Returns a list of vector pairs of datapoint indices and values.}
 \usage{
-MDplot_load_XRMSD <- function( STRING_path,
-                               INT_skipBeginning = 8,
-                               INT_factor = 10000 )
+load_rmsd <- function( files,
+                       mdEngine = "GROMOS" )
+}
 \arguments{
-  \item{STRING_path}{Specifies the input file.}
-  \item{INT_skipBeginning}{Determines, how many lines are ignored (format dependent).}
-  \item{INT_factor}{In case the RMSD values are given in \deqn{nm * INT_factor}, the factor can be specified. If the unit is already in nanometers, 1 is the appropriate value.}
+  \item{files}{Vector of paths to input text files.}
+  \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
-# load and return matrix
-MDplot_load_XRMSD( system.file( "extdata/MDplot_DSSP_summary_example.txt", package = "MDplot" ) )
+MDplot::load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ), system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
-\keyword{DSSP}
+\keyword{rmsd}

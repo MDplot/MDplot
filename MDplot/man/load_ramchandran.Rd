@@ -1,31 +1,26 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_load_ramachandran}
-\alias{MDplot_load_ramachandran}
-\title{Ramachandran plot for two dihedral angles}
+\name{load_ramachandran}
+\alias{load_ramachandran}
+\title{Load dihedral information (Ramachandran plot input)}
 \description{
-This plotting function divides a full rotation (360 degrees) into x- and y- bins and colors them according to the number of angle pairs that are provided in the input, a so-called Ramachandran plot.}
+Loads textfile with two columns of dihedral angles, which are to be stored in a matrix. May contain a third column for heat information. By default, the first column is phi and the second psi. Angles can be shifted by a constant value (in order to transform them from 0 to 360 to the usually used -180 to 180).}
 \usage{
-MDplot_ramachandran( dihedrals,
-                     xbins = 450,
-                     ybins = 450,
-                     heatFun = "log", 
-                     LIST_areas = c(),
-                     ... )}
+load_ramachandran( path,
+                   angleColumns = c( 1, 2 ),
+                   heatColumn = NA,
+                   shiftAngles = NA,
+                   mdEngine = "GROMOS" )}
 \arguments{
-  \item{dihedrals}{Matrix with angles (two rows maximum).}
-  \item{xbins}{Number of bins used to plot (on the x-axis).}
-  \item{ybins}{Number of bins used to plot (on the y-axis).}
-  \item{heatFun}{Function selector for calculation of the color, possible are either:
-                 \itemize{
-                   \item "log"" for logarithmic calculation, or
-                   \item "norm" for linear calculation
-                         }
-                }
+\item{path}{Path to input file. At least two columns of the same length are expected.}
+\item{angleColumns}{If more columns are present, the angle columns can be chosen by this vector.}
+\item{heatColumn}{The (optional) heat column can be specified here.}
+\item{shiftAngle}{In order to shift the values by a constant factor (e.g. -180).}
+\item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
 # load table and return it into plotting function "MDplot_ramachandran()"
-# see "extdata/MDplot_ramachandran_example.txt" for format information
-MDplot_ramachandran( MDplot_load_ramachandran( system.file( "extdata/MDplot_ramachandran_example.txt", package = "MDplot" ) ) )
+# see "extdata/ramachandran_example.txt" for format information
+MDplot::load_ramachandran( system.file( "extdata/ramachandran_example.txt", package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{Ramachandran}
