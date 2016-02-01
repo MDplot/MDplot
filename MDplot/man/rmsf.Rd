@@ -21,10 +21,10 @@ rmsf( rmsfData,
   \item{numberXLabels}{Specifies, how many ticks are used on the x-axis.}
   \item{names}{Vector of the names of the trajectories.}
 }
-\examples{
+\examples{\dontrun{
 # two curves
 MDplot::rmsf( MDplot::load_rmsf( c( system.file( "extdata/rmsf1_example.txt", package = "MDplot" ),
                                     system.file( "extdata/rmsf2_example.txt", package = "MDplot" ) ) ) )
-}
+}}
 \author{Christian Margreitter}
 \keyword{Root-mean-square-fluctuation}

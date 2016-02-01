@@ -13,7 +13,8 @@ load_rmsd <- function( files,
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
+\dontrun{
 MDplot::load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ), system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) )
-}
+}}
 \author{Christian Margreitter}
 \keyword{rmsd}

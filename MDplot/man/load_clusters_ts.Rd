@@ -18,7 +18,7 @@ load_clusters_ts( path,
 }
 \examples{
 # see "extdata/clusters_ts_example.txt" for format information
-MDplot::load_clusters_ts( system.file( "extdata/clusters_ts_example.txt", package = "MDplot" ) )
+MDplot::load_clusters_ts( system.file( "extdata/clusters_ts_example.txt", package = "MDplot" ), lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) )
 }
 \author{Christian Margreitter}
 \keyword{Clusters}

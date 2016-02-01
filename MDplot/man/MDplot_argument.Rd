@@ -1,30 +1,10 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{rmsd}
-\alias{rmsd}
-\title{Root-mean-square-deviation plot}
-\description{Plot one (or more) RMSD files as produced by molecular dynamics packages.}
+\name{MDplot_argument}
+\alias{MDplot_argument}
+\title{Arguments for bash script interface}
 \usage{
-rmsd( rmsdData,
-      printLegend = TRUE,
-      divisionFactor = 1000,
-      timeUnit = "ns",
-      rmsdUnit = "nm",
-      colours = NA,
-      names = NA,
-      ... )}
-\arguments{
-  \item{rmsdData}{List of (alterating) indices and rmsd values, as also produced by \code{MDplot::load_rmsd()} for example.}
-  \item{printLegend}{Boolean, which triggers plotting of the legend.}
-  \item{divisionFactor}{Number, specifying how many snapshots are within one \code{timeUnit}.}
-  \item{timeUnit}{Specifies, which unit the x-axis is given in.}
-  \item{rmsdUnit}{Specifies, which unit the y-axis is given in.}
-  \item{colours}{Vector of colours used for plotting.}
-  \item{names}{Vector of the names of the trajectories.}
-}
-\examples{
-# two curves
-MDplot::rmsd( MDplot::load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ),
-                                    system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) ) )
+MDplot_argument( key = "character",
+                 value = "character" )
 }
 \author{Christian Margreitter}
-\keyword{Root-mean-square-deviation}
+\keyword{MDplot_argument}

@@ -32,10 +32,11 @@ ramachandran( dihedrals,
   \item{plotContour}{Boolean (default: false) specifying, whether a contour should be plotted or no.}
 }
 \examples{
+\dontrun{
 # load table and return it into plotting function "MDplot::ramachandran()"
 # see "extdata/ramachandran_example.txt" for format information
 MDplot::ramachandran( MDplot::load_ramachandran( system.file( "extdata/ramachandran_example.txt", package = "MDplot" ) ) )
-}
+}}
 \author{Christian Margreitter}
 \keyword{ramachandran}
 \keyword{angles}

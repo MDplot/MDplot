@@ -20,7 +20,7 @@ load_ramachandran( path,
 \examples{
 # load table and return it into plotting function "MDplot_ramachandran()"
 # see "extdata/ramachandran_example.txt" for format information
-MDplot::load_ramachandran( system.file( "extdata/ramachandran_example.txt", package = "MDplot" ) ) )
+MDplot::load_ramachandran( system.file( "extdata/ramachandran_example.txt", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{Ramachandran}

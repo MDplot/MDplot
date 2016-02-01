@@ -3,12 +3,10 @@ library( "MDplot" )
 #########
 
 # load cluster data and set trajectory names if necessary
-MAT_clusters <- MDplot_load_clusters( system.file( "extdata/MDplot_clusters_example.txt",
-                                                   package = "MDplot" ) )
-colnames( MAT_clusters ) <- c( "WT", "test1", "test2",
+MAT_clusters <- MDplot::load_clusters( system.file( "extdata/clusters_example.txt",
+                                                    package = "MDplot" ) )
+rownames( MAT_clusters ) <- c( "WT", "test1", "test2",
                                "otherseries1", "otherseries2", "somethingelse" )
-MDplot_clusters( MAT_clusters,
-                 INT_maximum_number = 7,
-                 main = "Random cluster plot",
-                 BOOL_trajectory_names = TRUE )
+MDplot::clusters( MAT_clusters,
+                  clustersNumber = 7 )
 #########

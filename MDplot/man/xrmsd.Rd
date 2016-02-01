@@ -1,9 +1,8 @@
 %  Copyright (C) 2015 Christian Margreitter
-\name{MDplot_XRMSD}
-\docType{methods}
-\alias{MDplot_XRMSD}
+\name{xrmsd}
+\alias{xrmsd}
 \title{XRMSD plot in heatmap style}
-\description{Plots an heatmap according to the RMSD value for a 2D snapshot matrix, based on trajectories.}
+\description{Plots an heatmap according to the RMSD values for a 2D snapshot matrix, based on molecular dynamics trajectories.}
 \usage{
 xrmsd( xrmsdValues,
        printLegend = TRUE,
@@ -22,7 +21,7 @@ xrmsd( xrmsdValues,
 \examples{
 \dontrun{
 # see "extdata/xrmsd_example.txt" for format information
-MDplot::rmsd( MDplot::load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) ) )
+MDplot::xrmsd( MDplot::load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}
-\keyword{XRMSD}
+\keyword{xrmsd}
