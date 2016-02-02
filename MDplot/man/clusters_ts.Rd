@@ -5,13 +5,13 @@
 \description{
 This function plots distributions between clusters over time. In the top sub-plot, the overall distribution is given, while the timeseries is given at the bottom. The clusters are sorted beginning with the most populated one and then in descending order. Selections can be made, clusters that are not selected do also not appear in the timeseries plot (white areas).}
 \usage{
-clusters_ts <- function( clustersDataTS,
-                         clustersNumber = NA,
-                         selectTraj = NA,
-                         selectTime = NA,
-                         printNanoseconds = FALSE,
-                         snapshotsPerTime = 1000,
-                         ... )}
+clusters_ts( clustersDataTS,
+             clustersNumber = NA,
+             selectTraj = NA,
+             selectTime = NA,
+             printNanoseconds = FALSE,
+             snapshotsPerTime = 1000,
+             ... )}
 \arguments{
   \item{clustersDataTS}{List of cluster information as provided by \code{MDplot::load_clusters_ts()}, the associated loading function.}
   \item{clustersNumber}{Integer, specifying the number of clusters that is to be plotted.}
@@ -19,7 +19,6 @@ clusters_ts <- function( clustersDataTS,
   \item{selectTime}{Range of time in snapshots, which is to be plotted.}
   \item{printNanoseconds}{Boolean, that specifies whether the time shall be printed in nanoseconds or not.}
   \item{snapshotsPerTime}{If \code{printNanoseconds} is \code{TRUE}, this integer specifies the number of snapshots per nanosecond.}
-  \item{...}{Graphical parameters.}
 }
 \examples{
 # see "extdata/clusters_ts_example.txt" for format information

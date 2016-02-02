@@ -14,7 +14,7 @@ load_ramachandran( path,
 \item{path}{Path to input file. At least two columns of the same length are expected.}
 \item{angleColumns}{If more columns are present, the angle columns can be chosen by this vector.}
 \item{heatColumn}{The (optional) heat column can be specified here.}
-\item{shiftAngle}{In order to shift the values by a constant factor (e.g. -180).}
+\item{shiftAngles}{In order to shift the values by a constant factor (e.g. -180).}
 \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{

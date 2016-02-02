@@ -5,8 +5,8 @@
 \description{
 Converts an aminoacid naming scheme in the context of GROMOS (e.g. containing HISH) into canonical three- or one-letter codes.}
 \usage{
-translate_aminoacids <- function( input,
-                                  switchMode)
+translate_aminoacids( input,
+                      switchMode)
 }
 \arguments{
 \item{input}{Vector of GROMOS abbreviations.}

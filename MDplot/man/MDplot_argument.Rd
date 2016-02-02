@@ -2,9 +2,8 @@
 \name{MDplot_argument}
 \alias{MDplot_argument}
 \title{Arguments for bash script interface}
-\usage{
-MDplot_argument( key = "character",
-                 value = "character" )
+\description{
+Container for bash arguments with "key" <> "value" pairs.
 }
 \author{Christian Margreitter}
 \keyword{MDplot_argument}

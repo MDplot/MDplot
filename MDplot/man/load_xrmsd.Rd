@@ -5,9 +5,9 @@
 \description{
 Loads matrix information from the specified file. Caution: the function is in beta-state and extremely sensitive to format changes.}
 \usage{
-load_xrmsd <- function(  path,
-                         factor = 10000,
-                         mdEngine = "GROMOS"  )
+load_xrmsd(  path,
+             factor = 10000,
+             mdEngine = "GROMOS"  )
 }
 \arguments{
   \item{path}{Specifies the input file.}

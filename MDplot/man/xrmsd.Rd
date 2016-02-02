@@ -16,7 +16,6 @@ xrmsd( xrmsdValues,
   \item{xaxisRange}{A vector of boundaries for the x-snapshots (two elements).}
   \item{yaxisRange}{A vector of boundaries for the y-snapshots (two elements).}
   \item{colours}{A vector with colour names for the span palette.}
-  \item{...}{Graphical parameters.}
 }
 \examples{
 \dontrun{

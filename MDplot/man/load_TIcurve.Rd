@@ -5,8 +5,8 @@
 \description{
 Returns a list of matrices holding three columns (lambda state point, value and error) for every file.}
 \usage{
-load_TIcurve <- function( files,
-                          mdEngine = "GROMOS" )
+load_TIcurve( files,
+              mdEngine = "GROMOS" )
 }
 \arguments{
   \item{files}{Vector of files (up to two) to be loaded.)}

@@ -27,7 +27,6 @@ dssp_summary( dsspData,
   \item{plotType}{Either \code{dots}, \code{curves} or \code{bars}.}
   \item{selectedMotifs}{A vector of names of the motifs selected for plotting.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
-  \item{...}{Graphical parameters.}
 }
 \examples{
 # see "extdata/dssp_summary_example.txt" for format information

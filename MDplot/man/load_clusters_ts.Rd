@@ -6,13 +6,13 @@
 This function loads the time-series information for clusters from a plain text file and stores them in a list. The trajectories can be named by the user.}
 \usage{
 load_clusters_ts( path,
-                  lenghts,  
+                  lengths,  
                   names = NA,
                   mdEngine = "GROMOS" )
 }
 \arguments{
   \item{path}{Specified the path of the text input file.}
-  \item{lenghts}{Mandatory vector holding the number of snapshots for the respective trajectories.}
+  \item{lengths}{Mandatory vector holding the number of snapshots for the respective trajectories.}
   \item{names}{Optional vector of trajectory names. Needs to be of the same length as the number of clusters to be plotted.}
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }

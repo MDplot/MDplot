@@ -5,8 +5,8 @@
 \description{
 Returns a list of vector pairs of datapoint indices and values.}
 \usage{
-load_rmsd <- function( files,
-                       mdEngine = "GROMOS" )
+load_rmsd( files,
+           mdEngine = "GROMOS" )
 }
 \arguments{
   \item{files}{Vector of paths to input text files.}

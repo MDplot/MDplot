@@ -19,7 +19,6 @@ dssp_ts( tsData,
   \item{residueBoundaries}{A vector of boundaries for the residues (two elements).}
   \item{timeUnit}{If set, the snapshots are transformed into the respective time (in dependence of parameter \code{snapshotsPerTime}.}
   \item{snapshotsPerTime}{Number of snapshots per respective \code{timeUnit}.}
-  \item{...}{Graphical parameters.}
 }
 \examples{
 MDplot::dssp_ts( MDplot::load_dssp_ts( system.file( "extdata", package = "MDplot" ) ) )
