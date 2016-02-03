@@ -32,7 +32,8 @@
 #eog RMSF.tiff &
 
 # DSSP summary
-#Rscript MDplot/bash/MDplot_bash.R dssp_summary files=MDplot/inst/extdata/dssp_summary_example.txt title="DSSP summary" size=900,750 outformat=pdf outfile=DSSP_summary.pdf printLegend=TRUE plotType=dots
+# done
+#Rscript MDplot/bash/MDplot_bash.R dssp_summary files=MDplot/inst/extdata/dssp_summary_example.txt title="DSSP summary" size=900,750 outformat=pdf outfile=DSSP_summary.pdf printLegend=TRUE plotType=bars
 #Rscript MDplot/bash/MDplot_bash.R dssp_summary help=TRUE
 #acroread DSSP_summary.pdf &
 

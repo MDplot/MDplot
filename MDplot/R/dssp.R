@@ -158,16 +158,24 @@ dssp_summary <- function( dsspData,
   MAT_data <- MAT_buffer
   #########
   
-  # specify graphical settings, in case a legend has been requested (or not)
-  par( mar = c( 4.5, 4.5, 2.5, 1.0 ) )
-  if( printLegend )
-    layout( matrix( c( 1, 2 ), nrow = 1, byrow = TRUE ),
-            widths = c( 0.825,
-                        0.175 ),
-            heights = c( 1.0, 1.0 ) )
+  # specify graphical settings, in case a legend has been requested (or not) and "barePlot" is set to TRUE or FALSE
+  if( !barePlot )
+  {
+    par( mar = c( 4.5, 4.5, 2.5, 1.0 ) )
+    if( printLegend )
+      layout( matrix( c( 1, 2 ), nrow = 1, byrow = TRUE ),
+              widths = c( 0.825,
+                          0.175 ),
+              heights = c( 1.0, 1.0 ) )
+  }
   #########
-  defaultArguments <- list( xlab = "residues",
-                            ylab = "occurences [%]",
+  
+  defaultArguments <- list( xlab = ifelse( barePlot,
+                                           "",
+                                           "residues" ),
+                            ylab = ifelse( barePlot,
+                                           "",
+                                           "occurences [%]" ),
                             main = "" )
   ellipsis <- list( ... )
   defaultArguments[ names( ellipsis ) ] <- ellipsis
@@ -217,11 +225,14 @@ dssp_summary <- function( dsspData,
                                   col = colours,
                                   bty = ifelse( barePlot, "n", "o" ) ),
                          ellipsis ) )
-    VEC_atTicks <- PLOT_bar[ c( F, F, F, F, T ) ]
-    VEC_atLabels <- seq( 5, by = 5, length.out = length( VEC_atTicks ) )
-    axis( side = 1,
-          at = VEC_atTicks,
-          labels = VEC_atLabels )
+    if( !barePlot )
+    {
+      VEC_atTicks <- PLOT_bar[ c( F, F, F, F, T ) ]
+      VEC_atLabels <- seq( 5, by = 5, length.out = length( VEC_atTicks ) )
+      axis( side = 1,
+            at = VEC_atTicks,
+            labels = VEC_atLabels )
+    }
   }
   #########
   
@@ -255,7 +266,7 @@ dssp_summary <- function( dsspData,
   #########
   
   # print legend, if flag is set
-  if( printLegend )
+  if( printLegend && !barePlot )
   {
     plot.new()
     legend( "right",

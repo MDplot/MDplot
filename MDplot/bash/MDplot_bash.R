@@ -16,11 +16,12 @@ VEC_allowedForAll <- c( VEC_requiredForAll, "files", "size", "outformat",
                         "outfile", "title", "subtitle",
                         "enableProtocol", "colours", "resolution",
                         "axisNames", "names", "printLegend",
-                        "help" )
+                        "mdEngine", "help" )
 VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>", "<dimensions of the plot> (optional)", "['png'/'pdf'/'tiff'] (optional)",
                             "<outputfile> (optional)", "<plot main title> (optional)", "<plot subtitle> (optional)",
                             "<protocol steps in plot generation> (optional)", "<vector of colours used, separated by ','> (optional)", "<resolution> (optional)",
                             "<vector of names for the axes> (optional)", "<vector of names for the data sets> (optional)", "['true'/'false'] (optional)",
+                            "<name of molecular dynamics engine used> (default: GROMOS)",
                             "<if set to 'true', all other options are ignored and help is printed> (optional)" )
 #########
 
@@ -53,6 +54,9 @@ if( isKeySet( LIST_arguments, "outfile" ) )
 REAL_resolution <- 150
 if( isKeySet( LIST_arguments, "resolution" ) )
   REAL_resolution <- as.numeric( getValue( LIST_arguments, "resolution" ) )
+STRING_mdEngine <- "GROMOS"
+if( isKeySet( LIST_arguments, "mdEngine" ) )
+  STRING_mdEngine <- as.numeric( getValue( LIST_arguments, "mdEngine" ) )
 #########
 
 # define plot device and options
@@ -128,11 +132,16 @@ if( STRING_function == "dssp_summary" )
                                                 ",",
                                                 fixed = TRUE ) ) )
   
+  
   # plot
-  MDplot::dssp_summary( MDplot::load_dssp_summary( VEC_files ),
+  MDplot::dssp_summary( MDplot::load_dssp_summary( VEC_files,
+                                                   mdEngine = STRING_mdEngine ),
                         printLegend = BOOL_printLegend,
                         showResidues = VEC_residues,
                         showValues = VEC_values,
+                        plotType = ifelse( isKeySet( LIST_arguments, "plotType" ),
+                                           getValue( LIST_arguments, "plotType" ),
+                                           "dots" ),
                         main = ifelse( isKeySet( LIST_arguments, "title" ),
                                        getValue( LIST_arguments, "title" ),
                                        NA ) )
