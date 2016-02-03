@@ -38,9 +38,9 @@
 #acroread DSSP_summary.pdf &
 
 # DSSP timeseries
-#Rscript MDplot/bash/MDplot_bash.R dssp_ts files=MDplot/inst/extdata title="DSSP timeseries" size=1200,750 outformat=tiff outfile=DSSP_timeseries.tiff
-#Rscript MDplot/bash/MDplot_bash.R dssp_ts help=TRUE
-#eog DSSP_timeseries.tiff &
+Rscript MDplot/bash/MDplot_bash.R dssp_ts files=MDplot/inst/extdata title="DSSP timeseries" size=1200,750 timeUnit=ns snapshotsPerTimeInt=1000 residueBoundaries=21,70 outformat=pdf outfile=DSSP_timeseries.pdf
+Rscript MDplot/bash/MDplot_bash.R dssp_ts help=TRUE
+evince DSSP_timeseries.pdf &
 
 # XRMSD
 #Rscript MDplot/bash/MDplot_bash.R xrmsd files=MDplot/inst/extdata/xrmsd_example.txt title="XRMSD" size=1100,900 outformat=pdf outfile=XRMSD.pdf

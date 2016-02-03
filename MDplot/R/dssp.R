@@ -313,24 +313,24 @@ dssp_ts <- function( tsData,
                      timeBoundaries = NA,
                      residueBoundaries = NA,
                      timeUnit = NA,
-                     snapshotsPerTime = 1000,
+                     snapshotsPerTimeInt = 1000,
                      ... )
 {
   STRING_time_unit <- "snapshots"
-  if( !is.na( timeUnit ) )
+  if( all( !is.na( timeUnit ) ) )
   {
     for( i in 1:length( tsData ) )
       tsData[[ i ]][[ "values" ]][ 1 ] <- tsData[[ i ]][[ "values" ]][ 1 ] /
-                                                   snapshotsPerTime
+                                                   snapshotsPerTimeInt
     STRING_time_unit <- timeUnit
-    timeBoundaries <- timeBoundaries / snapshotsPerTime
+    timeBoundaries <- timeBoundaries / snapshotsPerTimeInt
   }
-  if( is.na( timeBoundaries ) )
+  if( all( is.na( timeBoundaries ) ) )
     timeBoundaries <- c( min( unlist( lapply( tsData,
                                                   function( x ) x[[ "values" ]][ 1 ] ) ) ),
                              max( unlist( lapply( tsData,
                                                   function( x ) x[[ "values" ]][ 1 ] ) ) ) )
-  if( is.na( residueBoundaries ) )
+  if( all( is.na( residueBoundaries ) ) )
     residueBoundaries <- c( min( unlist( lapply( tsData,
                                                      function( x ) x[[ "values" ]][ 2 ] ) ) ),
                                 max( unlist( lapply( tsData,

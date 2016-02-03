@@ -176,9 +176,27 @@ if( STRING_function == "dssp_ts" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  VEC_timeBoundaries <- NA
+  if( isKeySet( LIST_arguments, "timeBoundaries" ) )
+    VEC_timeBoundaries <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "timeBoundaries" ),
+                                                        ",",
+                                                        fixed = TRUE )))
+  VEC_residueBoundaries <- NA
+  if( isKeySet( LIST_arguments, "residueBoundaries" ) )
+    VEC_residueBoundaries <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "residueBoundaries" ),
+                                                           ",",
+                                                           fixed = TRUE )))
   
   # plot
-  MDplot::dssp_ts( MDplot::load_dssp_ts( VEC_files ),
+  MDplot::dssp_ts( MDplot::load_dssp_ts( VEC_files ), 
+                   timeBoundaries = VEC_timeBoundaries,
+                   residueBoundaries = VEC_residueBoundaries,
+                   timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
+                                      getValue( LIST_arguments, "timeUnit" ),
+                                      NA ),
+                   snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments, "snapshotsPerTimeInt" ),
+                                                 as.numeric( getValue( LIST_arguments, "snapshotsPerTimeInt" ) ),
+                                                 NA ),
                    main = ifelse( isKeySet( LIST_arguments, "title" ),
                                   getValue( LIST_arguments, "title" ),
                                   NA ) )
