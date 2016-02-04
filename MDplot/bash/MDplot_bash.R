@@ -207,7 +207,7 @@ if( STRING_function == "dssp_ts" )
 if( STRING_function == "xrmsd" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_xrmsdAll <- c( "xaxisRange", "yaxisRange" )
+  VEC_xrmsdAll <- c( "xaxisRange", "yaxisRange", "factor" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_xrmsdAll,
                   VEC_allowedForAll ), LIST_arguments )
@@ -219,6 +219,7 @@ if( STRING_function == "xrmsd" )
                    VEC_allowedForAll ),
                 c( "<range of x-axis data points plotted, separated by ','> (optional)",
                    "<range of y-axis data points plotted, separated by ','> (optional)",
+                   "<factor by which the values should be divided> (default: 10000)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -229,14 +230,32 @@ if( STRING_function == "xrmsd" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  VEC_xaxisRange <- NA
+  if( isKeySet( LIST_arguments, "xaxisRange" ) )
+    VEC_xaxisRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "xaxisRange" ),
+                                                    ",",
+                                                    fixed = TRUE ) ) )
+  VEC_yaxisRange <- NA
+  if( isKeySet( LIST_arguments, "yaxisRange" ) )
+    VEC_yaxisRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "yaxisRange" ),
+                                                    ",",
+                                                    fixed = TRUE ) ) )
   
   # plot
-  MDplot::xrmsd( MDplot::load_xrmsd( VEC_files ),
+  MDplot::xrmsd( MDplot::load_xrmsd( VEC_files, factor = ifelse( isKeySet( LIST_arguments, "factor" ),
+                                                                 as.numeric( getValue( LIST_arguments, "factor" ) ),
+                                                                 10000 ) ),
                  main = ifelse( isKeySet( LIST_arguments, "title" ),
                                 getValue( LIST_arguments, "title" ),
                                 NA ),
-                 xlab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 1 ] ),
-                 ylab = ifelse( is.na( VEC_axisNames ), "time [structure]", VEC_axisNames[ 2 ] ) )
+                 xlab = ifelse( all( is.na( VEC_axisNames ) ),
+                                "time [structure]",
+                                VEC_axisNames[ 1 ] ),
+                 ylab = ifelse( all( is.na( VEC_axisNames ) ),
+                                "time [structure]",
+                                VEC_axisNames[ 2 ] ),
+                 xaxisRange = VEC_xaxisRange,
+                 yaxisRange = VEC_yaxisRange )
 }
 
 
@@ -244,7 +263,7 @@ if( STRING_function == "xrmsd" )
 if( STRING_function == "rmsf" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_rmsfAll <- c( "residuewise" )
+  VEC_rmsfAll <- c( "residuewise", "rmsfUnit", "range" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_rmsfAll,
                   VEC_allowedForAll ), LIST_arguments )
@@ -255,6 +274,8 @@ if( STRING_function == "rmsf" )
                 c( VEC_rmsfAll,
                    VEC_allowedForAll ),
                 c( "<specifies, whether the protein is given in atoms or residues> (optional)",
+                   "<abbreviation of rmsf unit> (default: nm)",
+                   "<range of residues to be plotted> (optional)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -270,11 +291,21 @@ if( STRING_function == "rmsf" )
     BOOL_resWise <- ifelse( ( getValue( LIST_arguments, "residuewise" ) == "TRUE" ),
                             TRUE,
                             FALSE )
+  VEC_range <- NA
+  if( isKeySet( LIST_arguments, "range" ) )
+    VEC_range <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "range" ),
+                                               ",",
+                                               fixed = TRUE ) ) )
   
   # plot
   MDplot::rmsf( MDplot::load_rmsf( VEC_files ),
                 names = VEC_dataNames,
                 residuewise = BOOL_resWise,
+                printLegend = BOOL_printLegend,
+                range = VEC_range,
+                rmsfUnit = ifelse( isKeySet( LIST_arguments, "rmsfUnit" ),
+                                   getValue( LIST_arguments, "rmsfUnit" ),
+                                   "nm" ),
                 main = ifelse( isKeySet( LIST_arguments, "title" ),
                                getValue( LIST_arguments, "title" ),
                                NA ) )
@@ -285,7 +316,7 @@ if( STRING_function == "rmsf" )
 if( STRING_function == "rmsd" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_rmsdAll <- c( )
+  VEC_rmsdAll <- c( "factor", "timeUnit", "rmsdUnit" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_rmsdAll,
                   VEC_allowedForAll ), LIST_arguments )
@@ -295,7 +326,10 @@ if( STRING_function == "rmsd" )
     print_help( STRING_function,
                 c( VEC_rmsdAll,
                    VEC_allowedForAll ),
-                c( VEC_allowedForAllDesc ) )
+                c( "<factor by which the values should be divided> (default: 1000)",
+                   "<abbreviation of unit used for time-axis> (default: ns)",
+                   "<abbreviation of unit used for rmsd-axis> (default: nm)",
+                   VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
 
@@ -310,6 +344,15 @@ if( STRING_function == "rmsd" )
   # plot
   MDplot::rmsd( MDplot::load_rmsd( VEC_files ),
                 names = VEC_dataNames,
+                factor = ifelse( isKeySet( LIST_arguments, "factor" ),
+                                 as.numeric( getValue( LIST_arguments, "factor" ) ),
+                                 1000 ),
+                timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
+                                   getValue( LIST_arguments, "timeUnit" ),
+                                   "ns" ),
+                rmsdUnit = ifelse( isKeySet( LIST_arguments, "rmsdUnit" ),
+                                   getValue( LIST_arguments, "rmsdUnit" ),
+                                   "nm" ),
                 main = ifelse( isKeySet( LIST_arguments, "title" ),
                                getValue( LIST_arguments, "title" ),
                                NA ) )
@@ -463,8 +506,7 @@ if( STRING_function == "TIcurve" )
 if( STRING_function == "clusters" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_clustAll <- c( "clustersNumber",
-                     "trajectoryNames" )
+  VEC_clustAll <- c( "clustersNumber" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_clustAll,
                   VEC_allowedForAll ),
@@ -476,7 +518,6 @@ if( STRING_function == "clusters" )
                 c( VEC_clustAll,
                    VEC_allowedForAll ),
                 c( "<number of clusters (sorted by population) to be shown in the plot> (optional)",
-                   "<vector of trajectory names, separated by ','> (optional)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -486,23 +527,9 @@ if( STRING_function == "clusters" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   
-  # load matrix and set names
-  MAT_input <- MDplot::load_clusters( VEC_files )
-  if( isKeySet( LIST_arguments, "trajectoryNames" ) )
-  {
-    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "trajectoryNames" ),
-                                   ",",
-                                   fixed = TRUE ) )
-    if( length( VEC_names ) != nrow( MAT_input ) )
-      stop( paste( "Error while assigning user specified trajectory ",
-                   "names, since the numbers (",
-                   length( VEC_names ),
-                   ",",
-                   nrow( MAT_input ),
-                   ") do not match.",
-                   sep = "" ) )
-    rownames( MAT_input ) <- VEC_names
-  }
+  # load matrix
+  MAT_input <- MDplot::load_clusters( VEC_files,
+                                      names = VEC_dataNames )
 
   # plot
   MDplot::clusters( MAT_input,
@@ -524,8 +551,8 @@ if( STRING_function == "clusters_ts" )
   VEC_clustTSAll <- c( "clustersNumber",
                        "selectTraj",
                        "selectTime",
-                       "printNanoseconds",
-                       "snapshotsPerNS",
+                       "timeUnit",
+                       "snapshotsPerTimeInt",
                        "lengths" )
   testRequired( c( VEC_requiredForAll ),
                 LIST_arguments )
@@ -541,8 +568,8 @@ if( STRING_function == "clusters_ts" )
                 c( "<number of cluster printed> (optional)",
                    "<vector of selected trajectories, separated by ','> (optional)",
                    "<range of selected time, separated by ','> (optional)",
-                   "<print time in ns> (optional)",
-                   "<number of snapshots per ns> (optional)",
+                   "<print time in units> (optional)",
+                   "<number of snapshots per time unit (see above)> (optional)",
                    "<vector of trajectory-lengths, separated by ','>",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
@@ -582,12 +609,12 @@ if( STRING_function == "clusters_ts" )
                        clustersNumber = ifelse( isKeySet( LIST_arguments, "clustersNumber" ),
                                                 as.numeric( getValue( LIST_arguments, "clustersNumber" ) ),
                                                 NA ),
-                       printNanoseconds = ifelse( isKeySet( LIST_arguments, "printNanoseconds" ),
-                                                  TRUE,
-                                                  FALSE ),
-                       snapshotsPerNS = ifelse( isKeySet( LIST_arguments, "snapshotsPerNS" ),
-                                                as.numeric( getValue( LIST_arguments, "snapshotsPerNS" ) ),
-                                                1000 ),
+                       timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
+                                          getValue( LIST_arguments, "timeUnit" ),
+                                          NA ),
+                       snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments, "snapshotsPerTimeInt" ),
+                                                     as.numeric( getValue( LIST_arguments, "snapshotsPerTimeInt" ) ),
+                                                     1000 ),
                        main = ifelse( isKeySet( LIST_arguments, "title" ),
                                       getValue( LIST_arguments, "title" ),
                                       NA ) )

@@ -14,6 +14,7 @@ ramachandran( dihedrals,
               printLegend = FALSE,
               heatUnits = NA,
               plotContour = FALSE,
+              barePlot = FALSE,
               ... )}
 \arguments{
   \item{dihedrals}{Matrix with angles (two columns) and optional column for heat values.}
@@ -30,6 +31,7 @@ ramachandran( dihedrals,
   \item{printLegend}{Boolean (default: false) specifying, whether a heat lengend is to be plotted or not.}
   \item{heatUnits}{String, containing a the unit of heat.}
   \item{plotContour}{Boolean (default: false) specifying, whether a contour should be plotted or no.}
+  \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
 }
 \examples{
 \dontrun{

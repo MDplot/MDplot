@@ -79,11 +79,12 @@ load_rmsd <- function( files,
 # plot RMSD
 rmsd <- function( rmsdData,
                   printLegend = TRUE,
-                  divisionFactor = 1000,
+                  factor = 1000,
                   timeUnit = "ns",
                   rmsdUnit = "nm",
                   colours = NA,
                   names = NA,
+                  barePlot = FALSE,
                   ... )
 {
   # get boundaries
@@ -111,7 +112,9 @@ rmsd <- function( rmsdData,
       if( i == 1 )
         plot( rmsdData[[ i ]], rmsdData[[ ( i + 1 ) ]], type = "l",
               col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
-              xaxt = "n",  xlab = "", ylab = "",
+              xaxt = "n",
+              yaxt = ifelse( barePlot, "n", "s" ),
+              xlab = "", ylab = "",
               ylim = c( 0, REAL_max_RMSD * 1.05 ), xlim = c( 0, INT_max_snapshot ), ... )
       else
         plot( rmsdData[[ i ]], rmsdData[[ ( i + 1 ) ]], type = "l",
@@ -124,15 +127,18 @@ rmsd <- function( rmsdData,
   #########
   
   # plot the rest
-  axis( 1,
-        at = split_equidistant( c( 1, length( rmsdData[[ 1 ]] ) ), 7 ),
-        labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / divisionFactor ) ), 7 ),
-        cex.axis = 1 )
-  mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
-         cex = 1 )
-  mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,
-         cex = 1 )
-  if( printLegend )
+  if( !barePlot )
+  {
+    axis( 1,
+          at = split_equidistant( c( 1, length( rmsdData[[ 1 ]] ) ), 7 ),
+          labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / factor ) ), 7 ),
+          cex.axis = 1 )
+    mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
+           cex = 1 )
+    mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,
+           cex = 1 )
+  }
+  if( printLegend && !barePlot )
     legend( "bottomright",
             title = "Legend",
             legend = names,

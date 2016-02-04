@@ -37,6 +37,7 @@ ramachandran <- function( dihedrals,
                           printLegend = FALSE,
                           heatUnits = NA,
                           plotContour = FALSE,
+                          barePlot = FALSE,
                           ... )
 {
   
@@ -66,7 +67,7 @@ ramachandran <- function( dihedrals,
                             VEC_yLim = c( -180, 180 ) )
   VEC_heatValues <- c()
   VEC_palette <- NA
-  if( printLegend )
+  if( printLegend && !barePlot )
   {
     layout( matrix( 1:2, ncol = 2 ), widths = c( 0.75, 0.25 ), heights = c( 1, 1 ) )
     par( mar = c( 4.0, 4.0, 4.0, 0.0 ) )
@@ -81,10 +82,13 @@ ramachandran <- function( dihedrals,
             xaxs = "i", xaxt = "n", yaxs = "i", yaxt = "n",
             ann = TRUE, xaxt = "n", yaxt = "n", FUN = function( x ) FUN_heatFun( length( x ) ),
             xlim = c( -180, 180 ), ylim = c( -180, 180 ), ... )
-    axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
-    axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
-    mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.8, cex = 1.45 )
-    mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.3, cex = 1.45 )
+    if( !barePlot )
+    {
+      axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+      axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+      mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.8, cex = 1.45 )
+      mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.3, cex = 1.45 )
+    }
     
     # contour
     # TODO: separate this functionality somehow
@@ -141,10 +145,13 @@ ramachandran <- function( dihedrals,
     }
     #########
     
-    axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
-    axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
-    mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.8, cex = 1.45 )
-    mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.3, cex = 1.45 )
+    if( !barePlot )
+    {
+      axis( 1, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+      axis( 2, at = VEC_xTicks, labels = VEC_xLabels, cex.axis = 1.0 )
+      mtext( side = 1, text = expression( paste( phi, " [", degree, "]" ) ), line = 2.8, cex = 1.45 )
+      mtext( side = 2, text = expression( paste( psi, " [", degree, "]" ) ), line = 2.3, cex = 1.45 )
+    }
   }
   if( plotType == "fancy" )
   {
@@ -183,10 +190,13 @@ ramachandran <- function( dihedrals,
     segments( tick.start$x, tick.start$y, tick.end$x, tick.end$y )
     labels <- c( -135, -90, -45, 0, 45, 90, 135 )
     label.pos <- trans3d( seq( 1 / 8, 7 / 8, by = 1 / 8 ), -0.09, 0, perspMatrix )
-    text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 0.9 )
-    text( label.pos$x[ 4 ], label.pos$y[ 4 ] - 0.0225,
-          labels = c( expression( paste( phi, " [", degree, "]" ) ) ),
-          cex = 1.25 )
+    if( !barePlot )
+    {
+      text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 0.9 )
+      text( label.pos$x[ 4 ], label.pos$y[ 4 ] - 0.0225,
+            labels = c( expression( paste( phi, " [", degree, "]" ) ) ),
+            cex = 1.25 )
+    }
     
     # y-axis
     tick.start <- trans3d( 0, seq( 1 / 8, 7 / 8, by = 1 / 8 ), 0, perspMatrix )
@@ -194,12 +204,15 @@ ramachandran <- function( dihedrals,
     segments( tick.start$x, tick.start$y, tick.end$x, tick.end$y )
     labels <- c( -135, -90, -45, 0, 45, 90, 135 )
     label.pos <- trans3d( -0.11, seq( 1 / 8, 7 / 8, by = 1 / 8 ), 0, perspMatrix )
-    text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 0.9 )
-    text( label.pos$x[ 4 ] - 0.025, label.pos$y[ 4 ] + 0.015,
-          labels = c( expression( paste( psi, " [", degree, "]" ) ) ),
-          cex = 1.25 )
-    #label.pos <- trans3d( seq( 0, 1, by = 0.25 ), ( 0 - 0.1 ), 0, perspMatrix )
-    #text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 1.0 )
+    if( !barePlot )
+    {
+      text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 0.9 )
+      text( label.pos$x[ 4 ] - 0.025, label.pos$y[ 4 ] + 0.015,
+            labels = c( expression( paste( psi, " [", degree, "]" ) ) ),
+            cex = 1.25 )
+      #label.pos <- trans3d( seq( 0, 1, by = 0.25 ), ( 0 - 0.1 ), 0, perspMatrix )
+      #text( label.pos$x, label.pos$y, labels = labels, adj = c( 0, NA ), cex = 1.0 )
+    }
   }
   #########
   
@@ -232,7 +245,7 @@ ramachandran <- function( dihedrals,
   #########
   
   # print legend if specified to do so
-  if( printLegend )
+  if( printLegend && !barePlot )
   {
     if( ncol( dihedrals ) == 3 )
       VEC_heatValues <- dihedrals[ , 3 ]

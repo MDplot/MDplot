@@ -33,10 +33,10 @@ xrmsd <- function( xrmsdValues,
 {
   
   # check user supplied input and replace in case undefined
-  if( is.na( xaxisRange ) )
+  if( all( is.na( xaxisRange ) ) )
     xaxisRange <- c( min( xrmsdValues[ , 1 ] ),
-                          max( xrmsdValues[ , 1 ] ) )
-  if( is.na( yaxisRange ) )
+                     max( xrmsdValues[ , 1 ] ) )
+  if( all( is.na( yaxisRange ) ) )
     yaxisRange <- c( min( xrmsdValues[ , 2 ] ),
                      max( xrmsdValues[ , 2 ] ) )
   colours <- c( 0, 

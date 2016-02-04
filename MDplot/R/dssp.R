@@ -314,6 +314,7 @@ dssp_ts <- function( tsData,
                      residueBoundaries = NA,
                      timeUnit = NA,
                      snapshotsPerTimeInt = 1000,
+                     barePlot = FALSE,
                      ... )
 {
   STRING_time_unit <- "snapshots"
@@ -339,14 +340,17 @@ dssp_ts <- function( tsData,
   colours <- PALETTE_DSSP_timeseries_colours( length( tsData ) )
   
   # specify graphical settings, in case a legend has been requested (or not)
-  par( mar = c( 4.5, 4.5, 2.5, 0.0 ) )
-  if( printLegend )
-    layout( matrix( c( 1, 2 ), nrow = 1, byrow = TRUE ),
-            widths = c( 0.8,
-                        0.2 ),
-            heights = c( 1.0, 1.0 ) )
-
+  if( !barePlot )
+  {
+    par( mar = c( 4.5, 4.5, 2.5, 0.0 ) )
+    if( printLegend )
+      layout( matrix( c( 1, 2 ), nrow = 1, byrow = TRUE ),
+              widths = c( 0.8,
+                          0.2 ),
+              heights = c( 1.0, 1.0 ) )
+  }
   #########
+  
   for( i in 1:length( tsData )  )
   {
     if( i < 2 )
@@ -355,8 +359,14 @@ dssp_ts <- function( tsData,
             xlim = timeBoundaries,
             ylim = residueBoundaries,
             xaxs = "i", yaxs = "i",
-            xlab = paste( "time [", STRING_time_unit, "]", sep = "" ),
-            ylab = "residue number",
+            xaxt = ifelse( barePlot, "n", "s" ),
+            yaxt = ifelse( barePlot, "n", "s" ),
+            xlab = ifelse( barePlot,
+                           "",
+                           paste( "time [", STRING_time_unit, "]", sep = "" ) ),
+            ylab = ifelse( barePlot,
+                           "",
+                           "residue number" ),
             pch = 22, col = colours[ i ], bg = colours[ i ], cex = 0.25,
             ... )
     }
@@ -374,7 +384,7 @@ dssp_ts <- function( tsData,
   }
   
   # print legend, if flag is set
-  if( printLegend )
+  if( printLegend && !barePlot )
   {
     par( mar = c( 4.5, 0.0, 2.5, 1.0 ) )
     plot.new()

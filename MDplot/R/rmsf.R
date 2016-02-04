@@ -28,6 +28,7 @@ rmsf <- function( rmsfData,
                   numberXLabels = 7,
                   names = NA,
                   range = NA,
+                  barePlot = FALSE,
                   ... )
 {
   # set colours and names
@@ -58,7 +59,9 @@ rmsf <- function( rmsfData,
       if( i == 1 )
         plot( rmsfData[[ i ]], rmsfData[[ ( i + 1 ) ]], type = "l",
               col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
-              xaxt = "n", xlab = "", ylab = "",
+              xaxt = "n",
+              yaxt = ifelse( barePlot, "n", "s" ),
+              xlab = "", ylab = "",
               ylim = c( 0, REAL_maxRMSF * 1.05 ), xlim = range,
               ... )
       else
@@ -72,25 +75,28 @@ rmsf <- function( rmsfData,
   #########
   
   # plot axis labels and ticks, which are calculated either atom- or residuewise
-  mtext( side = 2, text = paste( "RMSF [", rmsfUnit, "]", sep = "" ), line = 2.4, cex = 1.25 )
-  VEC_atomNumbers <- range
-  if( !residuewise )
+  if( !barePlot )
   {
-    mtext( side = 1, text = "atom number", line = 3, cex = 1.25 )
-    axis( 1, at = split_equidistant( range, numberXLabels ),
-          labels = split_equidistant( range, numberXLabels ) )
-  }
-  else
-  {
-    mtext( side = 1, text = "residue number", line = 3, cex = 1.25 )
-    axis( 1, at = split_equidistant( range, numberXLabels ),
-          labels = as.integer( split_equidistant( range, numberXLabels )
-                               / 3 ) )
+    mtext( side = 2, text = paste( "RMSF [", rmsfUnit, "]", sep = "" ), line = 2.4, cex = 1.25 )
+    VEC_atomNumbers <- range
+    if( !residuewise )
+    {
+      mtext( side = 1, text = "atom number", line = 3, cex = 1.25 )
+      axis( 1, at = split_equidistant( range, numberXLabels ),
+            labels = split_equidistant( range, numberXLabels ) )
+    }
+    else
+    {
+      mtext( side = 1, text = "residue number", line = 3, cex = 1.25 )
+      axis( 1, at = split_equidistant( range, numberXLabels ),
+            labels = as.integer( split_equidistant( range, numberXLabels )
+                                 / 3 ) )
+    }
   }
   #########
   
   # plot the rest
-  if( printLegend )
+  if( printLegend && !barePlot )
     legend( "topright",
             title = "Legend",
             legend = names,

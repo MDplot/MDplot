@@ -12,6 +12,7 @@ load_TIcurve <- function( files,
 TIcurve <- function( lambdas,
                      invertedBackwards = FALSE,
                      energyUnit = "kJ/mol",
+                     barePlot = FALSE,
                      ... )
 {
   
@@ -34,10 +35,11 @@ TIcurve <- function( lambdas,
   #########
   
   # set proper outer margins and plot it
-  if( length( lambdas ) > 1 )
-    par( oma = c( 3.25, 3.00, 0.45, 0.0 ) )
-  else
-    par( oma = c( 1.35, 3.00, 0.45, 0.0 ) )
+  if( !barePlot )
+    if( length( lambdas ) > 1 )
+      par( oma = c( 3.25, 3.00, 0.45, 0.0 ) )
+    else
+      par( oma = c( 1.35, 3.00, 0.45, 0.0 ) )
   for( i in 1:length( lambdas ) )
   {
     if( i == 1 )
@@ -45,21 +47,26 @@ TIcurve <- function( lambdas,
       TIplot <- plot( lambdas[[ i ]],
                       ylim = VEC_valueLimits,
                       ylab = "",
+                      xaxt = ifelse( barePlot, "n", "s" ),
+                      yaxt = ifelse( barePlot, "n", "s" ),
                       xaxs = "i", xlab = "",
                       pch = 19, cex = 0.6,
                       col = VEC_colours[ i ],
                       ... )
-      mtext( side = 1, text = expression( lambda ), line = 3, cex = 1.45 )
-      mtext( side = 2, 
-             text = expression( atop( "<"*frac( paste( partialdiff, "H" ),
-                                                paste( partialdiff, lambda ) )*">", ) ),
-             line = 2.4, cex = 1.75, las = 1 )
-      mtext( side = 2,
-             text = paste( "[",
-                           energyUnit,
-                           "]",
-                           sep = "" ),
-             line = 2.4, cex = 1.0, las = 1, padj = 2.25 )
+      if( !barePlot )
+      {
+        mtext( side = 1, text = expression( lambda ), line = 3, cex = 1.45 )
+        mtext( side = 2, 
+               text = expression( atop( "<"*frac( paste( partialdiff, "H" ),
+                                                  paste( partialdiff, lambda ) )*">", ) ),
+               line = 2.4, cex = 1.75, las = 1 )
+        mtext( side = 2,
+               text = paste( "[",
+                             energyUnit,
+                             "]",
+                             sep = "" ),
+               line = 2.4, cex = 1.0, las = 1, padj = 2.25 )
+      }
       abline( h = 0, lwd = 1, lty = 3 )
     }
     else
@@ -77,7 +84,7 @@ TIcurve <- function( lambdas,
   par( new = TRUE )
   plot( lambdas[[ i ]],
         ylim = VEC_valueLimits, yaxt = "n", ylab = "",
-        xaxs = "i", xaxt = "n", xlab = "",
+        xaxs = "i", xaxt = "n", xlab = "", yaxt = "n",
         type = "l", lwd = 1, col = VEC_colours[ i ] )
   par( new = TRUE )
   }
@@ -89,18 +96,19 @@ TIcurve <- function( lambdas,
   INT_significantForward <- get_sign_digits( REAL_forward_error )
   REAL_forward_integral_rounded <- round( REAL_forward_integral, digits = INT_significantForward )
   REAL_forward_error_rounded <- round( REAL_forward_error, digits = INT_significantForward )
-  mtext( side = 1, line = 4.75, cex = 1.0,
-         adj = 1,
-         text = substitute( paste( Delta, "G"["forw"], " = ",
-                                   REAL_forward_integral_rounded,
-                                   #" \u00b1 ",
-                                   " +/- ",
-                                   REAL_forward_error_rounded,
-                                   paste( " [",
-                                          energyUnit,
-                                          "]",
-                                          sep = "" ) ) ) )
-  if( length( lambdas ) > 1 )
+  if( !barePlot )
+    mtext( side = 1, line = 4.75, cex = 1.0,
+           adj = 1,
+           text = substitute( paste( Delta, "G"["forw"], " = ",
+                                     REAL_forward_integral_rounded,
+                                     #" \u00b1 ",
+                                     " +/- ",
+                                     REAL_forward_error_rounded,
+                                     paste( " [",
+                                            energyUnit,
+                                            "]",
+                                            sep = "" ) ) ) )
+  if( length( lambdas ) > 1 && !barePlot )
   {
     REAL_backward_integral <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "integral" ] )
     REAL_backward_error <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "error" ] )

@@ -32,8 +32,8 @@ clusters_ts <- function( clustersDataTS,
                          clustersNumber = NA,
                          selectTraj = NA,
                          selectTime = NA,
-                         printNanoseconds = FALSE,
-                         snapshotsPerTime = 1000,
+                         timeUnit = NA,
+                         snapshotsPerTimeInt = 1000,
                          ... )
 {
   
@@ -68,7 +68,7 @@ clusters_ts <- function( clustersDataTS,
                         REAL_widthOfOccurences,
                         1.0 - REAL_widthOfOccurences,
                         1.0 ),
-            heights = c( 0.4, 1.5, 1.5, 1.5 ) )
+            heights = c( 0.4, 1.0, 1.0, 1.5 ) )
     plot.new()
     mtext( side = 3, padj = 0, cex = 1.45, text = list( ... )[[ "main" ]] )
   }
@@ -125,8 +125,8 @@ clusters_ts <- function( clustersDataTS,
                                 n = 5 ),
         labels = split_equidistant( VEC_values = c( 0, INT_maxSnapshots ),
                                     n = 5 ) /
-                 ifelse( printNanoseconds,
-                         snapshotsPerTime,
+                 ifelse( !is.na( timeUnit ),
+                         snapshotsPerTimeInt,
                          1 ),
         tick = FALSE,
         line = -0.45 )
@@ -138,9 +138,9 @@ clusters_ts <- function( clustersDataTS,
         las = 1 )
   mtext( side = 1, line = 2.0, cex = 1.25,
          text = paste( "time [",
-                       ifelse( printNanoseconds,
-                               "ns",
-                               "snapshots" ),
+                       ifelse( is.na( timeUnit ),
+                               "snapshots",
+                               timeUnit ),
                        "]",
                        sep = "" ) )
   #########
@@ -189,6 +189,7 @@ load_clusters <- function( path,
 clusters <- function( clusters,
                       clustersNumber = NA,
                       legendTitle = "trajectories",
+                      barePlot = FALSE,
                       ... )
 {
   # reduce number of clusters, in case specified and take care of the trajectory names
@@ -199,17 +200,20 @@ clusters <- function( clusters,
   
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_CLUSTERS <- PALETTE_clusters( nrow( clusters ) )
-  defaultArguments <- list( xlab = "clusters",
+  defaultArguments <- list( xlab = ifelse( barePlot, "", "clusters" ),
                             main = "",
                             col = COLOURS_CLUSTERS )
   ellipsis <- list( ... )
   defaultArguments[ names( ellipsis ) ] <- ellipsis
   ellipsis[ names( defaultArguments ) ] <- defaultArguments
   do.call( what = barplot,
-           c( list( height = clusters ),
+           c( list( height = clusters,
+                    xaxt = ifelse( barePlot, "n", "s" ),
+                    yaxt = ifelse( barePlot, "n", "s" ) ),
               ellipsis ) )
-  legend( "topright", inset = 0.045, legend = rownames( clusters ),
-          title = legendTitle, box.lty = 0, box.lwd = 0, 
-          col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
+  if( !barePlot )
+    legend( "topright", inset = 0.045, legend = rownames( clusters ),
+            title = legendTitle, box.lty = 0, box.lwd = 0, 
+            col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
   #########
 }

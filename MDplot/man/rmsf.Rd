@@ -12,6 +12,7 @@ rmsf( rmsfData,
       numberXLabels = 7,
       names = NA,
       range = NA,
+      barePlot = FALSE,
       ... )}
 \arguments{
   \item{rmsfData}{List of (alterating) atom numbers and rmsf values, as also produced by \code{MDplot::load_rmsf()} for example.}
@@ -22,6 +23,7 @@ rmsf( rmsfData,
   \item{numberXLabels}{Specifies, how many ticks are used on the x-axis.}
   \item{names}{Vector of the names of the trajectories.}
   \item{range}{Range of residues to be plotted.}
+  \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
 }
 \examples{\dontrun{
 # two curves

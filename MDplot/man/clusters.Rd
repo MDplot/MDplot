@@ -8,11 +8,13 @@ This function plots clusters over a set of trajectories as joint, coloured bar p
 clusters( clusters,
           clustersNumber = NA,
           legendTitle = "trajectories",
+          barePlot = FALSE,
           ... )}
 \arguments{
   \item{dihedrals}{Matrix with clusters. Trajectories in rows, clusters in columns.}
   \item{clustersNumber}{When specified, only this number of clusters is shown.}
   \item{legendTitle}{The title of the legend.}
+  \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
 }
 \examples{
 # see "extdata/clusters_example.txt" for format information
