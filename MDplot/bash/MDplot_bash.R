@@ -625,7 +625,7 @@ if( STRING_function == "clusters_ts" )
 if( STRING_function == "hbond" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_hbAll <- c( )
+  VEC_hbAll <- c( "acceptorRange", "donorRange" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_hbAll,
                   VEC_allowedForAll ),
@@ -636,7 +636,9 @@ if( STRING_function == "hbond" )
     print_help( STRING_function,
                 c( VEC_hbAll,
                    VEC_allowedForAll ),
-                c( VEC_allowedForAllDesc ) )
+                c( "<range of selected acceptors, separated by ','> (optional)",
+                   "<range of selected donors, separated by ','> (optional)",
+                   VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
@@ -646,9 +648,24 @@ if( STRING_function == "hbond" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  VEC_acceptorRange <- NA
+  if( isKeySet( LIST_arguments, "acceptorRange" ) )
+    VEC_acceptorRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                                 "acceptorRange" ),
+                                             ",",
+                                             fixed = TRUE ) ) )
+  VEC_donorRange <- NA
+  if( isKeySet( LIST_arguments, "donorRange" ) )
+    VEC_donorRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                              "donorRange" ),
+                                                    ",",
+                                                    fixed = TRUE ) ) )
   
   # plot
   MDplot::hbond( MDplot::load_hbond( VEC_files ),
+                 printLegend = BOOL_printLegend,
+                 donorRange = VEC_donorRange,
+                 acceptorRange = VEC_acceptorRange,
                  main = ifelse( isKeySet( LIST_arguments, "title" ),
                                 getValue( LIST_arguments, "title" ),
                                 NA ) )
@@ -656,19 +673,33 @@ if( STRING_function == "hbond" )
 
 
 
-if( STRING_function == "MDplot_hbond_timeseries" )
+if( STRING_function == "hbond_ts" )
 {
+  VEC_hbtsAll <- c( "acceptorRange", "donorRange", "plotOccurences",
+                    "printNames", "namesToSingle", "timeUnit",
+                    "snapshotsPerTimeInt", "hbondIndices" )
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_allowedForAll,
-                  "plotoccurences",
-                  "acceptors",
-                  "donors",
-                  "printnames",
-                  "single",
-                  "timeNS",
-                  "snapshotsperNS" ),
+  testAllowed( c( VEC_hbtsAll,
+                  VEC_allowedForAll ),
                LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_hbtsAll,
+                   VEC_allowedForAll ),
+                c( "<range of acceptors, separated by ','> (optional)",
+                   "<range of donors, separated by ','> (optional)",
+                   "<boolean, setting the right subplot with occurences> (default: FALSE)",
+                   "<boolean, setting whether hbonds should be plotted with names> (default: FALSE)",
+                   "<boolean, setting wether the names are in single-letter code> (default: FALSE)",
+                   "<abbreviation for time unit> (optional)",
+                   "<number of snapshots per time unit (see above)> (default: 1000)",
+                   "<range of hbonds defined by their indices> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
   VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
   for( i in 1:length( VEC_files ) )
   {
@@ -679,42 +710,51 @@ if( STRING_function == "MDplot_hbond_timeseries" )
   if( length( VEC_files ) != 2 )
     stop( paste( "Error in file checking: seemingly, the number of provided files is",
                  length( VEC_files ), "and not 2, as expected." ) )
-  VEC_acceptors = NA
-  if( isKeySet( LIST_arguments, "acceptors" ) )
-    VEC_acceptors <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "acceptors" ),
-                                                   ",",
-                                                   fixed = TRUE ) ) )
-  VEC_donors <- NA
-  if( isKeySet( LIST_arguments, "donors" ) )
-    VEC_donors <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "donors" ),
-                                                ",",
-                                                fixed = TRUE ) ) )
+  VEC_acceptorRange = NA
+  if( isKeySet( LIST_arguments, "acceptorRange" ) )
+    VEC_acceptorRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                                 "acceptorRange" ),
+                                                       ",",
+                                                       fixed = TRUE ) ) )
+  VEC_donorRange <- NA
+  if( isKeySet( LIST_arguments, "donorRange" ) )
+    VEC_donorRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                              "donorRange" ),
+                                                    ",",
+                                                    fixed = TRUE ) ) )
+  VEC_hbondIndices <- NA
+  if( isKeySet( LIST_arguments, "hbondIndices" ) )
+    VEC_hbondIndices <- as.numeric( unlist( strsplit( getValue( LIST_arguments,
+                                                                "hbondIndices" ),
+                                                      ",",
+                                                      fixed = TRUE ) ) )
   
   # plot
-  MDplot_hbond_timeseries( MDplot_load_hbond_timeseries( VEC_files[ 1 ] ),
-                           MDplot_load_hbond( VEC_files[ 2 ] ),
-                           BOOL_printNames = ifelse( isKeySet( LIST_arguments, "printnames" ),
-                                                     TRUE,
-                                                     FALSE ),
-                           BOOL_plotOccurences = ifelse( isKeySet( LIST_arguments, "plotoccurences" ),
-                                                         TRUE,
-                                                         FALSE ),
-                           VEC_acceptorRange = VEC_acceptors,
-                           VEC_donorRange = VEC_donors,
-                           BOOL_namesToSingle = ifelse( isKeySet( LIST_arguments, "single" ),
-                                                        TRUE,
-                                                        FALSE ),
-                           BOOL_timeInNS = ifelse( isKeySet( LIST_arguments, "timeNS" ),
-                                                  TRUE,
-                                                  FALSE ),
-                           REAL_divisionFactor = ifelse( isKeySet( LIST_arguments,
-                                                                   "snapshotsperNS" ),
-                                                         getValue( LIST_arguments,
-                                                                   "snapshotsperNS" ),
-                                                         1000 ),
-                           main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                          getValue( LIST_arguments, "title" ),
-                                          NA ) )
+  MDplot::hbond_ts( MDplot::load_hbond_ts( VEC_files[ 1 ] ),
+                    MDplot::load_hbond( VEC_files[ 2 ] ),
+                    printNames = ifelse( isKeySet( LIST_arguments, "printNames" ),
+                                         TRUE,
+                                         FALSE ),
+                    plotOccurences = ifelse( isKeySet( LIST_arguments, "plotOccurences" ),
+                                                       TRUE,
+                                                       FALSE ),
+                    acceptorRange = VEC_acceptorRange,
+                    donorRange = VEC_donorRange,
+                    namesToSingle = ifelse( isKeySet( LIST_arguments, "namesToSingle" ),
+                                                      TRUE,
+                                                      FALSE ),
+                    timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
+                                       getValue( LIST_arguments, "timeUnit" ),
+                                       NA ),
+                    snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments,
+                                                            "snapshotsPerTimeInt" ),
+                                                  as.numeric( getValue( LIST_arguments,
+                                                                        "snapshotsPerTimeInt" ) ),
+                                                  1000 ),
+                    hbondIndices = VEC_hbondIndices,
+                    main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                   getValue( LIST_arguments, "title" ),
+                                   NA ) )
 }
 #########
 

@@ -20,6 +20,7 @@ hbond_ts <- function( timeseries,
                       snapshotsPerTimeInt = 1000,
                       timeRange = NA,
                       hbondIndices = NA,
+                      barePlot = FALSE,
                       ... )
 {
   
@@ -105,14 +106,22 @@ hbond_ts <- function( timeseries,
 
   # in case the occurences are to be plotted, make some space
   # do make sure, that the y axis has enough space for long labels
-  par( mar = c( 4.0,
-                ifelse( !namesToSingle && printNames,
-                        7.95,
-                        5.25 ),
-                3.25,
-                ifelse( plotOccurences,
-                        0.0,
-                        2.0 ) ) )
+  if( !barePlot )
+    par( mar = c( 4.0,
+                  ifelse( !namesToSingle && printNames,
+                          7.95,
+                          5.25 ),
+                  3.25,
+                  ifelse( plotOccurences,
+                          0.0,
+                          2.0 ) ) )
+  else
+    par( mar = c( 4.0,
+                  3.25,
+                  3.25,
+                  ifelse( plotOccurences,
+                          0.0,
+                          2.0 ) ) )
   if( plotOccurences )
     layout( matrix( 1:2, ncol = 2 ), widths = c( 2, 1 ), heights = c( 1, 1 ) )
   #########
@@ -123,40 +132,47 @@ hbond_ts <- function( timeseries,
         ylim = c( min( VEC_hbondIDs ), max( VEC_hbondIDs ) ), yaxt = "n", ylab = "",
         type = "n" )
   LIST_ellipsis <- list( ... )
-  mtext( side = 3, line = 1.25, cex = 2.0,
-         text = ifelse( is.null( LIST_ellipsis[[ "main" ]] ),
-                        "Hbond timeseries",
-                        LIST_ellipsis[[ "main" ]] ),
-         adj = ifelse( plotOccurences,
-                       0.795,
-                       0.5 ) )
-  mtext( side = 1, line = 2.45, cex = 1.0, text = paste( "time",
-                                                         ifelse( !is.na( timeUnit ),
-                                                                 paste( "[",
-                                                                        timeUnit,
-                                                                        "]",
-                                                                        sep = "" ),
-                                                                 "[snapshots]" ) ) )
-  if( !printNames )
+  if( !barePlot )
+  {
+    mtext( side = 3, line = 1.25, cex = 2.0,
+           text = ifelse( is.null( LIST_ellipsis[[ "main" ]] ),
+                          "Hbond timeseries",
+                          LIST_ellipsis[[ "main" ]] ),
+           adj = ifelse( plotOccurences,
+                         0.795,
+                         0.5 ) )
+    mtext( side = 1, line = 2.45, cex = 1.0,
+           text = paste( "time",
+                         ifelse( !is.na( timeUnit ),
+                         paste( "[",
+                                timeUnit,
+                                "]",
+                                sep = "" ),
+                         "[snapshots]" ) ) )
+  }
+  if( !printNames && !barePlot )
     mtext( side = 2, line = 2.45, cex = 1, text = "hbonds [#]" )
-  axis( 1,
-        at = split_equidistant( VEC_values = VEC_timeLimits,
-                                n = 6,
-                                BOOL_removeLast = TRUE,
-                                BOOL_roundDown = TRUE ),
-        labels = split_equidistant( VEC_values = VEC_timeTicks,
-                                    n = 6,
-                                    BOOL_removeLast = TRUE,
-                                    BOOL_roundDown = TRUE ) )
-  axis( 2,
-        at = VEC_hbondNamesPositions,
-        labels = VEC_hbondNames,
-        las = ifelse( printNames,
-                      1,
-                      0 ),
-        cex.axis = ifelse( printNames,
-                           scalingFactorPlot * 2.45,
-                           1 ) )
+  if( !barePlot )
+  {
+    axis( 1,
+          at = split_equidistant( VEC_values = VEC_timeLimits,
+                                  n = 6,
+                                  BOOL_removeLast = TRUE,
+                                  BOOL_roundDown = TRUE ),
+          labels = split_equidistant( VEC_values = VEC_timeTicks,
+                                      n = 6,
+                                      BOOL_removeLast = TRUE,
+                                      BOOL_roundDown = TRUE ) )
+    axis( 2,
+          at = VEC_hbondNamesPositions,
+          labels = VEC_hbondNames,
+          las = ifelse( printNames,
+                        1,
+                        0 ),
+          cex.axis = ifelse( printNames,
+                             scalingFactorPlot * 2.45,
+                             1 ) )
+  }
   segments( timeseries[ , 1 ],
             timeseries[ , 2 ] - scalingFactorPlot,
             timeseries[ , 1 ],
@@ -186,8 +202,10 @@ hbond_ts <- function( timeseries,
                     max( VEC_hbondIDs ) ),
           yaxt = "n", ylab = "",
           xaxs = "i", xlim = c( 0, 100 ), xlab = "",
+          xaxt = ifelse( barePlot, "n", "s" ),
           type = "n" )
-    mtext( side = 1, line = 2.45, cex = 1, text = "occurence [%]" )
+    if( !barePlot )
+      mtext( side = 1, line = 2.45, cex = 1, text = "occurence [%]" )
     segments( rep( 0, length( VEC_hbondIDs ) ),
               VEC_hbondIDs,
               VEC_occurences,
@@ -252,6 +270,7 @@ hbond <- function( hbonds,
                    acceptorRange = NA,
                    donorRange = NA,
                    printLegend = TRUE,
+                   barePlot = FALSE,
                    ... )
 {
   
@@ -305,7 +324,7 @@ hbond <- function( hbonds,
     
     # normalize values to 0 to 100% and plot graph and legend (in case)
     VEC_normalized <- lapply( as.list( MAT_result[ , 3 ] ), function( x ) x / 100 )
-    if( printLegend )
+    if( printLegend && !barePlot )
     {
       par( mar = c( 4.25, 4.25, 3.25, 0.25 ) )
       layout( matrix( 1:2, ncol = 2 ), widths = c( 2.5, 0.5 ), heights = c( 1.0, 1.0 ) )
@@ -316,10 +335,12 @@ hbond <- function( hbonds,
           col = PALETTE_colors_rev( 10 )[ as.numeric( cut( as.numeric( VEC_normalized ), breaks = 10 ) )  ],
           pch = 19,
           cex = 0.75,
-          xlab = "Donor [residue number]",
-          ylab = "Acceptor [residue number]",
+          xlab = ifelse( barePlot, "", "Donor [residue number]" ),
+          ylab = ifelse( barePlot, "", "Acceptor [residue number]" ),
+          xaxt = ifelse( barePlot, "n", "s" ),
+          yaxt = ifelse( barePlot, "n", "s" ),
           ... )
-    if( printLegend )
+    if( printLegend && !barePlot )
     {
       par( mar = c( 4.25, 0.25, 3.25, 1.0 ) )
       legend_image <- as.raster( matrix( PALETTE_colors( 10 ), ncol = 1 ) )
