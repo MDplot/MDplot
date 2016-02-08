@@ -12,6 +12,7 @@ hbond_ts( timeseries,
           scalingFactorPlot = NA,
           printNames = FALSE,
           namesToSingle = FALSE,
+          printAtoms = FALSE,
           timeUnit = NA,
           snapshotsPerTimeInt = 1000,
           timeRange = NA,
@@ -28,6 +29,7 @@ hbond_ts( timeseries,
 \item{scalingFactorPlot}{To manually set the scaling factor (if necessary).}
 \item{printNames}{Enables human readable names rather than the hbond identifiers.}
 \item{namesToSingle}{If \code{printNames} is \code{TRUE}, this flags enables one letter codes.}
+\item{printAtoms}{Enables atom names in hydrogen bond identification on the y-axis.}
 \item{timeUnit}{Specifies the time unit on the x-axis.}
 \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit (see above).}
 \item{timeRange}{Selects a certain time range specified by a vector.}

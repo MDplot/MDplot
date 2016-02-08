@@ -677,7 +677,7 @@ if( STRING_function == "hbond_ts" )
 {
   VEC_hbtsAll <- c( "acceptorRange", "donorRange", "plotOccurences",
                     "printNames", "namesToSingle", "timeUnit",
-                    "snapshotsPerTimeInt", "hbondIndices" )
+                    "snapshotsPerTimeInt", "hbondIndices", "printAtoms" )
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_hbtsAll,
@@ -697,6 +697,7 @@ if( STRING_function == "hbond_ts" )
                    "<abbreviation for time unit> (optional)",
                    "<number of snapshots per time unit (see above)> (default: 1000)",
                    "<range of hbonds defined by their indices> (optional)",
+                   "<boolean, which sets the labels to contain the atom names if true> (default: FALSE)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -743,6 +744,9 @@ if( STRING_function == "hbond_ts" )
                     namesToSingle = ifelse( isKeySet( LIST_arguments, "namesToSingle" ),
                                                       TRUE,
                                                       FALSE ),
+                    printAtoms = ifelse( isKeySet( LIST_arguments, "printAtoms" ),
+                                         TRUE,
+                                         FALSE ),
                     timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
                                        getValue( LIST_arguments, "timeUnit" ),
                                        NA ),

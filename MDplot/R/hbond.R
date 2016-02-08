@@ -16,6 +16,7 @@ hbond_ts <- function( timeseries,
                       scalingFactorPlot = NA,
                       printNames = FALSE,
                       namesToSingle = FALSE,
+                      printAtoms = FALSE,
                       timeUnit = NA,
                       snapshotsPerTimeInt = 1000,
                       timeRange = NA,
@@ -54,7 +55,7 @@ hbond_ts <- function( timeseries,
                  acceptorRange[ 2 ], " with donor residues ", donorRange[ 1 ], ":",
                  donorRange[ 2 ], " does not contain any hbonds.", sep = "" ) )
   timeseries <- timeseries[ ( timeseries[ , 2 ] %in% VEC_hbondIDs ), ,
-                                        drop = FALSE ]
+                            drop = FALSE ]
   #########
 
   # set time axis
@@ -89,12 +90,22 @@ hbond_ts <- function( timeseries,
       }
       VEC_hbondNames <- c( VEC_hbondNames,
                            paste( paste( LIST_tableLine[[ "resDonorName" ]],
-                                        LIST_tableLine[[ "resDonor" ]],
-                                        sep = "" ),
+                                         LIST_tableLine[[ "resDonor" ]],
+                                         ifelse( printAtoms,
+                                                 paste( ":",
+                                                        LIST_tableLine[[ "atomDonorName" ]],
+                                                        sep = "" ),
+                                                 "" ),
+                                         sep = "" ),
                                   "->",
                                   paste( LIST_tableLine[[ "resAcceptorName" ]],
-                                        LIST_tableLine[[ "resAcceptor" ]],
-                                        sep = "" ) ) )
+                                         LIST_tableLine[[ "resAcceptor" ]],
+                                         ifelse( printAtoms,
+                                                 paste( ":",
+                                                        LIST_tableLine[[ "atomAcceptorName" ]],
+                                                        sep = "" ),
+                                                 "" ),
+                                         sep = "" ) ) )
     }
   }
   #########
@@ -106,11 +117,14 @@ hbond_ts <- function( timeseries,
 
   # in case the occurences are to be plotted, make some space
   # do make sure, that the y axis has enough space for long labels
+  INT_additionForAtomNumbers <- ifelse( printAtoms,
+                                        3.0,
+                                        0.0 )
   if( !barePlot )
     par( mar = c( 4.0,
                   ifelse( !namesToSingle && printNames,
-                          7.95,
-                          5.25 ),
+                          7.95 + INT_additionForAtomNumbers,
+                          5.95 + INT_additionForAtomNumbers ),
                   3.25,
                   ifelse( plotOccurences,
                           0.0,
@@ -170,7 +184,7 @@ hbond_ts <- function( timeseries,
                         1,
                         0 ),
           cex.axis = ifelse( printNames,
-                             scalingFactorPlot * 2.45,
+                             scalingFactorPlot * 2.15,
                              1 ) )
   }
   segments( timeseries[ , 1 ],
@@ -249,7 +263,7 @@ load_hbond <- function( path,
   # the important columns only
   DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 21, byrow = TRUE ),
                            stringsAsFactors = FALSE )
-  input <- DF_buffer[ , c( -20, -19, -18, -17, -15, -14, -12, -11, -7, -6, -3, -1 ) ]
+  input <- DF_buffer[ , c( -20, -19, -18, -15, -14, -12, -7, -6, -3, -1 ) ]
   STRING_tempFile <- tempfile( "MDplot_Hbonds" )
   on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
   write.table( input, file = STRING_tempFile )
@@ -258,8 +272,9 @@ load_hbond <- function( path,
   
   # update column names
   colnames( input ) <- c( "hbondID", "resDonor", "resDonorName",
-                           "resAcceptor", "resAcceptorName", "atomDonor",
-                           "atomH", "atomAcceptor", "percentage" )
+                          "resAcceptor", "resAcceptorName", "atomDonor",
+                          "atomDonorName", "atomH", "atomAcceptor",
+                          "atomAcceptorName", "percentage" )
   #########
   return( input )
 }

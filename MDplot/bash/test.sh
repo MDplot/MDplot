@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # clusters
@@ -48,7 +47,7 @@ Rscript MDplot_bash.R xrmsd help=TRUE
 acroread XRMSD.pdf &
 
 # hbond timeseries
-Rscript MDplot_bash.R hbond_ts files=../inst/extdata/hbond_ts_example.txt,../inst/extdata/hbond_example.txt namesToSingle=TRUE acceptorRange=61,64 donorRange=64,72 title="HBOND timeseries" size=1450,950 plotOccurences=TRUE outformat=tiff printNames=TRUE outfile=hbond_ts.tiff
+Rscript MDplot_bash.R hbond_ts files=../inst/extdata/hbond_ts_example.txt,../inst/extdata/hbond_example.txt namesToSingle=TRUE acceptorRange=61,64 donorRange=64,72 title="HBOND timeseries" size=1450,950 plotOccurences=TRUE outformat=tiff printNames=TRUE printAtoms=TRUE outfile=hbond_ts.tiff
 Rscript MDplot_bash.R hbond_ts help=TRUE
 eog hbond_ts.tiff
 
