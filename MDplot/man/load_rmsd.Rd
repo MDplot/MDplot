@@ -14,7 +14,8 @@ load_rmsd( files,
 }
 \examples{
 \dontrun{
-MDplot::load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ), system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) )
+load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ),
+              system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{rmsd}

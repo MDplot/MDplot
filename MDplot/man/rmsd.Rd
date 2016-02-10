@@ -22,11 +22,12 @@ rmsd( rmsdData,
   \item{colours}{Vector of colours used for plotting.}
   \item{names}{Vector of the names of the trajectories.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{\dontrun{
 # two curves
-MDplot::rmsd( MDplot::load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ),
-                                    system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) ) )
+rmsd( load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ),
+                    system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{Root-mean-square-deviation}

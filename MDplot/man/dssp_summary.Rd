@@ -27,10 +27,12 @@ dssp_summary( dsspData,
   \item{plotType}{Either \code{dots}, \code{curves} or \code{bars}.}
   \item{selectedMotifs}{A vector of names of the motifs selected for plotting.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 # see "extdata/dssp_summary_example.txt" for format information
-MDplot::dssp_summary( MDplot::load_dssp_summary( system.file( "extdata/dssp_summary_example.txt", package = "MDplot" ) ) )
+dssp_summary( load_dssp_summary( system.file( "extdata/dssp_summary_example.txt",
+                                 package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{dssp}

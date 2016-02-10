@@ -16,11 +16,12 @@ xrmsd( xrmsdValues,
   \item{xaxisRange}{A vector of boundaries for the x-snapshots (two elements).}
   \item{yaxisRange}{A vector of boundaries for the y-snapshots (two elements).}
   \item{colours}{A vector with colour names for the span palette.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 \dontrun{
 # see "extdata/xrmsd_example.txt" for format information
-MDplot::xrmsd( MDplot::load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) ) )
+xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{xrmsd}

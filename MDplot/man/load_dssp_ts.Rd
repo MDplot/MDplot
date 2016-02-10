@@ -13,7 +13,7 @@ load_dssp_ts( folder,
 }
 \examples{
 # see "extdata" for format information and file names
-MDplot::load_dssp_ts( system.file( "extdata", package = "MDplot" ) )
+load_dssp_ts( system.file( "extdata", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{DSSP}

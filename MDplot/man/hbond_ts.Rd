@@ -35,10 +35,14 @@ hbond_ts( timeseries,
 \item{timeRange}{Selects a certain time range specified by a vector.}
 \item{hbondIndices}{Select hbonds by their identifiers.}
 \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+\item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 # see "extdata/hbond_example.txt" and "extdata/hbond_ts_example.txt" for format information
-MDplot::hbond_ts( MDplot::load_hbond_ts( system.file( "extdata/hbond_ts_example.txt", package = "MDplot" ) ), MDplot::load_hbond( system.file( "extdata/hbond_example.txt", package = "MDplot" ) ) )
+hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example.txt",
+                                      package = "MDplot" ) ),
+          load_hbond( system.file( "extdata/hbond_example.txt",
+                                   package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

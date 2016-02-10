@@ -19,9 +19,9 @@ export(
          ramachandran,
          xrmsd,
          hbond_ts,
-         clusters_ts,
-         rmsd_average,
-         dssp_summary_multi
+         clusters_ts
+         #dssp_summary_multi,
+         #rmsd_average
        )
 
 # export loading functions
@@ -40,9 +40,10 @@ export(
       )
 
 # export data manipulation functions
-export(
-         averaging_dssp_summary
-      )
+#export(
+#         averaging_dssp_summary
+#      )
+
 # export other functions
 export(
          parse_arguments,

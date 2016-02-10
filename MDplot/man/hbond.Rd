@@ -19,10 +19,12 @@ hbond( hbonds,
   \item{donorRange}{Vector, specifying which range of donor residues is used.}
   \item{printLegend}{Boolean, used to print or hide the legend for the occurences.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 # see "extdata/hbond_example.txt" for format information
-MDplot::hbond( MDplot::load_hbond( system.file( "extdata/hbond_example.txt", package = "MDplot" ) ) )
+hbond( load_hbond( system.file( "extdata/hbond_example.txt",
+                                package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

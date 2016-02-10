@@ -19,11 +19,14 @@ clusters_ts( clustersDataTS,
   \item{selectTime}{Range of time in snapshots, which is to be plotted.}
   \item{timeUnit}{Abbreviation of time unit.}
   \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit (see above).}
-
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 # see "extdata/clusters_ts_example.txt" for format information
-MDplot::clusters_ts( MDplot::load_clusters_ts( system.file( "extdata/clusters_ts_example.txt", package = "MDplot" ), lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) ), clustersNumber = 7 )
+clusters_ts( load_clusters_ts( system.file( "extdata/clusters_ts_example.txt",
+                               package = "MDplot" ),
+                               lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) ),
+             clustersNumber = 7 )
 }
 \author{Christian Margreitter}
 \keyword{clusters_ts}

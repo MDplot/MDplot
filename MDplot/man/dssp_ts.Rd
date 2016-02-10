@@ -21,9 +21,10 @@ dssp_ts( tsData,
   \item{timeUnit}{If set, the snapshots are transformed into the respective time (in dependence of parameter \code{snapshotsPerTime}.}
   \item{snapshotsPerTimeInt}{Number of snapshots per respective \code{timeUnit}.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
-MDplot::dssp_ts( MDplot::load_dssp_ts( system.file( "extdata", package = "MDplot" ) ) )
+dssp_ts( load_dssp_ts( system.file( "extdata", package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{dssp}

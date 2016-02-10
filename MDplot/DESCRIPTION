@@ -1,15 +1,18 @@
 Package: MDplot
 Type: Package
 Title: Plots (automated) graphs for molecular dynamics simulation analysis
+Authors@R: person( given = "Christian", family = "Margreitter",
+                   email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) )
 Version: 0.2
-Date: 2015-09-17
-Author: person( given = "Christian", family = "Margreitter", email = "christian.margreitter@boku.ac.at", role = "aut" )
-Title: MDplot - a package for plotting molecular dynamics analysis
+Date: 2016-02-09
+Title: MDplot: visualizing Molecular Dynamics analysis
 Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, calibrate, gtools, grDevices, lattice
 Description: The purpose of MDplot is, to provide automatization for plot generation succeeding common 
               molecular dynamics analyses. This includes straightforward plots, such as RMSD and RMSF but also more 
               sophisticated ones such as dihedral angle maps, hydrogen bonds, cluster bar plots and DSSP analysis.
-License: GPL-2
-Lazyload: no
-Author: Christian Margreitter [aut]
-Maintainer: Christian Margreitter <christian.margreitter@boku.ac.at>
+License: GPL-3
+LazyLoad: yes
+Author: Christian Margreitter [aut, cre]
+Maintainer: Christian Margreitter <christian.margreitter@gmail.com>
+NeedsCompilation: no
+Repository: CRAN

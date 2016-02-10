@@ -15,7 +15,7 @@ translate_aminoacids( input,
 \examples{
 # to one letter code
 test <- c( "ALA", "HISA", "SER" )
-translate_aminoacids( test, switchMode = 2 )
+MDplot::translate_aminoacids( test, switchMode = 2 )
 }
 \author{Christian Margreitter}
 \keyword{aminoacids}

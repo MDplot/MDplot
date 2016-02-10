@@ -32,12 +32,14 @@ ramachandran( dihedrals,
   \item{heatUnits}{String, containing a the unit of heat.}
   \item{plotContour}{Boolean (default: false) specifying, whether a contour should be plotted or no.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 \dontrun{
 # load table and return it into plotting function "MDplot::ramachandran()"
 # see "extdata/ramachandran_example.txt" for format information
-MDplot::ramachandran( MDplot::load_ramachandran( system.file( "extdata/ramachandran_example.txt", package = "MDplot" ) ) )
+ramachandran( load_ramachandran( system.file( "extdata/ramachandran_example.txt",
+                                              package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{ramachandran}

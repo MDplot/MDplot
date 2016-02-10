@@ -24,11 +24,12 @@ rmsf( rmsfData,
   \item{names}{Vector of the names of the trajectories.}
   \item{range}{Range of residues to be plotted.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{\dontrun{
 # two curves
-MDplot::rmsf( MDplot::load_rmsf( c( system.file( "extdata/rmsf1_example.txt", package = "MDplot" ),
-                                    system.file( "extdata/rmsf2_example.txt", package = "MDplot" ) ) ) )
+rmsf( load_rmsf( c( system.file( "extdata/rmsf1_example.txt", package = "MDplot" ),
+                    system.file( "extdata/rmsf2_example.txt", package = "MDplot" ) ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{Root-mean-square-fluctuation}

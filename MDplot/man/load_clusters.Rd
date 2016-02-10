@@ -16,7 +16,7 @@ load_clusters( path,
 }
 \examples{
 # see "extdata/clusters_example.txt" for format information
-MDplot::load_clusters( system.file( "extdata/clusters_example.txt", package = "MDplot" ) )
+load_clusters( system.file( "extdata/clusters_example.txt", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{Clusters}

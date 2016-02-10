@@ -14,7 +14,7 @@ load_dssp_summary( path,
 }
 \examples{
 # see "extdata" for format information and file names
-MDplot::load_dssp_summary( system.file( "extdata/dssp_summary_example.txt", package = "MDplot" ) )
+load_dssp_summary( system.file( "extdata/dssp_summary_example.txt", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{dssp}

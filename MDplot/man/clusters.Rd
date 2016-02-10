@@ -11,14 +11,16 @@ clusters( clusters,
           barePlot = FALSE,
           ... )}
 \arguments{
-  \item{dihedrals}{Matrix with clusters. Trajectories in rows, clusters in columns.}
+  \item{clusters}{Matrix with clusters. Trajectories in rows, clusters in columns.}
   \item{clustersNumber}{When specified, only this number of clusters is shown.}
   \item{legendTitle}{The title of the legend.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 # see "extdata/clusters_example.txt" for format information
-MDplot::clusters( MDplot::load_clusters( system.file( "extdata/clusters_example.txt", package = "MDplot" ) ) )
+clusters( load_clusters( system.file( "extdata/clusters_example.txt",
+                                      package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{Clusters}

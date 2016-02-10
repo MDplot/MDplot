@@ -14,14 +14,19 @@ TIcurve( lambdas,
   \item{invertedBackwards}{In case a forward and backward TI have been performed and the lambda points are enumerated reversely (i.e. 0.3 of one TI is equivalent to 0.7 of the other), this flag can be set to be \code{TRUE} in order to automatically mirror the values appropriately.}
   \item{energyUnit}{Defines the energy unit used for the plot.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
+  \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
 # see "extdata/TIcurve_example.txt" for format information
-MDplot::TIcurve( MDplot::load_TIcurve( system.file( "extdata/TIcurve_example.txt", package = "MDplot" ) ) )
+TIcurve( load_TIcurve( system.file( "extdata/TIcurve_example.txt",
+                                    package = "MDplot" ) ) )
 
 # forward and backward integration
-MDplot::TIcurve( MDplot::load_TIcurve( c( system.file( "extdata/TIcurve_fb_forward_example.txt", package = "MDplot" ),
-                                          system.file( "extdata/TIcurve_fb_backward_example.txt", package = "MDplot" ) ) ), invertedBackwards = TRUE )
+TIcurve( load_TIcurve( c( system.file( "extdata/TIcurve_fb_forward_example.txt",
+                                       package = "MDplot" ),
+                          system.file( "extdata/TIcurve_fb_backward_example.txt",
+                          package = "MDplot" ) ) ),
+         invertedBackwards = TRUE )
 }
 \author{Christian Margreitter}
 \keyword{Thermodynamic integration}

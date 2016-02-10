@@ -16,7 +16,7 @@ load_xrmsd(  path,
 }
 \examples{
 # loading
-MDplot::load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) )
+load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{xrmsd}
