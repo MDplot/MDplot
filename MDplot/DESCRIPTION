@@ -11,6 +11,7 @@ Description: Provides automatization for plot generation succeeding common
              also more sophisticated ones such as dihedral angle maps, hydrogen bonds, 
              cluster bar plots and DSSP (Definition of Secondary Structure of Proteins) analysis.
 License: GPL-3
+URL: https://github.com/MDplot/MDplot
 LazyLoad: yes
 Author: Christian Margreitter [aut, cre]
 Maintainer: Christian Margreitter <christian.margreitter@gmail.com>
