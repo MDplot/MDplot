@@ -22,8 +22,8 @@ clusters_ts( clustersDataTS,
   \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
-# see "extdata/clusters_ts_example.txt" for format information
-clusters_ts( load_clusters_ts( system.file( "extdata/clusters_ts_example.txt",
+# see "extdata/clusters_ts_example.txt.gz" for format information
+clusters_ts( load_clusters_ts( system.file( "extdata/clusters_ts_example.txt.gz",
                                package = "MDplot" ),
                                lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) ),
              clustersNumber = 7 )

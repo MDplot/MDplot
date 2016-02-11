@@ -20,10 +20,10 @@ ramachandran( dihedrals,
   \item{dihedrals}{Matrix with angles (two columns) and optional column for heat values.}
   \item{xBins}{Number of bins (default: 150) used to plot (on the x-axis).}
   \item{yBins}{Number of bins (default: 150) used to plot (on the y-axis).}
-  \item{heatFun}{Function selector for calculation of the color, possible are either:
+  \item{heatFun}{Function selector for calculation of the colour, possible are either:
                  \itemize{
                    \item "norm" (default) for linear calculation, or
-                   \item "log"" for logarithmic calculation.
+                   \item "log" for logarithmic calculation.
                          }
                 }
   \item{structureAreas}{List of secondary structure areas, by default there are no regions specified.}
@@ -37,8 +37,8 @@ ramachandran( dihedrals,
 \examples{
 \dontrun{
 # load table and return it into plotting function "MDplot::ramachandran()"
-# see "extdata/ramachandran_example.txt" for format information
-ramachandran( load_ramachandran( system.file( "extdata/ramachandran_example.txt",
+# see "extdata/ramachandran_example.txt.gz" for format information
+ramachandran( load_ramachandran( system.file( "extdata/ramachandran_example.txt.gz",
                                               package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}

@@ -18,8 +18,8 @@ clusters( clusters,
   \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
-# see "extdata/clusters_example.txt" for format information
-clusters( load_clusters( system.file( "extdata/clusters_example.txt",
+# see "extdata/clusters_example.txt.gz" for format information
+clusters( load_clusters( system.file( "extdata/clusters_example.txt.gz",
                                       package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}

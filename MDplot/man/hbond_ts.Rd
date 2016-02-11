@@ -38,10 +38,10 @@ hbond_ts( timeseries,
 \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
-# see "extdata/hbond_example.txt" and "extdata/hbond_ts_example.txt" for format information
-hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example.txt",
+# see "extdata/hbond_example.txt.gz" and "extdata/hbond_ts_example.txt.gz" for format information
+hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz",
                                       package = "MDplot" ) ),
-          load_hbond( system.file( "extdata/hbond_example.txt",
+          load_hbond( system.file( "extdata/hbond_example.txt.gz",
                                    package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}

@@ -17,8 +17,8 @@ load_clusters_ts( path,
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
-# see "extdata/clusters_ts_example.txt" for format information
-load_clusters_ts( system.file( "extdata/clusters_ts_example.txt", package = "MDplot" ),
+# see "extdata/clusters_ts_example.txt.gz" for format information
+load_clusters_ts( system.file( "extdata/clusters_ts_example.txt.gz", package = "MDplot" ),
                   lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) )
 }
 \author{Christian Margreitter}

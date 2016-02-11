@@ -2,7 +2,7 @@
 citEntry( 
           entry  = "phdthesis",
           author = "Christian Margreitter", 
-          title  = "The butterfly effect: molecular dynamics simulations, small and large",
+          title  = "MDplot",
           school = "University of Natural Resources and Life Sciences, Vienna",
           year   = 2015,
           note   = "to be published",

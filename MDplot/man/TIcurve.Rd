@@ -17,14 +17,14 @@ TIcurve( lambdas,
   \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
-# see "extdata/TIcurve_example.txt" for format information
-TIcurve( load_TIcurve( system.file( "extdata/TIcurve_example.txt",
+# see "extdata/TIcurve_example.txt.gz" for format information
+TIcurve( load_TIcurve( system.file( "extdata/TIcurve_example.txt.gz",
                                     package = "MDplot" ) ) )
 
 # forward and backward integration
-TIcurve( load_TIcurve( c( system.file( "extdata/TIcurve_fb_forward_example.txt",
+TIcurve( load_TIcurve( c( system.file( "extdata/TIcurve_fb_forward_example.txt.gz",
                                        package = "MDplot" ),
-                          system.file( "extdata/TIcurve_fb_backward_example.txt",
+                          system.file( "extdata/TIcurve_fb_backward_example.txt.gz",
                           package = "MDplot" ) ) ),
          invertedBackwards = TRUE )
 }
