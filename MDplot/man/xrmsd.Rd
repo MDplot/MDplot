@@ -20,8 +20,8 @@ xrmsd( xrmsdValues,
 }
 \examples{
 \dontrun{
-# see "extdata/xrmsd_example.txt" for format information
-xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example.txt", package = "MDplot" ) ) )
+# see "extdata/xrmsd_example.txt.gz" for format information
+xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example.txt.gz", package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{xrmsd}

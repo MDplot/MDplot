@@ -28,8 +28,8 @@ rmsf( rmsfData,
 }
 \examples{\dontrun{
 # two curves
-rmsf( load_rmsf( c( system.file( "extdata/rmsf1_example.txt", package = "MDplot" ),
-                    system.file( "extdata/rmsf2_example.txt", package = "MDplot" ) ) ) )
+rmsf( load_rmsf( c( system.file( "extdata/rmsf1_example.txt.gz", package = "MDplot" ),
+                    system.file( "extdata/rmsf2_example.txt.gz", package = "MDplot" ) ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{Root-mean-square-fluctuation}

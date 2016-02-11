@@ -37,8 +37,8 @@ ramachandran( dihedrals,
 \examples{
 \dontrun{
 # load table and return it into plotting function "MDplot::ramachandran()"
-# see "extdata/ramachandran_example.txt" for format information
-ramachandran( load_ramachandran( system.file( "extdata/ramachandran_example.txt",
+# see "extdata/ramachandran_example.txt.gz" for format information
+ramachandran( load_ramachandran( system.file( "extdata/ramachandran_example.txt.gz",
                                               package = "MDplot" ) ) )
 }}
 \author{Christian Margreitter}

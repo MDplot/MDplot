@@ -30,8 +30,8 @@ dssp_summary( dsspData,
   \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
-# see "extdata/dssp_summary_example.txt" for format information
-dssp_summary( load_dssp_summary( system.file( "extdata/dssp_summary_example.txt",
+# see "extdata/dssp_summary_example.txt.gz" for format information
+dssp_summary( load_dssp_summary( system.file( "extdata/dssp_summary_example.txt.gz",
                                  package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}

@@ -1,11 +1,13 @@
-import( gtools )
+import( methods )
 import( MASS )
 import( RColorBrewer )
+import( gtools )
 import( gplots )
-import( calibrate )
-import( grDevices )
-import( methods )
-import( lattice )
+importFrom( "graphics", "abline", "axis", "barplot", "contour", "image", "layout",
+            "legend", "lines", "mtext", "par", "persp", "plot", "plot.new",
+            "rasterImage", "segments", "text" )
+importFrom( "stats", "sd" )
+importFrom( "utils", "read.table", "write.table" )
 
 # export plotting functions
 export( 

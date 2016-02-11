@@ -65,10 +65,9 @@ clusters_ts <- function( clustersDataTS,
   {
     layout( matrix( c( 1, 1, 2, 0, 3, 3 ), nrow = 3, byrow = TRUE ),
             widths = c( 1.0,
-                        REAL_widthOfOccurences,
-                        1.0 - REAL_widthOfOccurences,
+                        1 - REAL_widthOfOccurences,
                         1.0 ),
-            heights = c( 0.4, 1.0, 1.0, 1.5 ) )
+            heights = c( 0.4, 1.0, 1.5 ) )
     plot.new()
     mtext( side = 3, padj = 0, cex = 1.45, text = list( ... )[[ "main" ]] )
   }

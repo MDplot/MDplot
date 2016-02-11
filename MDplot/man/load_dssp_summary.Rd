@@ -13,8 +13,8 @@ load_dssp_summary( path,
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
-# see "extdata" for format information and file names
-load_dssp_summary( system.file( "extdata/dssp_summary_example.txt", package = "MDplot" ) )
+# see "extdata/dssp_summary_example.txt.gz" for format information and file names
+load_dssp_summary( system.file( "extdata/dssp_summary_example.txt.gz", package = "MDplot" ) )
 }
 \author{Christian Margreitter}
 \keyword{dssp}

@@ -26,8 +26,8 @@ rmsd( rmsdData,
 }
 \examples{\dontrun{
 # two curves
-rmsd( load_rmsd( c( system.file( "extdata/rmsd1_example.txt", package = "MDplot" ),
-                    system.file( "extdata/rmsd2_example.txt", package = "MDplot" ) ) ) )
+rmsd( load_rmsd( c( system.file( "extdata/rmsd1_example.txt.gz", package = "MDplot" ),
+                    system.file( "extdata/rmsd2_example.txt.gz", package = "MDplot" ) ) ) )
 }}
 \author{Christian Margreitter}
 \keyword{Root-mean-square-deviation}

@@ -14,7 +14,7 @@ load_TIcurve( files,
 }
 \examples{
 # loading
-load_TIcurve( c( system.file( "extdata/TIcurve_example.txt", package = "MDplot" ) ) )
+load_TIcurve( c( system.file( "extdata/TIcurve_example.txt.gz", package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{thermodynamic integration}
