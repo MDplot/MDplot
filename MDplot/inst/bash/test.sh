@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # clusters
-Rscript MDplot_bash.R clusters files=../extdata/clusters_example.txt.gz title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clustersNumber=7 names=WT,variant1a,variantb,variant2,variant3,variant4
+Rscript MDplot_bash.R clusters files=../extdata/clusters_example.txt.gz title="Cluster analysis" size=900,900 outformat=pdf outfile=clusters.pdf clustersNumber=7 names=WT,varianta,variantb,variant2,variant3,variant4
 Rscript MDplot_bash.R clusters help=TRUE
 acroread clusters.pdf &
 
