@@ -3,7 +3,7 @@
 \alias{load_dssp_summary}
 \title{Load DSSP information}
 \description{
-Loads dssp summary output files from a specified directory and combines it into a list.}
+Loads dssp summary output files from a specified directory and combines it into a table.}
 \usage{
 load_dssp_summary( path,
                    mdEngine = "GROMOS" )
