@@ -13,19 +13,19 @@ dssp_summary( dsspData,
               showValues = NA,
               showResidues = NA,
               plotType = "dots",
-              selectedMotifs = NA,
+              selectedElements = NA,
               barePlot = FALSE,
               ... )}
 \arguments{
   \item{dsspData}{Table containing the information on the secondary structure motifs.}
   \item{printLegend}{If \code{TRUE}, a legend is printed on the right hand side of the plot.}
-  \item{useOwnLegend}{If \code{FALSE}, the names of the secondary structure motifs are considered to be in default order.}
-  \item{motifNames}{Vector of names for the secondary structure motifs.}
+  \item{useOwnLegend}{If \code{FALSE}, the names of the secondary structure elements are considered to be in default order.}
+  \item{motifNames}{Vector of names for the secondary structure elements.}
   \item{colours}{A vector of colours, that can be specified to replace the default ones.}
   \item{showValues}{A vector of boundaries for the values (two elements).}
   \item{showResidues}{A vector of boundaries for the residues (two elements).}
   \item{plotType}{Either \code{dots}, \code{curves} or \code{bars}.}
-  \item{selectedMotifs}{A vector of names of the motifs selected for plotting.}
+  \item{selectedElements}{A vector of names of the elements selected for plotting.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }

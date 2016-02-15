@@ -55,3 +55,8 @@ eog hbond_ts.tiff
 Rscript MDplot_bash.R clusters_ts files=../extdata/clusters_ts_example.txt.gz title="CLUSTERS timeseries" size=1500,1500 outformat=png outfile=clusters_ts.png timeUnit=ns lengths=4000,4000,4000,4000,4000,4000 clustersNumber=9
 Rscript MDplot_bash.R clusters_ts help=TRUE
 eog clusters_ts.png
+
+# timeseries
+Rscript MDplot_bash.R timeseries files=../extdata/timeseries_example.txt.gz title="timeseries" size=1500,1500 outformat=tiff outfile=timeseries.tiff timeUnit=ns
+Rscript MDplot_bash.R timeseries help=TRUE
+eog timeseries.tiff

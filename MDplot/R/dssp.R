@@ -1,6 +1,6 @@
 # plot multiple DSSP plots
 dssp_summary_multi <- function( dsspSumMultInput,
-                                selectedMotifs,
+                                selectedElements,
                                 printLegend = FALSE,
                                 colours = NA,
                                 showResidues = NA,
@@ -20,7 +20,7 @@ dssp_summary_multi <- function( dsspSumMultInput,
   }
   #########
   MDplot::dssp_summary( dsspSumMultInput[[ 1 ]][[ "matrix" ]],
-                        selectedMotifs = c( selectedMotifs ),
+                        selectedElements = c( selectedElements ),
                         barePlot = barePlot,
                         plotType = "curves",
                         colours = c( colours[ 1 ] ),
@@ -30,7 +30,7 @@ dssp_summary_multi <- function( dsspSumMultInput,
   {
     par( new = TRUE )
     MDplot::dssp_summary( dsspSumMultInput[[ i ]][[ "matrix" ]],
-                          selectedMotifs = c( selectedMotifs ),
+                          selectedElements = c( selectedElements ),
                           barePlot = TRUE,
                           plotType = "curves",
                           colours = c( colours[ i ] ),
@@ -86,7 +86,7 @@ dssp_summary <- function( dsspData,
                           showValues = NA,
                           showResidues = NA,
                           plotType = "dots",
-                          selectedMotifs = NA,
+                          selectedElements = NA,
                           barePlot = FALSE,
                           ... )
 {
@@ -108,10 +108,10 @@ dssp_summary <- function( dsspData,
                  plotType,
                  " is not known!",
                  sep = "" ) )
-  if( all( is.na( selectedMotifs ) ) )
-    selectedMotifs <- colnames( MAT_data )
+  if( all( is.na( selectedElements ) ) )
+    selectedElements <- colnames( MAT_data )
   MAT_data <- MAT_data[ ,
-                        ifelse( colnames( MAT_data ) %in% selectedMotifs,
+                        ifelse( colnames( MAT_data ) %in% selectedElements,
                                 TRUE,
                                 FALSE ),
                         drop = FALSE ]

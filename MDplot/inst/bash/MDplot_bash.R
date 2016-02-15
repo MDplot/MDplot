@@ -501,6 +501,52 @@ if( STRING_function == "TIcurve" )
                                   NA ) )
 }
 
+if( STRING_function == "timeseries" )
+{
+  # check, if input is sane for this plot and get input files
+  VEC_rmsdAll <- c( "snapshotsPerTimeInt", "timeUnit", "valueUnit", "valueName" )
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( c( VEC_rmsdAll,
+                  VEC_allowedForAll ), LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_rmsdAll,
+                   VEC_allowedForAll ),
+                c( "<factor by which the values should be divided> (default: 1000)",
+                   "<abbreviation of unit used for time-axis> (default: ns)",
+                   "<abbreviation of unit used for response variable> (optional)",
+                   "<name of response variable> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
+  
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  }    
+  
+  # plot
+  MDplot::timeseries( MDplot::load_timeseries( VEC_files ),
+                      names = VEC_dataNames,
+                      snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments, "snapshotsPerTimeInt" ),
+                                                    as.numeric( getValue( LIST_arguments, "snapshotsPerTimeInt" ) ),
+                                                    1000 ),
+                      timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
+                                         getValue( LIST_arguments, "timeUnit" ),
+                                         "ns" ),
+                      valueUnit = ifelse( isKeySet( LIST_arguments, "valueUnit" ),
+                                          getValue( LIST_arguments, "valueUnit" ),
+                                          NA ),
+                      main = ifelse( isKeySet( LIST_arguments, "title" ),
+                                     getValue( LIST_arguments, "title" ),
+                                     NA ) )
+}
+
 
 
 if( STRING_function == "clusters" )
