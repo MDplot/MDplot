@@ -98,11 +98,12 @@ load_rmsd <- function( files,
 # plot RMSD
 rmsd <- function( rmsdData,
                   printLegend = TRUE,
-                  factor = 1000,
+                  snapshotsPerTimeInt = 1000,
                   timeUnit = "ns",
                   rmsdUnit = "nm",
                   colours = NA,
                   names = NA,
+                  legendPosition = "bottomright",
                   barePlot = FALSE,
                   ... )
 {
@@ -121,9 +122,7 @@ rmsd <- function( rmsdData,
     names = 1:( length( rmsdData ) / 2 )
   #########
   
-  # transpose and get rid of first column before you do
   # plot
-  #TS_datainput <- as.ts( MAT_MDplot_RMSD_example[ , -1 ] )
   for( i in 1:length( rmsdData ) )
   {
     if( i %% 2 == 1 )
@@ -150,7 +149,7 @@ rmsd <- function( rmsdData,
   {
     axis( 1,
           at = split_equidistant( c( 1, length( rmsdData[[ 1 ]] ) ), 7 ),
-          labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / factor ) ), 7 ),
+          labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / snapshotsPerTimeInt ) ), 7 ),
           cex.axis = 1 )
     mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
            cex = 1 )
@@ -158,7 +157,7 @@ rmsd <- function( rmsdData,
            cex = 1 )
   }
   if( printLegend && !barePlot )
-    legend( "bottomright",
+    legend( legendPosition,
             title = "Legend",
             legend = names,
             col = colours,

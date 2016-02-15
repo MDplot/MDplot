@@ -22,7 +22,8 @@ export(
          ramachandran,
          xrmsd,
          hbond_ts,
-         clusters_ts
+         clusters_ts,
+         timeseries
          #dssp_summary_multi,
          #rmsd_average
        )
@@ -39,7 +40,8 @@ export(
          load_rmsd,
          load_xrmsd,
          load_hbond_ts,
-         load_clusters_ts
+         load_clusters_ts,
+         load_timeseries
       )
 
 # export data manipulation functions

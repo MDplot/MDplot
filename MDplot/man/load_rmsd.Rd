@@ -3,7 +3,7 @@
 \alias{load_rmsd}
 \title{Loading function for MDplot::rmsd()}
 \description{
-Returns a list of vector pairs of datapoint indices and values.}
+Returns a list of vector pairs of datapoint indices and RMSD values.}
 \usage{
 load_rmsd( files,
            mdEngine = "GROMOS" )

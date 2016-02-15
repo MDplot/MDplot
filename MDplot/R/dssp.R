@@ -281,11 +281,14 @@ dssp_summary <- function( dsspData,
 
 # load the time-series files
 load_dssp_ts <- function( folder,
+                          filenames = NA,
                           mdEngine = "GROMOS" )
 {
-  VEC_gromos_names <- c( "3-Helix", "4-Helix", "5-Helix",
-                         "Bend", "Beta-Bridge", "Beta-Strand",
-                         "Turn" )
+  VEC_gromos_names <- filenames
+  if( is.na( filenames ) )
+    VEC_gromos_names <- c( "3-Helix", "4-Helix", "5-Helix",
+                           "Bend", "Beta-Bridge", "Beta-Strand",
+                           "Turn" )
   STRING_gromos_postfix <- ".out"
   LIST_return <- list()
   for( i in 1:length( VEC_gromos_names ) )

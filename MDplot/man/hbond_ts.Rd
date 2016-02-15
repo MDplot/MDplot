@@ -33,7 +33,7 @@ hbond_ts( timeseries,
 \item{timeUnit}{Specifies the time unit on the x-axis.}
 \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit (see above).}
 \item{timeRange}{Selects a certain time range specified by a vector.}
-\item{hbondIndices}{Select hbonds by their identifiers.}
+\item{hbondIndices}{List, containing vectors to select hbonds by their identifiers.}
 \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
 \item{...}{Additional arguments (ellipsis).}
 }

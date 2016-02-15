@@ -316,7 +316,7 @@ if( STRING_function == "rmsf" )
 if( STRING_function == "rmsd" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_rmsdAll <- c( "factor", "timeUnit", "rmsdUnit" )
+  VEC_rmsdAll <- c( "snapshotsPerTimeInt", "timeUnit", "rmsdUnit" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_rmsdAll,
                   VEC_allowedForAll ), LIST_arguments )
@@ -344,9 +344,9 @@ if( STRING_function == "rmsd" )
   # plot
   MDplot::rmsd( MDplot::load_rmsd( VEC_files ),
                 names = VEC_dataNames,
-                factor = ifelse( isKeySet( LIST_arguments, "factor" ),
-                                 as.numeric( getValue( LIST_arguments, "factor" ) ),
-                                 1000 ),
+                snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments, "snapshotsPerTimeInt" ),
+                                              as.numeric( getValue( LIST_arguments, "snapshotsPerTimeInt" ) ),
+                                              1000 ),
                 timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
                                    getValue( LIST_arguments, "timeUnit" ),
                                    "ns" ),

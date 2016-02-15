@@ -28,6 +28,7 @@ rmsf <- function( rmsfData,
                   numberXLabels = 7,
                   names = NA,
                   range = NA,
+                  legendPosition = "topright",
                   barePlot = FALSE,
                   ... )
 {
@@ -97,7 +98,7 @@ rmsf <- function( rmsfData,
   
   # plot the rest
   if( printLegend && !barePlot )
-    legend( "topright",
+    legend( legendPosition,
             title = "Legend",
             legend = names,
             col = colours,

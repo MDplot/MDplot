@@ -3,7 +3,7 @@
 \alias{load_rmsf}
 \title{Loading function for MDplot::rmsf()}
 \description{
-Returns a list of vector pairs of datapoint indices and values.}
+Returns a list of vector pairs of datapoint indices and RMSF values.}
 \usage{
 load_rmsf( files,
            mdEngine = "GROMOS" )

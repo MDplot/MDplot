@@ -31,7 +31,7 @@ hbond_ts <- function( timeseries,
   if( all( is.na( donorRange ) ) )
     donorRange <- c( min( summary[ , 2 ] ), max( summary[ , 2 ] ) )
   if( all( is.na( hbondIndices ) ) )
-    hbondIndices <- c( min( summary[ , 1 ] ), max( summary[ , 1 ] ) )
+    hbondIndices <- list( c( min( summary[ , 1 ] ), max( summary[ , 1 ] ) ) )
   #########
 
   # select the hbond-IDs of those hbonds, that match all criteria
@@ -41,10 +41,19 @@ hbond_ts <- function( timeseries,
     if( summary[ i, 2 ] >= donorRange[ 1 ] &&
         summary[ i, 2 ] <= donorRange[ 2 ] &&
         summary[ i, 4 ] >= acceptorRange[ 1 ] &&
-        summary[ i, 4 ] <= acceptorRange[ 2 ] &&
-        summary[ i, 1 ] >= hbondIndices[ 1 ] &&
-        summary[ i, 1 ] <= hbondIndices[ 2 ] )
-      VEC_hbondIDs <- c( VEC_hbondIDs, i )
+        summary[ i, 4 ] <= acceptorRange[ 2 ] )
+    {
+      BOOL_add <- FALSE
+      for( j in 1:length( hbondIndices ) )
+      {
+        VEC_hbondIndCur <- hbondIndices[[ j ]]
+        if( summary[ i, 1 ] >= VEC_hbondIndCur[ 1 ] &&
+            summary[ i, 1 ] <= VEC_hbondIndCur[ 2 ] )
+          BOOL_add <- TRUE
+      }
+      if( BOOL_add )
+        VEC_hbondIDs <- c( VEC_hbondIDs, i )
+    }
   }
   #########
 

@@ -1,0 +1,10 @@
+Version: 0.3
+Date: 2016-02-15
+
+o added multiple vector selection by hydrogen bond identifiers to function 'hbond_ts()'
+o added argument 'printValues' functionality to function 'TIcurve()'
+o removed hard-coding for the filenames of function 'load_dssp_ts()'
+o included new functions 'load_timeseries()' and 'timeseries()'
+o added argument 'legendPosition' to functions 'rmsd()' and 'rmsf()'
+o added labels for axes for function 'xrmsd()'
+------------------------

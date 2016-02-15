@@ -12,10 +12,11 @@ rmsf( rmsfData,
       numberXLabels = 7,
       names = NA,
       range = NA,
+      legendPosition = "topright",
       barePlot = FALSE,
       ... )}
 \arguments{
-  \item{rmsfData}{List of (alterating) atom numbers and rmsf values, as also produced by \code{MDplot::load_rmsf()} for example.}
+  \item{rmsfData}{List of (alterating) atom numbers and rmsf values, as also produced by \code{load_rmsf()} for example.}
   \item{printLegend}{Boolean, which triggers plotting of the legend.}
   \item{rmsfUnit}{Specifies, which unit the y-axis is given in.}
   \item{colours}{Vector of colours used for plotting.}
@@ -23,6 +24,7 @@ rmsf( rmsfData,
   \item{numberXLabels}{Specifies, how many ticks are used on the x-axis.}
   \item{names}{Vector of the names of the trajectories.}
   \item{range}{Range of residues to be plotted.}
+  \item{legendPosition}{Indicate position of legend: either "bottomright", "bottomleft", "topleft" or "topright".}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }

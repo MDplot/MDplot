@@ -44,7 +44,6 @@ xrmsd <- function( xrmsdValues,
   #########
   
   # colour values accordingly
-  par( mar = c( 2.5, 2.5, 2.5, 0.5 ) )
   if( printLegend )
     layout( matrix( 1:2, ncol = 2 ), widths = c( 2, 1 ), heights = c( 1, 1 ) )
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
@@ -61,6 +60,7 @@ xrmsd <- function( xrmsdValues,
                             ( yaxisRange[ 2 ] - yaxisRange[ 1 ] ) ) ),
         xaxs = "i", yaxs = "i",
         xlim = xaxisRange, ylim = yaxisRange,
+        xlab = "conformation", ylab = "conformation",
         ... )
   #########
   

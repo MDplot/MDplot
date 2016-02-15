@@ -12,6 +12,7 @@ load_TIcurve <- function( files,
 TIcurve <- function( lambdas,
                      invertedBackwards = FALSE,
                      energyUnit = "kJ/mol",
+                     printValues = TRUE,
                      barePlot = FALSE,
                      ... )
 {
@@ -36,7 +37,7 @@ TIcurve <- function( lambdas,
   
   # set proper outer margins and plot it
   if( !barePlot )
-    if( length( lambdas ) > 1 )
+    if( length( lambdas ) > 1 && printValues )
       par( oma = c( 3.25, 3.00, 0.45, 0.0 ) )
     else
       par( oma = c( 1.35, 3.00, 0.45, 0.0 ) )
@@ -96,7 +97,7 @@ TIcurve <- function( lambdas,
   INT_significantForward <- get_sign_digits( REAL_forward_error )
   REAL_forward_integral_rounded <- round( REAL_forward_integral, digits = INT_significantForward )
   REAL_forward_error_rounded <- round( REAL_forward_error, digits = INT_significantForward )
-  if( !barePlot )
+  if( !barePlot && printValues )
     mtext( side = 1, line = 4.75, cex = 1.0,
            adj = 1,
            text = substitute( paste( Delta, "G"["forw"], " = ",
@@ -108,7 +109,7 @@ TIcurve <- function( lambdas,
                                             energyUnit,
                                             "]",
                                             sep = "" ) ) ) )
-  if( length( lambdas ) > 1 && !barePlot )
+  if( length( lambdas ) > 1 && !barePlot && printValues )
   {
     REAL_backward_integral <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "integral" ] )
     REAL_backward_error <- unlist( integrate_curve( lambdas[[ 2 ]] )[ "error" ] )
