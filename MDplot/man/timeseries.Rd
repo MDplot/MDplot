@@ -16,7 +16,7 @@ timeseries( tsData,
             barePlot = FALSE,
             ... )}
 \arguments{
-  \item{tsData}{List of (alterating) indices and response values, as also produced by \code{load_timeseries()} for example.}
+  \item{tsData}{List of (alterating) indices and response values, as also produced by \code{\link{load_timeseries}()} for example.}
   \item{printLegend}{Boolean, which triggers plotting of the legend.}
   \item{snapshotsPerTimeInt}{Number, specifying how many snapshots are within one \code{timeUnit}.}
   \item{timeUnit}{Specifies, which unit the x-axis is given in.}
@@ -24,7 +24,7 @@ timeseries( tsData,
   \item{valueUnit}{Specifies, which unit the y-axis is given in.}
   \item{colours}{Vector of colours used for plotting.}
   \item{names}{Vector of the names of the trajectories.}
-  \item{legendPosition}{Indicate position of legend: either "bottomright", "bottomleft", "topleft" or "topright".}
+  \item{legendPosition}{Indicate position of legend: either "\code{bottomright}", "\code{bottomleft}", "\code{topleft}" or "\code{topright}".}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }

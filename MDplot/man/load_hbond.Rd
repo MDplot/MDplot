@@ -8,7 +8,7 @@ This function loads hydrogen bond information from a plain text file and stores 
 load_hbond( path,
             mdEngine = "GROMOS" ) }
 \arguments{
-  \item{path}{Specified the path of the text input file.}
+  \item{path}{Specifies the path of the text input file.}
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{

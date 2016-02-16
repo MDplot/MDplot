@@ -1,7 +1,7 @@
 %  Copyright (C) 2015 Christian Margreitter
 \name{load_TIcurve}
 \alias{load_TIcurve}
-\title{Loading function for thermodynamic integration function TIcurve}
+\title{Loading function for thermodynamic integration function \code{\link{TIcurve}()}}
 \description{
 Returns a list of matrices holding three columns (lambda state point, value and error) for every file.}
 \usage{

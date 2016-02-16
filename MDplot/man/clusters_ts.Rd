@@ -13,12 +13,12 @@ clusters_ts( clustersDataTS,
              snapshotsPerTimeInt = 1000,
              ... )}
 \arguments{
-  \item{clustersDataTS}{List of cluster information as provided by \code{MDplot::load_clusters_ts()}, the associated loading function.}
+  \item{clustersDataTS}{List of cluster information as provided by \code{\link{load_clusters_ts}()}, the associated loading function.}
   \item{clustersNumber}{Integer, specifying the number of clusters that is to be plotted.}
   \item{selectTraj}{Vector of indices of trajectories that are to be plotted (as given in the input file).}
   \item{selectTime}{Range of time in snapshots, which is to be plotted.}
   \item{timeUnit}{Abbreviation of time unit.}
-  \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit (see above).}
+  \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit.}
   \item{...}{Additional arguments (ellipsis).}
 }
 \examples{

@@ -1,7 +1,7 @@
 %  Copyright (C) 2015 Christian Margreitter
 \name{load_timeseries}
 \alias{load_timeseries}
-\title{Loading function for MDplot::timeseries()}
+\title{Loading function for \code{\link{timeseries}()}}
 \description{
 Returns a list of vector pairs of datapoint indices and values.}
 \usage{

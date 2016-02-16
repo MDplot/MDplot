@@ -1,7 +1,7 @@
 %  Copyright (C) 2015 Christian Margreitter
 \name{load_rmsf}
 \alias{load_rmsf}
-\title{Loading function for MDplot::rmsf()}
+\title{Loading function for \code{\link{rmsf}()}}
 \description{
 Returns a list of vector pairs of datapoint indices and RMSF values.}
 \usage{

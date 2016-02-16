@@ -21,8 +21,8 @@ hbond_ts( timeseries,
           ... )
 }
 \arguments{
-\item{timeseries}{Table, containing the timeseries information (e.g. produced by MDplot::load_hbond_ts()).}
-\item{summary}{Table, containing the summary information (e.g. produced by MDplot::load_hbond()).}
+\item{timeseries}{Table, containing the timeseries information (e.g. produced by \code{\link{load_hbond_ts}()}).}
+\item{summary}{Table, containing the summary information (e.g. produced by \code{\link{load_hbond}()}).}
 \item{acceptorRange}{Vector of acceptor resdiues, which are to be plotted.}
 \item{donorRange}{Vector of donor residues, which are to be plotted.}
 \item{plotOccurences}{Specifies, whether the overall summary should also be plotted in a subplot on the right hand side.}

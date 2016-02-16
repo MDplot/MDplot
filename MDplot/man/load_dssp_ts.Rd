@@ -3,7 +3,7 @@
 \alias{load_dssp_ts}
 \title{Load DSSP timeseries}
 \description{
-Loads DSSP output files from a specified directory and combines it into a list suited for \code{dssp_ts()}.}
+Loads DSSP output files from a specified directory and combines it into a list suited for \code{\link{dssp_ts}()}.}
 \usage{
 load_dssp_ts( folder,
               filenames = NA,

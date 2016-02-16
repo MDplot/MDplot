@@ -1,9 +1,9 @@
 %  Copyright (C) 2015 Christian Margreitter
 \name{load_xrmsd}
 \alias{load_xrmsd}
-\title{Loading function for MDplot::xrmsd()}
+\title{Loading function for \code{\link{xrmsd}()}}
 \description{
-Loads matrix information from the specified file. Caution: the function is in beta-state and extremely sensitive to format changes.}
+Loads matrix information from the specified file.}
 \usage{
 load_xrmsd(  path,
              factor = 10000,

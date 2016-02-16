@@ -1,16 +1,13 @@
 # load ramachandran data into a matrix, select columns
 load_ramachandran <- function( path,
                                angleColumns = c( 1, 2 ),
-                               heatColumn = NA,
                                shiftAngles = NA,
                                mdEngine = "GROMOS" )
 {
   
   # load and parse matrix, return result
   MAT_buffer <- as.matrix( read.table( path ) )
-  if( ncol( MAT_buffer ) < ifelse( is.na( heatColumn ),
-                                   max( angleColumns ),
-                                   max( angleColumns, heatColumn ) ) )
+  if( ncol( MAT_buffer ) < max( angleColumns ) )
     stop( paste( "Error while loading and parsing file '",
                  path, "' since the number of columns is less than ",
                  "the maximum column number specified.",
@@ -21,8 +18,6 @@ load_ramachandran <- function( path,
     MAT_input[ , 1 ] <- MAT_input[ , 1 ] + shiftAngles
     MAT_input[ , 2 ] <- MAT_input[ , 2 ] + shiftAngles
   }
-  if( !is.na( heatColumn ) )
-    MAT_input <- cbind( MAT_input, MAT_buffer[ , heatColumn ] )
   return( MAT_input )
 }
 

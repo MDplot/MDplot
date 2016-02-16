@@ -1,9 +1,9 @@
 %  Copyright (C) 2015 Christian Margreitter
 \name{load_clusters_ts}
 \alias{load_clusters_ts}
-\title{Loading time-series cluster information}
+\title{Loading timeseries cluster information}
 \description{
-This function loads the time-series information for clusters from a plain text file and stores them in a list. The trajectories can be named by the user.}
+This function loads the timeseries information for clusters from a plain text file and stores them in a list. The trajectories can be named by the user.}
 \usage{
 load_clusters_ts( path,
                   lengths,  

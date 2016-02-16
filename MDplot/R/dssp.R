@@ -81,7 +81,7 @@ load_dssp_summary <- function( path,
 dssp_summary <- function( dsspData,
                           printLegend = FALSE,
                           useOwnLegend = FALSE,
-                          motifNames = NA,
+                          elementNames = NA,
                           colours = NA,
                           showValues = NA,
                           showResidues = NA,
@@ -116,14 +116,14 @@ dssp_summary <- function( dsspData,
                                 FALSE ),
                         drop = FALSE ]
   if( useOwnLegend )
-    if( all( is.na( motifNames ) ) ||
-        length( motifNames ) != ncol( MAT_data ) )
+    if( all( is.na( elementNames ) ) ||
+        length( elementNames ) != ncol( MAT_data ) )
       stop( "Error while trying to name the columns in the input matrix ",
-            "according to specification, since either no 'motifNames' has been ",
+            "according to specification, since either no 'elementNames' has been ",
             "supplied or it has the wrong length!",
             sep = "" )
     else
-      colnames( MAT_data ) <- motifNames
+      colnames( MAT_data ) <- elementNames
   #########
   
   # if certain range of residues is to be shown, remove the rest
