@@ -3,7 +3,7 @@ Version: 0.3
 Date: 2016-02-15
 Authors@R: person( given = "Christian", family = "Margreitter",
                    email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) )
-Title: Visualizing Molecular Dynamics Analysis
+Title: Visualizing Molecular Dynamics Analyses
 Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools
 Description: Provides automatization for plot generation succeeding common 
              molecular dynamics analyses. This includes straightforward plots, such 
