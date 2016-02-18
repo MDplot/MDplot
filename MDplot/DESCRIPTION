@@ -5,11 +5,11 @@ Authors@R: person( given = "Christian", family = "Margreitter",
                    email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) )
 Title: Visualizing Molecular Dynamics Analyses
 Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools
-Description: Provides automatization for plot generation succeeding common 
-             molecular dynamics analyses. This includes straightforward plots, such 
-             as RMSD (Root-Mean-Square-Deviation) and RMSF (Root-Mean-Square-Fluctuation) but 
-             also more sophisticated ones such as dihedral angle maps, hydrogen bonds, 
-             cluster bar plots and DSSP (Definition of Secondary Structure of Proteins) analysis.
+Description: Provides automatization for plot generation succeeding common molecular dynamics analyses.
+             This includes straightforward plots, such as RMSD (Root-Mean-Square-Deviation) and
+             RMSF (Root-Mean-Square-Fluctuation) but also more sophisticated ones such as
+             dihedral angle maps, hydrogen bonds, cluster bar plots and
+             DSSP (Definition of Secondary Structure of Proteins) analysis.
 License: GPL-3
 URL: https://github.com/MDplot/MDplot
 LazyLoad: yes
