@@ -37,6 +37,7 @@ timeseries <- function( tsData,
                         valueName = NA,
                         valueUnit = NA,
                         colours = NA,
+                        numberXLabels = 5,
                         names = NA,
                         legendPosition = "bottomright",
                         barePlot = FALSE,
@@ -94,8 +95,8 @@ timeseries <- function( tsData,
   if( !barePlot )
   {
     axis( 1,
-          at = split_equidistant( c( 1, length( tsData[[ 1 ]] ) ), 7 ),
-          labels = split_equidistant( c( 1, ( length( tsData[[ 1 ]] ) / snapshotsPerTimeInt ) ), 7 ),
+          at = split_equidistant( c( 1, length( tsData[[ 1 ]] ) ), numberXLabels ),
+          labels = split_equidistant( c( 1, ( length( tsData[[ 1 ]] ) / snapshotsPerTimeInt ) ), numberXLabels ),
           cex.axis = 1 )
     mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
            cex = 1 )

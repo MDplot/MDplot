@@ -31,7 +31,6 @@ Rscript MDplot_bash.R rmsf help=TRUE
 eog RMSF.tiff &
 
 # DSSP summary
-# done
 Rscript MDplot_bash.R dssp_summary files=../extdata/dssp_summary_example.txt.gz title="DSSP summary" size=900,750 outformat=pdf outfile=DSSP_summary.pdf printLegend=TRUE plotType=bars
 Rscript MDplot_bash.R dssp_summary help=TRUE
 acroread DSSP_summary.pdf &
@@ -47,7 +46,7 @@ Rscript MDplot_bash.R xrmsd help=TRUE
 acroread XRMSD.pdf &
 
 # hbond timeseries
-Rscript MDplot_bash.R hbond_ts files=../extdata/hbond_ts_example.txt.gz,../extdata/hbond_example.txt.gz namesToSingle=TRUE acceptorRange=61,64 donorRange=64,72 title="HBOND timeseries" size=1450,950 plotOccurences=TRUE outformat=tiff printNames=TRUE printAtoms=TRUE outfile=hbond_ts.tiff
+Rscript MDplot_bash.R hbond_ts files=../extdata/hbond_ts_example.txt.gz,../extdata/hbond_example.txt.gz namesToSingle=TRUE hbondIndices=24,57 title="HBOND timeseries" size=1450,950 plotOccurences=TRUE outformat=tiff printNames=TRUE printAtoms=TRUE outfile=hbond_ts.tiff
 Rscript MDplot_bash.R hbond_ts help=TRUE
 eog hbond_ts.tiff
 
@@ -57,6 +56,6 @@ Rscript MDplot_bash.R clusters_ts help=TRUE
 eog clusters_ts.png
 
 # timeseries
-Rscript MDplot_bash.R timeseries files=../extdata/timeseries_example.txt.gz title="timeseries" size=1500,1500 outformat=tiff outfile=timeseries.tiff timeUnit=ns
+Rscript MDplot_bash.R timeseries files=../extdata/timeseries_example.txt.gz title="timeseries" size=1500,1500 outformat=tiff outfile=timeseries.tiff timeUnit=ns snapshotsPerTimeInt=10
 Rscript MDplot_bash.R timeseries help=TRUE
 eog timeseries.tiff

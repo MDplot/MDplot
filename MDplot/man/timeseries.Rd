@@ -11,6 +11,7 @@ timeseries( tsData,
             valueName = NA,
             valueUnit = NA,
             colours = NA,
+            numberXLabels = 5,
             names = NA,
             legendPosition = "bottomright",
             barePlot = FALSE,
@@ -23,6 +24,7 @@ timeseries( tsData,
   \item{valueName}{Name of response variable.}
   \item{valueUnit}{Specifies, which unit the y-axis is given in.}
   \item{colours}{Vector of colours used for plotting.}
+  \item{numberXLabels}{Specifies, how many ticks are used on the x-axis.}
   \item{names}{Vector of the names of the trajectories.}
   \item{legendPosition}{Indicate position of legend: either "\code{bottomright}", "\code{bottomleft}", "\code{topleft}" or "\code{topright}".}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
