@@ -8,6 +8,8 @@ TIcurve( lambdas,
          invertedBackwards = FALSE,
          energyUnit = "kJ/mol",
          printValues = TRUE,
+         printErrors = TRUE,
+         errorBarThreshold = 0,
          barePlot = FALSE,
          ... )}
 \arguments{
@@ -15,6 +17,8 @@ TIcurve( lambdas,
   \item{invertedBackwards}{In case a forward and backward TI have been performed and the lambda points are enumerated reversely (i.e. 0.3 of one TI is equivalent to 0.7 of the other), this flag can be set to be \code{TRUE} in order to automatically mirror the values appropriately.}
   \item{energyUnit}{Defines the energy unit used for the plot.}
   \item{printValues}{Boolean, indicating whether the computed values are to be plotted.}
+  \item{printErrors}{Boolean, indicating whether error bars are to be plotted.}
+  \item{errorBarThreshold}{If the error at a given lambda point is below this theshold, it is not plotted.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }

@@ -1,3 +1,5 @@
+
+
 # load the lambda point information here
 load_TIcurve <- function( files,
                           mdEngine = "GROMOS" )
@@ -13,6 +15,8 @@ TIcurve <- function( lambdas,
                      invertedBackwards = FALSE,
                      energyUnit = "kJ/mol",
                      printValues = TRUE,
+                     printErrors = TRUE,
+                     errorBarThreshold = 0,
                      barePlot = FALSE,
                      ... )
 {
@@ -78,10 +82,24 @@ TIcurve <- function( lambdas,
                       pch = 19, cex = 0.6,
                       col = VEC_colours[ i ],
                       ... )
-  plot_segments( lambdas[[ i ]][ , 1:2 ],
-                 lambdas[[ i ]][ , 3 ],
-                 0.01,
-                 col = VEC_colours[ i ] )
+  if( printErrors )
+  {
+    MAT_positions <- lambdas[[ i ]][ , 1:2 ]
+    VEC_errors <- lambdas[[ i ]][ , 3 ]
+    for( j in nrow( MAT_positions ):1 )
+    {
+      if( VEC_errors[ j ] <= errorBarThreshold )
+      {
+        VEC_errors <- VEC_errors[ -j ]
+        MAT_positions <- MAT_positions[ -j, ]
+      }
+    }
+    VEC_curColours <- rep( VEC_colours[ i ], times = nrow( MAT_positions ) )
+    plot_segments( MAT_positions,
+                   VEC_errors,
+                   0.01,
+                   col = VEC_curColours )
+  }
   par( new = TRUE )
   plot( lambdas[[ i ]],
         ylim = VEC_valueLimits, yaxt = "n", ylab = "",

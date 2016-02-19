@@ -1,3 +1,10 @@
+Version: 0.31
+Date: 2016-XX-YY
+
+o added 'printErrors' flag to function 'TIcurve()'
+o added 'errorBarThreshold' flag to function 'TIcurve()'
+------------------------
+
 Version: 0.3
 Date: 2016-02-15
 
@@ -7,5 +14,5 @@ o removed hard-coding for the filenames of function 'load_dssp_ts()'
 o included new functions 'load_timeseries()' and 'timeseries()'
 o added argument 'legendPosition' to functions 'rmsd()' and 'rmsf()'
 o added labels for axes for function 'xrmsd()'
-o renamed title ("Anaylses") to comply with the publication title
+o renamed title ("Analyses") to comply with the publication title
 ------------------------

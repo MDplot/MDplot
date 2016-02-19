@@ -27,7 +27,7 @@ Date: 2016-02-15
 * included new functions 'load_timeseries()' and 'timeseries()'
 * added argument 'legendPosition' to functions 'rmsd()' and 'rmsf()'
 * added labels for axes for function 'xrmsd()'
-* renamed title ("Anaylses") to comply with the publication title
+* renamed title ("Analyses") to comply with the publication title
 
 ## Outlook
 1. support for other MD engines such as GROMACS, NAMD, CHARMM, ...
