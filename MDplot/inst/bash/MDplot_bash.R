@@ -454,7 +454,7 @@ if( STRING_function == "ramachandran" )
 if( STRING_function == "TIcurve" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_TIcAll <- c( "invertedBackwards" )
+  VEC_TIcAll <- c( "invertedBackwards", "printValues", "printErrors", "errorBarThreshold" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_TIcAll,
                   VEC_allowedForAll ),
@@ -466,6 +466,9 @@ if( STRING_function == "TIcurve" )
                 c( VEC_TIcAll,
                    VEC_allowedForAll),
                 c( "<if 'TRUE', the backward points are inverted> (optional)",
+                   "<sets, whether the values are to be plotted> (default: TRUE)",
+                   "<sets, whether the error bars are to be plotted> (default: TRUE)",
+                   "<sets a threshold, below which the error bars are not plotted> (default: 0)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -485,6 +488,15 @@ if( STRING_function == "TIcurve" )
   # plot
   MDplot::TIcurve( MDplot::load_TIcurve( VEC_files ),
                    invertedBackwards = BOOL_inverted,
+                   printValues = ifelse( isKeySet( LIST_arguments, "printValues" ),
+                                         FALSE,
+                                         TRUE ),
+                   printErrors = ifelse( isKeySet( LIST_arguments, "printErrors" ),
+                                         FALSE,
+                                         TRUE ),
+                   errorBarThreshold = ifelse( isKeySet( LIST_arguments, "errorBarThreshold" ),
+                                               getValue( LIST_arguments, "errorBarThreshold" ),
+                                               0 ),
                    main = ifelse( isKeySet( LIST_arguments, "title" ),
                                   getValue( LIST_arguments, "title" ),
                                   NA ) )
