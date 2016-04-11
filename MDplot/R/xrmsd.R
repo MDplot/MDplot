@@ -29,6 +29,7 @@ xrmsd <- function( xrmsdValues,
                    xaxisRange = NA,
                    yaxisRange = NA,
                    colours = NA,
+                   barePlot = FALSE,
                    ... )
 {
   
@@ -42,6 +43,17 @@ xrmsd <- function( xrmsdValues,
   colours <- c( 0, 
                 max( xrmsdValues[ , 3 ] ) )
   #########
+
+  defaultArguments <- list( xlab = ifelse( barePlot,
+                                           "",
+                                           "conformation" ),
+                            ylab = ifelse( barePlot,
+                                           "",
+                                           "conformation" ),
+                            main = "" )
+  ellipsis <- list( ... )
+  defaultArguments[ names( ellipsis ) ] <- ellipsis
+  ellipsis[ names( defaultArguments ) ] <- defaultArguments
   
   # colour values accordingly
   if( printLegend )
@@ -52,16 +64,16 @@ xrmsd <- function( xrmsdValues,
   #########
   
   # plot the heatmap thing
-  plot( xrmsdValues[ , 1:2 ],
-        col = VEC_coloursPlot,
-        bg = VEC_coloursPlot,
-        pch = 22,
-        cex = 2.75 / log( ( ( xaxisRange[ 2 ] - xaxisRange[ 1 ] ) *
-                            ( yaxisRange[ 2 ] - yaxisRange[ 1 ] ) ) ),
-        xaxs = "i", yaxs = "i",
-        xlim = xaxisRange, ylim = yaxisRange,
-        xlab = "conformation", ylab = "conformation",
-        ... )
+  do.call( what = plot,
+           c( list( xrmsdValues[ , 1:2 ],
+                    col = VEC_coloursPlot,
+                    bg = VEC_coloursPlot,
+                    pch = 22,
+                    cex = 2.75 / log( ( ( xaxisRange[ 2 ] - xaxisRange[ 1 ] ) *
+                                        ( yaxisRange[ 2 ] - yaxisRange[ 1 ] ) ) ),
+                    xaxs = "i", yaxs = "i",
+                    xlim = xaxisRange, ylim = yaxisRange ),
+                    ellipsis ) )
   #########
   
   # print legend in case it is specified
