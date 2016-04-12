@@ -94,7 +94,7 @@ clusters_ts <- function( clustersDataTS,
                       xaxs = "i", yaxt = "n", xlab = "",
                       yaxs = "i", yaxt = "n", ylab = "populations",
                       bty = "n",
-                      col = COLOURS_clusters )
+                      col = COLOURS_clusters, cex.lab = 1.45 )
   mtext( sapply( VEC_occurences,
                  FUN = function( x ) paste( round( x, digits = 1 ),
                                             "%" ), 
@@ -128,14 +128,16 @@ clusters_ts <- function( clustersDataTS,
                          snapshotsPerTimeInt,
                          1 ),
         tick = FALSE,
-        line = -0.45 )
+        line = -0.45,
+        cex.axis = 1.25 )
   axis( 2,
         at = 1:length( clustersDataTS ),
         labels = unlist( lapply( clustersDataTS,
                                 function( x ) x[[ 1 ]] ) ),
         tick = FALSE,
-        las = 1 )
-  mtext( side = 1, line = 2.0, cex = 1.25,
+        las = 1,
+        cex.axis = 1.25 )
+  mtext( side = 1, line = 2.25, cex = 1,
          text = paste( "time [",
                        ifelse( is.na( timeUnit ),
                                "snapshots",

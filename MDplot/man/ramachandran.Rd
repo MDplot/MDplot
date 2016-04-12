@@ -17,7 +17,7 @@ ramachandran( dihedrals,
               barePlot = FALSE,
               ... )}
 \arguments{
-  \item{dihedrals}{Matrix with angles (two columns) and optional column for heat values.}
+  \item{dihedrals}{Matrix with angles (two columns).}
   \item{xBins}{Number of bins (default: 150) used to plot (on the x-axis).}
   \item{yBins}{Number of bins (default: 150) used to plot (on the y-axis).}
   \item{heatFun}{Function selector for calculation of the colour, possible are either:
