@@ -64,7 +64,8 @@ export(
          plot_segments,
          get_sign_digits,
          fill_bins,
-         print_help
+         print_help,
+         setNumberDigits
       )
 
 # export classes

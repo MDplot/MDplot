@@ -41,9 +41,9 @@ clusters_ts <- function( clustersDataTS,
   # in addition, generate the fake plotting matrix for the timeseries plot to generate the properly spanned area
   if( is.na( clustersNumber ) )
     clustersNumber <- max( unlist( lapply( clustersDataTS, FUN = function( x ) unlist( x[[ 2 ]] ) ) ) )
-  if( !is.na( selectTraj ) )
+  if( all( !is.na( selectTraj ) ) )
     clustersDataTS <- clustersDataTS[ selectTraj ] 
-  if( !is.na( selectTime ) )
+  if( all( !is.na( selectTime ) ) )
     for( i in 1:length( clustersDataTS ) )
       clustersDataTS[[ i ]][[ 2 ]] <- clustersDataTS[[ i ]][[ 2 ]][ selectTime[ 1 ]:selectTime[ 2 ] ]
   INT_maxSnapshots <- max( unlist( lapply( clustersDataTS, FUN = function( x ) length( unlist( x[[ 2 ]] ) ) ) ) )
@@ -87,6 +87,16 @@ clusters_ts <- function( clustersDataTS,
   for( i in 1:clustersNumber )
     VEC_occurences <- c( VEC_occurences,
                          sum( VEC_allClusterIDs == i ) / length( VEC_allClusterIDs ) * 100 )
+  MAT_printResults <- matrix( setNumberDigits( VEC_occurences,
+                                               2 ),
+                              ncol = length( VEC_occurences ) )
+  VEC_colNames <- c()
+  for( i in 1:length( VEC_occurences ) )
+    VEC_colNames <- c( VEC_colNames,
+                       paste( "cluster",
+                              i,
+                              sep = "" ) )
+  colnames( MAT_printResults ) <- VEC_colNames
   #########
   
   # plot the top plot: all the occurences in percents
@@ -148,19 +158,33 @@ clusters_ts <- function( clustersDataTS,
   
   # plot the coloured lines representing the cluster occurences over time here
   if( length( clustersDataTS ) > 1 )
+  {
     for( i in 1:length( clustersDataTS ) )
     {
+      VEC_trajOccurences <- c()
       VEC_clusterIDs <- unlist( clustersDataTS[[ i ]][[ 2 ]] )
       VEC_xTicks <- seq( 1, length( clustersDataTS[[ i ]][[ 2 ]] ) )
       for( j in 1:clustersNumber )
+      {
         segments( VEC_xTicks[ VEC_clusterIDs == j ],
                   rep( i - 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
                   VEC_xTicks[ VEC_clusterIDs == j ],
                   rep( i + 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
                   lwd = 0.65,
                   col = COLOURS_clusters[ j ] )
+        VEC_trajOccurences <- c( VEC_trajOccurences,
+                                 length( VEC_clusterIDs[ VEC_clusterIDs == j ] ) / length( VEC_clusterIDs ) * 100 )
+      }
+      MAT_printResults <- rbind( MAT_printResults,
+                                 setNumberDigits( VEC_trajOccurences,
+                                                  2 ) )
     }
+    rownames( MAT_printResults ) <- c( "overall",
+                                       unlist( lapply( clustersDataTS, function( x ) x[[ 1 ]] ) ) )
+  }
   #########
+  
+  return( MAT_printResults )
 }
 
 # load function for "MDplot_clusters"
@@ -199,6 +223,7 @@ clusters <- function( clusters,
   colnames( clusters ) <- 1:ncol( clusters )
   #########
   
+  # plot clusters
   PALETTE_clusters <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   COLOURS_CLUSTERS <- PALETTE_clusters( nrow( clusters ) )
   defaultArguments <- list( xlab = ifelse( barePlot, "", "clusters" ),
@@ -217,4 +242,13 @@ clusters <- function( clusters,
             title = legendTitle, box.lty = 0, box.lwd = 0, 
             col = COLOURS_CLUSTERS, pch = 19, cex = 1.25 )
   #########
+  
+  VEC_clusterNames <- c()
+  for( i in 1:ncol( clusters ) )
+    VEC_clusterNames <- c( VEC_clusterNames,
+                           paste( "cluster",
+                                  i,
+                                  sep = "" ) )
+  colnames( clusters ) <- VEC_clusterNames
+  return( clusters )
 }

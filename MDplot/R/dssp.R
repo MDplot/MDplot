@@ -277,6 +277,8 @@ dssp_summary <- function( dsspData,
             pt.cex = 1.45 )
   }
   #########
+  
+  return( MAT_data )
 }
 
 # load the time-series files

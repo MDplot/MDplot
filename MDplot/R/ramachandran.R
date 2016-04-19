@@ -262,4 +262,6 @@ ramachandran <- function( dihedrals,
     rasterImage( legend_image, 0, 0, 1, 1 )
   }
   #########
+  
+  return( LIST_filled )
 }

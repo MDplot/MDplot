@@ -204,19 +204,19 @@ hbond_ts <- function( timeseries,
   #########
 
   # in case the occurences are to be plotted, add them on the right hand side
+  VEC_occurences <- c()
+  for( i in 1:length( VEC_hbondIDs ) )
+  {
+    INT_numberAppearances <- sum( timeseries[ , 2 ] == VEC_hbondIDs[ i ] )
+    
+    # calculate percent from the time limits
+    # CAUTION: might differ from the overall score out of the summary file
+    VEC_occurences <- c( VEC_occurences, ( INT_numberAppearances / 
+                                             ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 
+                                             100 ) )
+  }
   if( plotOccurences )
   {
-    VEC_occurences <- c()
-    for( i in 1:length( VEC_hbondIDs ) )
-    {
-      INT_numberAppearances <- sum( timeseries[ , 2 ] == VEC_hbondIDs[ i ] )
-      
-      # calculate percent from the time limits
-      # CAUTION: might differ from the overall score out of the summary file
-      VEC_occurences <- c( VEC_occurences, ( INT_numberAppearances / 
-                                             ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 
-                                               100 ) )
-    }
     par( mar = c( 4.0, 0.0, 3.25, 3.0 ) )
     
     # plot
@@ -241,6 +241,11 @@ hbond_ts <- function( timeseries,
               lwd = 2.0 )
   }
   #########
+  MAT_return <- matrix( c( VEC_hbondIDs,
+                           VEC_occurences ),
+                        ncol = 2, byrow = FALSE )
+  colnames( MAT_return ) <- c( "hbondID", "occurence [%]" )
+  return( MAT_return )
 }
 
 # load and parse GROMOS hbond output
@@ -379,4 +384,5 @@ hbond <- function( hbonds,
   {
     stop( paste( "Error: plot method ", plotMethod, " is unknown. Process aborted!" ) )
   }
+  return( hbonds )
 }

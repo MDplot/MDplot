@@ -1,3 +1,15 @@
+# round properly
+setNumberDigits <- function( VEC_values, digits )
+{
+  VEC_return <- c()
+  for( i in 1:length( VEC_values ) )
+    VEC_return <- c( VEC_return,
+                     as.numeric( format( round( VEC_values[ i ],
+                                                digits ),
+                                         nsmall = digits ) ) )
+  return( VEC_return )
+}
+
 # translate amino acids in the context of the GROMOS framework
 translate_aminoacids <- function( input,
                                   switchMode )
