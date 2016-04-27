@@ -1,5 +1,3 @@
-
-
 # load the lambda point information here
 load_TIcurve <- function( files,
                           mdEngine = "GROMOS" )
@@ -115,6 +113,11 @@ TIcurve <- function( lambdas,
   INT_significantForward <- get_sign_digits( REAL_forward_error )
   REAL_forward_integral_rounded <- round( REAL_forward_integral, digits = INT_significantForward )
   REAL_forward_error_rounded <- round( REAL_forward_error, digits = INT_significantForward )
+  MAT_integrationResults <- matrix( c( REAL_forward_integral_rounded, REAL_forward_error_rounded ),
+                                    ncol = 2 )
+  colnames( MAT_integrationResults ) <- c( "deltaG", "error" )
+  rownames( MAT_integrationResults ) <- c( "forward" )
+  REAL_hysteresis <- NA
   if( !barePlot && printValues )
     mtext( side = 1, line = 4.75, cex = 1.0,
            adj = 1,
@@ -134,6 +137,9 @@ TIcurve <- function( lambdas,
     INT_significantBackward <- get_sign_digits( REAL_backward_error )
     REAL_backward_integral_rounded <- round( REAL_backward_integral, digits = INT_significantBackward )
     REAL_backward_error_rounded <- round( REAL_backward_error, digits = INT_significantBackward )
+    MAT_integrationResults <- rbind( MAT_integrationResults,
+                                     c( REAL_backward_integral_rounded, REAL_backward_error_rounded ) )
+    rownames( MAT_integrationResults ) <- c( "forward", "backward" )
     mtext( side = 1, line = 6.0, cex = 1.0,
            adj = 1,
            text = substitute( paste( Delta, "G"["back"], " = ",
@@ -158,4 +164,9 @@ TIcurve <- function( lambdas,
                                             sep = "" ) ) ) )
   }
   #########
+  
+  LIST_return <- list( lambdapoints = lambdas,
+                       integrationresults = MAT_integrationResults,
+                       hysteresis = REAL_hysteresis )
+  return( LIST_return )
 }

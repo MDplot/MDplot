@@ -67,7 +67,8 @@ timeseries <- function( tsData,
     names = 1:( length( tsData ) / 2 )
   #########
   
-  # plot  
+  LIST_return <- list()
+  # plot
   for( i in 1:length( tsData ) )
   {
     if( i %% 2 == 1 )
@@ -86,6 +87,10 @@ timeseries <- function( tsData,
               xaxt = "n", yaxt = "n", xlab = "", ylab = "",
               ylim = c( VEC_rangeValues[ 1 ] * 0.95, VEC_rangeValues[ 2 ] * 1.05 ),
               xlim = c( INT_min_snapshot, INT_max_snapshot ) )
+      LIST_return[[ length( LIST_return ) + 1 ]] <- list( minValue = min( tsData[[ ( i + 1 ) ]] ),
+                                                          maxValue = max( tsData[[ ( i + 1 ) ]] ),
+                                                          meanValue = mean( tsData[[ ( i + 1 ) ]] ),
+                                                          sd = sd( tsData[[ ( i + 1 ) ]] ) )
       par( new = TRUE )
     }
   }
@@ -120,4 +125,6 @@ timeseries <- function( tsData,
             lty = 1.0, lwd = 2.0,
             cex = 1 )
   #########
+  
+  return( LIST_return )
 }

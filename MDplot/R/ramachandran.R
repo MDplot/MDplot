@@ -150,14 +150,16 @@ ramachandran <- function( dihedrals,
   }
   if( plotType == "fancy" )
   {
-    DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
-                                                          LIST_filled[[ "xBins" ]] ),
-                                            findInterval( dihedrals[ , 2 ],
-                                                          LIST_filled[[ "yBins" ]] ) ) )
-    DF_frequencies[ , 1 ] <- as.numeric( DF_frequencies[ , 1 ] )
-    DF_frequencies[ , 2 ] <- as.numeric( DF_frequencies[ , 2 ] )
-    freq2D <- diag( LIST_filled[[ "xBins" ]] ) * 0
-    freq2D[ cbind( DF_frequencies[ , 1 ], DF_frequencies[ , 2 ] ) ] <- DF_frequencies[ , 3 ]
+    #DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
+    #                                                      LIST_filled[[ "xBins" ]] ),
+    #                                        findInterval( dihedrals[ , 2 ],
+    #                                                      LIST_filled[[ "yBins" ]] ) ) )
+    #DF_frequencies[ , 1 ] <- as.numeric( DF_frequencies[ , 1 ] )
+    #DF_frequencies[ , 2 ] <- as.numeric( DF_frequencies[ , 2 ] )
+    #freq2D <- diag( LIST_filled[[ "xBins" ]] ) * 0
+    #freq2D[ cbind( DF_frequencies[ , 1 ], DF_frequencies[ , 2 ] ) ] <- DF_frequencies[ , 3 ]
+    freq2D <- LIST_filled[[ "freq2D" ]]
+    freq2D[ is.na( freq2D ) ] <- 0
     INT_numberColours <- 100
     VEC_palette <- PALETTE_fancy( INT_numberColours )
     zFacetValue <- freq2D[ -1, -1 ] + 

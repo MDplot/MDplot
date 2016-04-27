@@ -105,4 +105,6 @@ rmsf <- function( rmsfData,
             lty = 1.0, lwd = 2.0,
             cex = 1.0 )
   #########
+  
+  return( rmsfData )
 }

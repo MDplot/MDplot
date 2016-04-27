@@ -122,6 +122,7 @@ rmsd <- function( rmsdData,
     names = 1:( length( rmsdData ) / 2 )
   #########
   
+  LIST_return <- list()
   # plot
   for( i in 1:length( rmsdData ) )
   {
@@ -139,6 +140,10 @@ rmsd <- function( rmsdData,
               col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
               xaxt = "n", yaxt = "n", xlab = "", ylab = "",
               ylim = c( 0, REAL_max_RMSD * 1.05 ), xlim = c( 0, INT_max_snapshot ) )
+      LIST_return[[ length( LIST_return ) + 1 ]] <- list( minValue = min( rmsdData[[ ( i + 1 ) ]] ),
+                                                          maxValue = max( rmsdData[[ ( i + 1 ) ]] ),
+                                                          meanValue = mean( rmsdData[[ ( i + 1 ) ]] ),
+                                                          sd = sd( rmsdData[[ ( i + 1 ) ]] ) )
       par( new = TRUE )
     }
   }
@@ -164,4 +169,6 @@ rmsd <- function( rmsdData,
             lty = 1.0, lwd = 2.0,
             cex = 1 )
   #########
+  
+  return( LIST_return )
 }
