@@ -1,4 +1,4 @@
-# MDplot: Visualize Molecular Dynamics Analyses
+# MDplot: Visualise Molecular Dynamics Analyses
 MDplot is an R package that allows automated plot generation directly from the output produced by Molecular Dynamics (MD) engines. Currently, loading functions for [GROMOS](http://www.gromos.net) type of output is provided.
 
 ## Call from within bash script
