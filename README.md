@@ -18,6 +18,16 @@ Rscript MDplot_bash.R clusters \
 See XXX
 
 ## New in the latest major version
+Version: 0.3.1
+Date: 2016-04-28
+
+* added 'printErrors' flag to function 'TIcurve()'
+* added 'errorBarThreshold' flag to function 'TIcurve()'
+* fixed bug in function 'ramachandran()' for type "fancy"
+* added return information to functions where appropriate
+* fixed 'xrmsd()' ellipsis
+* changed some phrases and the title
+
 Version: 0.3  
 Date: 2016-02-15
 
