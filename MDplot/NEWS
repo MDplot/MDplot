@@ -1,8 +1,11 @@
 Version: 0.31
-Date: 2016-XX-YY
+Date: 2016-04-28
 
 o added 'printErrors' flag to function 'TIcurve()'
 o added 'errorBarThreshold' flag to function 'TIcurve()'
+o fixed bug in function 'ramachandran()' for type "fancy"
+o added return information to functions where appropriate
+o fixed 'xrmsd()' ellipsis
 ------------------------
 
 Version: 0.3

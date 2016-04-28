@@ -157,7 +157,7 @@ hbond_ts <- function( timeseries,
   LIST_ellipsis <- list( ... )
   if( !barePlot )
   {
-    mtext( side = 3, line = 1.25, cex = 2.0,
+    mtext( side = 3, line = 1.25, cex = 1.45,
            text = ifelse( is.null( LIST_ellipsis[[ "main" ]] ),
                           "Hbond timeseries",
                           LIST_ellipsis[[ "main" ]] ),
