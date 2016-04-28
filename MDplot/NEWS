@@ -1,4 +1,4 @@
-Version: 0.31
+Version: 0.3.1
 Date: 2016-04-28
 
 o added 'printErrors' flag to function 'TIcurve()'
