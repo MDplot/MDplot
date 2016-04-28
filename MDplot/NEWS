@@ -6,6 +6,7 @@ o added 'errorBarThreshold' flag to function 'TIcurve()'
 o fixed bug in function 'ramachandran()' for type "fancy"
 o added return information to functions where appropriate
 o fixed 'xrmsd()' ellipsis
+o changed some phrases and the title
 ------------------------
 
 Version: 0.3

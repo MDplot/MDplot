@@ -1,9 +1,9 @@
 Package: MDplot
-Version: 0.31
+Version: 0.3.1
 Date: 2016-04-28
 Authors@R: person( given = "Christian", family = "Margreitter",
                    email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) )
-Title: Visualizing Molecular Dynamics Analyses
+Title: Visualising Molecular Dynamics Analyses
 Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools
 Description: Provides automatization for plot generation succeeding common molecular dynamics analyses.
              This includes straightforward plots, such as RMSD (Root-Mean-Square-Deviation) and
