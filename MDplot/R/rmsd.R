@@ -1,60 +1,55 @@
 # plot the average RMSD of many runs with spread
-rmsd_average <- function( rmsdAvInput,
+rmsd_average <- function( rmsdInput,
                           skip = 0,
                           printMeans = FALSE,
+                          levelFactor = NA,
                           ... )
 {
+  # initialize
+  MAT_values <- matrix( c( rmsdInput[[ 1 ]][[ 1 ]],
+                           rep( NA, times = 3 * length( rmsdInput[[ 1 ]][[ 1 ]] ) ) ),
+                        byrow = FALSE, ncol = 4 )
+  MAT_input <- matrix( rmsdInput[[ 1 ]][[ 2 ]], ncol = 1 )
+  for( i in 2:length( rmsdInput ) )
+    MAT_input <- cbind( MAT_input,
+                        rmsdInput[[ i ]][[ 2 ]] )
+  colnames( MAT_values ) <- c( "snapshot", "minimum", "mean", "maximum" )
+  REAL_max_RMSD = max( MAT_input )
   
-  # initialization
-  names <- rep( NA, length( rmsdAvInput ) )
-  MAT_result <- NULL
-  #########
-  
-  # calculate the average RMSD and the standard deviation
-  for( i in 1:length( rmsdAvInput ) )
+  # calculate the average RMSD, minimum and maximum values
+  for( i in 1:length( rmsdInput[[ 1 ]][[ 1 ]] ) )
   {
-    names[ i ] <- rmsdAvInput[[ i ]][[ "name" ]]
-    VEC_files <- rmsdAvInput[[ i ]][[ "files" ]]
-    VEC_values <- c()
-    for( j in 1:length( VEC_files ) )
-    {
-      VEC_buffer <- read.table( VEC_files[ j ] )[ , 2 ]
-      if( skip > 0 )
-        VEC_buffer <- VEC_buffer[ skip:length( VEC_buffer ) ]
-      VEC_values <- c( VEC_values, VEC_buffer )
-    }
-    MAT_result <- rbind( MAT_result, c( mean( VEC_values ), sd( VEC_values ) ) )
+    MAT_values[ i, 2 ] <- min( MAT_input[ i, ] )
+    MAT_values[ i, 3 ] <- mean( MAT_input[ i, ] )
+    MAT_values[ i, 4 ] <- max( MAT_input[ i, ] )
   }
+  if( !is.na( levelFactor ) )
+    MAT_values <- MAT_values[ c( T, rep( F, times = levelFactor - 1 ) ), ]
   #########
   
-  # set the column and row names
-  colnames( MAT_result ) <- c( "values", "sds" )
-  rownames( MAT_result ) <- names
-  #########
+  # plot the minimum curve
+  plot( MAT_values[ , 1 ], MAT_values[ , 2 ], type = "l",
+        col = "grey", xaxs = "i", yaxs = "i",
+        xaxt = "n",
+        #yaxt = ifelse( barePlot, "n", "s" ),
+        xlab = "", ylab = "",
+        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... )
+  par( new = TRUE )
   
-  # plot the bars and the errors
-  par( mar = c( 2.5, 4.25, 1.0, 1.5 ) )
-  PLOT_positions = barplot( MAT_result[ , 1 ],
-                            ylim = c( 0.0, 1.5 * max( MAT_result[ , 1 ] ) ),
-                            ylab = "RMSD [nm]",
-                            xaxt = "n",
-                            ... )
-  plot_segments( cbind( PLOT_positions, MAT_result[ , 1 ] ),
-                 VEC_spread = MAT_result[ , 2 ] )
-  axis( 1,
-        at = PLOT_positions,
-        labels = rownames( MAT_result ),
-        cex.axis = 0.9,
-        tick = FALSE )
-  #########
+  # plot the maximum curve
+  plot( MAT_values[ , 1 ], MAT_values[ , 4 ], type = "l",
+        col = "grey", xaxs = "i", yaxs = "i",
+        xaxt = "n", yaxt = "n",
+        xlab = "", ylab = "",
+        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... )
+   par( new = TRUE )
   
-  # print the means in case specified
-  print( paste( "Mean: ",
-                round( mean( MAT_result[ , 1 ] ), digits = 2 ),
-                " +/- ",
-                round( mean( MAT_result[ , 2 ] ), digits = 2 ),
-                sep = "" ) )
-  #########
+  # plot the mean curve
+  plot( MAT_values[ , 1 ], MAT_values[ , 3 ], type = "l",
+        col = "black", xaxs = "i", yaxs = "i",
+        xaxt = "n", yaxt = "n",
+        xlab = "", ylab = "", cex = 1.45,
+        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... 
 }
 
 # load RMSD
