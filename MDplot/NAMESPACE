@@ -23,7 +23,7 @@ export(
          xrmsd,
          hbond_ts,
          clusters_ts,
-         timeseries
+         timeseries,
          #dssp_summary_multi,
          rmsd_average
        )
