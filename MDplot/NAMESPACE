@@ -25,7 +25,7 @@ export(
          clusters_ts,
          timeseries
          #dssp_summary_multi,
-         #rmsd_average
+         rmsd_average
        )
 
 # export loading functions
