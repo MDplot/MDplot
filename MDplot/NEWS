@@ -1,3 +1,9 @@
+Version: 0.3.x
+Date: ZZZZ-YY-XX
+
+o added 'stride' to function 'load_dssp_ts()
+------------------------
+
 Version: 0.3.1
 Date: 2016-04-28
 

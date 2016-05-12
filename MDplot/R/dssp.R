@@ -284,6 +284,7 @@ dssp_summary <- function( dsspData,
 # load the time-series files
 load_dssp_ts <- function( folder,
                           filenames = NA,
+                          stride = 1,
                           mdEngine = "GROMOS" )
 {
   VEC_gromos_names <- filenames
@@ -304,6 +305,8 @@ load_dssp_ts <- function( folder,
     if( file.info( STRING_file )$size == 0 )
       next
     TABLE_current <- read.table( STRING_file )
+    if( stride != 1 )
+      TABLE_current <- TABLE_current[ c( T, rep( F, times = stride - 1 ) ), ]
     LIST_current <- list( name = VEC_gromos_names[ i ],
                           values = TABLE_current )
     LIST_return[[ length( LIST_return ) + 1 ]] <- LIST_current

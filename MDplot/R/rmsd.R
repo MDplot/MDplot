@@ -3,10 +3,14 @@ rmsd_average <- function( rmsdInput,
                           skip = 0,
                           printMeans = FALSE,
                           levelFactor = NA,
+                          snapshotsPerTimeInt = 1000,
+                          timeUnit = "ns",
+                          rmsdUnit = "nm",
+                          barePlot = FALSE,
                           ... )
 {
   # initialize
-  MAT_values <- matrix( c( rmsdInput[[ 1 ]][[ 1 ]],
+  MAT_values <- matrix( c( 1:length( rmsdInput[[ 1 ]][[ 1 ]] ),
                            rep( NA, times = 3 * length( rmsdInput[[ 1 ]][[ 1 ]] ) ) ),
                         byrow = FALSE, ncol = 4 )
   MAT_input <- matrix( rmsdInput[[ 1 ]][[ 2 ]], ncol = 1 )
@@ -14,7 +18,7 @@ rmsd_average <- function( rmsdInput,
     MAT_input <- cbind( MAT_input,
                         rmsdInput[[ i ]][[ 2 ]] )
   colnames( MAT_values ) <- c( "snapshot", "minimum", "mean", "maximum" )
-  REAL_max_RMSD = max( MAT_input )
+  REAL_max_RMSD = 0.375#max( MAT_input )
   
   # calculate the average RMSD, minimum and maximum values
   for( i in 1:length( rmsdInput[[ 1 ]][[ 1 ]] ) )
@@ -31,15 +35,27 @@ rmsd_average <- function( rmsdInput,
   plot( MAT_values[ , 1 ], MAT_values[ , 2 ], type = "l",
         col = "grey", xaxs = "i", yaxs = "i",
         xaxt = "n",
+        xlim = c( 0, nrow( MAT_values ) ),
         #yaxt = ifelse( barePlot, "n", "s" ),
         xlab = "", ylab = "",
-        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... )
+        ylim = c( 0, REAL_max_RMSD * 1.05 ), ... ) #, xlim = c( 0, INT_max_snapshot ), ... )
+  if( !barePlot )
+  {
+    axis( 1,
+          #at = split_equidistant( c( 0, length( MAT_values[ , 1 ] ) ), 7 ),
+          #labels = split_equidistant( c( 0, ( length( MAT_values[ , 1 ] ) / snapshotsPerTimeInt ) ), 7 ) )
+          at = c( 0, 6000, 12000, 18000 ), labels = c( 0, 3, 6, 9 ), cex.axis = 1 )
+    mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
+           cex = 1 )
+    mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,
+           cex = 1 )
+  }
   par( new = TRUE )
   
   # plot the maximum curve
   plot( MAT_values[ , 1 ], MAT_values[ , 4 ], type = "l",
         col = "grey", xaxs = "i", yaxs = "i",
-        xaxt = "n", yaxt = "n",
+        xaxt = "n", yaxt = "n", xlim = c( 0, nrow( MAT_values ) ),
         xlab = "", ylab = "",
         ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... )
    par( new = TRUE )
@@ -47,9 +63,10 @@ rmsd_average <- function( rmsdInput,
   # plot the mean curve
   plot( MAT_values[ , 1 ], MAT_values[ , 3 ], type = "l",
         col = "black", xaxs = "i", yaxs = "i",
-        xaxt = "n", yaxt = "n",
+        xaxt = "n", yaxt = "n", xlim = c( 0, nrow( MAT_values ) ),
         xlab = "", ylab = "", cex = 1.45,
         ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... 
+  return( MAT_values )
 }
 
 # load RMSD
