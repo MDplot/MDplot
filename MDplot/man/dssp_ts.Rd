@@ -11,6 +11,7 @@ dssp_ts( tsData,
          residueBoundaries = NA,
          timeUnit = NA,
          snapshotsPerTimeInt = 1000,
+         barScaleFactor = 0.25,
          barePlot = FALSE,
          ... )}
 \arguments{
@@ -20,6 +21,7 @@ dssp_ts( tsData,
   \item{residueBoundaries}{A vector of boundaries for the residues.}
   \item{timeUnit}{If set, the snapshots are transformed into the respective time (depending on parameter \code{snapshotsPerTime}.}
   \item{snapshotsPerTimeInt}{Number of snapshots per respective \code{timeUnit}.}
+  \item{barScaleFactor}{Allows to manually overwrite the height of the bars.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }

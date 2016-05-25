@@ -6,6 +6,7 @@ rmsd_average <- function( rmsdInput,
                           snapshotsPerTimeInt = 1000,
                           timeUnit = "ns",
                           rmsdUnit = "nm",
+                          maxYAxis = NA,
                           barePlot = FALSE,
                           ... )
 {
@@ -18,7 +19,9 @@ rmsd_average <- function( rmsdInput,
     MAT_input <- cbind( MAT_input,
                         rmsdInput[[ i ]][[ 2 ]] )
   colnames( MAT_values ) <- c( "snapshot", "minimum", "mean", "maximum" )
-  REAL_max_RMSD = 0.375#max( MAT_input )
+  REAL_max_RMSD = max( MAT_input )
+  if( !is.na( maxYAxis ) )
+    REAL_max_RMSD = maxYAxis
   
   # calculate the average RMSD, minimum and maximum values
   for( i in 1:length( rmsdInput[[ 1 ]][[ 1 ]] ) )
@@ -42,9 +45,9 @@ rmsd_average <- function( rmsdInput,
   if( !barePlot )
   {
     axis( 1,
-          #at = split_equidistant( c( 0, length( MAT_values[ , 1 ] ) ), 7 ),
-          #labels = split_equidistant( c( 0, ( length( MAT_values[ , 1 ] ) / snapshotsPerTimeInt ) ), 7 ) )
-          at = c( 0, 6000, 12000, 18000, 24000, 30000, 36000 ), labels = c( 0, 3, 6, 9, 12, 15, 18 ), cex.axis = 1 )
+          at = split_equidistant( c( 0, length( MAT_values[ , 1 ] ) ), 7 ),
+          labels = split_equidistant( c( 0, ( length( MAT_values[ , 1 ] ) / snapshotsPerTimeInt ) ), 7 ) )
+          #at = c( 0, 6000, 12000, 18000, 24000, 30000, 36000 ), labels = c( 0, 3, 6, 9, 12, 15, 18 ), cex.axis = 1 )
     mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
            cex = 1 )
     mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,

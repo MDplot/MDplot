@@ -322,6 +322,7 @@ dssp_ts <- function( tsData,
                      residueBoundaries = NA,
                      timeUnit = NA,
                      snapshotsPerTimeInt = 1000,
+                     barScaleFactor = 0.25,
                      barePlot = FALSE,
                      ... )
 {
@@ -375,7 +376,7 @@ dssp_ts <- function( tsData,
             ylab = ifelse( barePlot,
                            "",
                            "residue number" ),
-            pch = 22, col = colours[ i ], bg = colours[ i ], cex = 0.25,
+            pch = 22, col = colours[ i ], bg = colours[ i ], cex = barScaleFactor,
             ... )
     }
     else
@@ -387,7 +388,7 @@ dssp_ts <- function( tsData,
             xaxs = "i", yaxs = "i",
             xaxt = "n", yaxt = "n",
             xlab = "", ylab = "",
-            pch = 22, col = colours[ i ], bg = colours[ i ], cex = 0.25 )
+            pch = 22, col = colours[ i ], bg = colours[ i ], cex = barScaleFactor )
     }
   }
   

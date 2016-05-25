@@ -2,6 +2,8 @@ Version: 0.3.x
 Date: ZZZZ-YY-XX
 
 o added 'stride' to function 'load_dssp_ts()
+o added additional box lines to function 'ramachandran()' for 'plotType = "comic"' (still in development)
+o added 'barScaleFactor' to function 'dssp_ts()' to account for the possibility that very small peptides might be plotted
 ------------------------
 
 Version: 0.3.1

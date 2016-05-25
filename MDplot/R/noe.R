@@ -73,6 +73,7 @@ noe <- function( noeData,
                  lineTypes = NA,
                  names = NA,
                  plotSumCurves = TRUE,
+                 maxYAxis = NA,
                  printLegend = FALSE,
                  ... )
 {
@@ -113,9 +114,11 @@ noe <- function( noeData,
     VEC_yLimits <- c( 0, REAL_maxYValueSum * 1.05 )
   else
     VEC_yLimits <- c( 0, REAL_maxYValue * 1.05 )
+  if( !is.na( maxYAxis ) )
+      VEC_yLimits[ 2 ] <- maxYAxis
 
   # plot histogram now
-  par( mar = c( 5.25, 4.25, 4.25, 2.0 ) )
+  par( mar = c( 5.6, 4.25, 4.25, 2.0 ) )
   VEC_spaceArgument <- 0
   MAT_toPlot <- NULL
   if( ncol( noeData ) > 2 )
@@ -139,9 +142,10 @@ noe <- function( noeData,
                   #to = ( nrow( noeData ) - 1 ) * ( ncol( noeData ) - 1 ),
                   #by = ncol( noeData ) - 1 ), 
         labels = c( noeData[ , 1 ] ),
-        las = 3 )
-  mtext( text = "noe violations", side = 1, line = 3.75, cex = 1.25 )
-  mtext( text = "fraction violations [%]", side = 2, line = 2.75, cex = 1.25 )
+        las = 3,
+        cex = 0.85 )
+  mtext( text = "noe violations", side = 1, line = 4.15, cex = 1.0 )
+  mtext( text = "fraction violations [%]", side = 2, line = 2.75, cex = 1.0 )
 
   # add addition curves
   for( j in 2:ncol( noeData ) )

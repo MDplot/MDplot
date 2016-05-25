@@ -117,6 +117,8 @@ ramachandran <- function( dihedrals,
             xaxt = "n", xlab = "",
             yaxt = "n", ylab = "",
            ... )
+    abline( h = c( -180, 180 ), lwd = 1.0 )
+    abline( v = c( -180, 180 ), lwd = 1.0 )
     ##########
     
     # contour
