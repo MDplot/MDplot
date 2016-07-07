@@ -44,10 +44,10 @@ rmsd_average <- function( rmsdInput,
         ylim = c( 0, REAL_max_RMSD * 1.05 ), ... ) #, xlim = c( 0, INT_max_snapshot ), ... )
   if( !barePlot )
   {
+    VEC_tickValues <- axTicks( 1 )
     axis( 1,
-          at = split_equidistant( c( 0, length( MAT_values[ , 1 ] ) ), 7 ),
-          labels = split_equidistant( c( 0, ( length( MAT_values[ , 1 ] ) / snapshotsPerTimeInt ) ), 7 ) )
-          #at = c( 0, 6000, 12000, 18000, 24000, 30000, 36000 ), labels = c( 0, 3, 6, 9, 12, 15, 18 ), cex.axis = 1 )
+          at = VEC_tickValues,
+          labels = VEC_tickValues / snapshotsPerTimeInt )
     mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
            cex = 1 )
     mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,
