@@ -14,6 +14,7 @@
 \alias{fill_bins}
 \alias{print_help}
 \alias{setNumberDigits}
+\alias{load_dssp_GROMACS}
 \title{Internal functions for \code{MDplot}}
 \description{Functions in \code{MDplot} not to be used by the user directly.
 }
