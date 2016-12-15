@@ -2,10 +2,29 @@
 load_rmsf <- function( files,
                        mdEngine = "GROMOS" )
 {
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   LIST_return <- list()
   for( i in 1:length( files ) )
   {
-    TABLE_input <- read.table( files[ i ] )
+    TABLE_input <- NA
+    if( mdEngine == "GROMOS" )
+    {
+      TABLE_input <- read.table( files[ i ] )
+    }
+    if( mdEngine == "GROMACS" )
+    {
+      inputData <- readLines( files[ i ],
+                              warn = FALSE )
+      inputData <- gsub( "^[#].*", "", inputData )
+      inputData <- gsub( "^[@].*", "", inputData )
+      inputData <- gsub( "^\\s+|\\s+$", "", inputData )
+      inputData <- inputData[ inputData != "" ]
+      VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
+      TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+    }
     if( length( LIST_return ) == 0 )
     {
       LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )

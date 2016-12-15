@@ -97,7 +97,7 @@ load_rmsd <- function( files,
       inputData <- gsub( "^\\s+|\\s+$", "", inputData )
       inputData <- inputData[ inputData != "" ]
       VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
-      TABLE_input <- as.table( matrix( VEC_input, byrow = TRUE, ncol = 2 ) )
+      TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
     }
     if( length( LIST_return ) == 0 )
       LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )

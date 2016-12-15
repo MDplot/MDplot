@@ -73,7 +73,33 @@ averaging_dssp_summary <- function( VEC_files )
 load_dssp_summary <- function( path,
                                mdEngine = "GROMOS" )
 {
-  return( read.table( path ) )
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+  if( mdEngine == "GROMOS" )
+  {
+    dsspData <- read.table( path )
+    MAT_data <- as.matrix( dsspData[ , -1][ , c( F, T ) ] )
+    MAT_data <- cbind( dsspData[ , 1 ],
+                       MAT_data )
+    colnames( MAT_data ) <- c( "residue", "3-Helix", "4-Helix",
+                               "5-Helix", "Turn", "B-Strand",
+                               "B-Bridge", "Bend" )
+    return( MAT_data )
+  }
+  if( mdEngine == "GROMACS" )
+  {
+    inputData <- readLines( path,
+                            warn = FALSE )
+    inputData <- gsub( "^[#].*", "", inputData )
+    inputData <- gsub( "^[@].*", "", inputData )
+    inputData <- gsub( "^\\s+|\\s+$", "", inputData )
+    inputData <- inputData[ inputData != "" ]
+    VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
+    TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 8 )
+    return( TABLE_input[ , -2 ] )
+  }
 }
 
 # plot the summary over residues and values (selected)
@@ -93,11 +119,7 @@ dssp_summary <- function( dsspData,
   
   # parse input table and get all values in a matrix
   VEC_residues <- dsspData[ , 1 ]
-  dsspData <- dsspData[ , -1 ]
-  MAT_data <- as.matrix( dsspData[ , c( F, T ) ] )
-  colnames( MAT_data ) <- c( "3-Helix", "4-Helix", "5-Helix",
-                             "Turn", "B-Strand", "B-Bridge",
-                             "Bend" )
+  MAT_data <- dsspData[ , -1 ]
   #########
   
   # check plot type, delete non-selected motifs and check legend names
