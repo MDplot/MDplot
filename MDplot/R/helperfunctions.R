@@ -1,3 +1,47 @@
+# load XPM file and convert it into a matrix
+load_XPM <- function( path )
+{
+  inputData <- readLines( path )
+  if( inputData[ 1 ] != "/* XPM */" )
+    stop( "Magic number in file does not match XPM definition!" )
+  inputData <- inputData[ -1 ]
+  MAT_result <- NULL
+  for( i in 1:length( inputData ) )
+  {
+    if( regexpr( "static char", inputData[ i ] ) != -1 )
+    {
+      STRING_header <- inputData[ i + 1 ]
+      VEC_header <- as.numeric( unlist( strsplit( substr( STRING_header, 2, nchar( STRING_header ) - 2 ), "[[:space:]]+" ) ) )
+      INT_start <- i + 1 + VEC_header[ 3 ] + 1
+      INT_addition <- 0
+      for( j in INT_start:length( inputData ) )
+      {
+        if( substr( inputData[ j ], 1, 3 ) == "/* " )
+        {
+          INT_addition <- INT_addition + 1
+          next
+        }
+        else
+          break
+      }
+      INT_start = INT_start + INT_addition
+      for( j in INT_start:( INT_start + VEC_header[ 2 ] - 1 ) )
+      {
+        STRING_buffer <- inputData[ j ]
+        STRING_buffer <- substr( inputData[ j ], 2, VEC_header[ 1 ] + 1 )
+        if( all( is.null( MAT_result ) ) )
+          MAT_result <- matrix( unlist( strsplit( STRING_buffer, split = "" ) ),
+                                nrow = 1 )
+        else
+          MAT_result <- rbind( MAT_result,
+                               unlist( strsplit( STRING_buffer, split = "" ) ) )
+      }
+      break
+    }
+  }
+  return( MAT_result )
+}
+
 # round properly
 setNumberDigits <- function( VEC_values, digits )
 {

@@ -67,7 +67,8 @@ export(
          get_sign_digits,
          fill_bins,
          print_help,
-         setNumberDigits
+         setNumberDigits,
+         load_XPM
       )
 
 # export classes

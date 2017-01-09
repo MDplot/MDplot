@@ -4,6 +4,8 @@ Date: ZZZZ-YY-XX
 o added 'stride' to function 'load_dssp_ts()
 o added additional box lines to function 'ramachandran()' for 'plotType = "comic"' (still in development)
 o added 'barScaleFactor' to function 'dssp_ts()' to account for the possibility that very small peptides might be plotted
+o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()'
+o added function 'load_XPM()' to load "X PixMap" data as commonly produced by GROMACS
 ------------------------
 
 Version: 0.3.1
