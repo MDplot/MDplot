@@ -250,47 +250,91 @@ hbond_ts <- function( timeseries,
 
 # load and parse GROMOS hbond output
 load_hbond <- function( path,
+                        GROMACShbondlogfile = NA,
                         mdEngine = "GROMOS" )
 {
-  CON_input <- file( path, open = "r" )
-  
-  #skip first comments
-  readLines( CON_input, n = 23, warn = FALSE )
-  LIST_buffer <- list()
-  INT_line <- 1
-  #########
-  
-  # read line by line and split by one or multiple spaces
-  # second block (three-centered hbonds) is skipped
-  while( length( STRING_theLine <- readLines( CON_input, n = 1, warn = FALSE ) ) > 0 )
+  VEC_outputColumnNames <- c( "hbondID", "resDonor", "resDonorName",
+                              "resAcceptor", "resAcceptorName", "atomDonor",
+                              "atomDonorName", "atomH", "atomAcceptor",
+                              "atomAcceptorName", "percentage" )
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+  if( mdEngine == "GROMOS" )
   {
-    VEC_buffer <- unlist( strsplit( STRING_theLine, split = " +" ) )
-    if( length( VEC_buffer ) == 0 )
-      break
-    LIST_buffer[[ INT_line ]] <- VEC_buffer
-    INT_line <- INT_line + 1
+    CON_input <- file( path, open = "r" )
+  
+    #skip first comments
+    readLines( CON_input, n = 23, warn = FALSE )
+    LIST_buffer <- list()
+    INT_line <- 1
+    #########
+  
+    # read line by line and split by one or multiple spaces
+    # second block (three-centered hbonds) is skipped
+    while( length( STRING_theLine <- readLines( CON_input, n = 1, warn = FALSE ) ) > 0 )
+    {
+      VEC_buffer <- unlist( strsplit( STRING_theLine, split = " +" ) )
+      if( length( VEC_buffer ) == 0 )
+        break
+      LIST_buffer[[ INT_line ]] <- VEC_buffer
+      INT_line <- INT_line + 1
+    }
+    close( CON_input )
+    #########
+  
+    # transform list of lists into table using temporary file reads / writes and select
+    # the important columns only
+    DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 21, byrow = TRUE ),
+                             stringsAsFactors = FALSE )
+    input <- DF_buffer[ , c( -20, -19, -18, -15, -14, -12, -7, -6, -3, -1 ) ]
+    STRING_tempFile <- tempfile( "MDplot_Hbonds" )
+    on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
+    write.table( input, file = STRING_tempFile )
+    input <- read.table( STRING_tempFile )
+    #########
+  
+    # update column names
+    colnames( input ) <- VEC_outputColumnNames
+
+    #########
+    return( input )
   }
-  close( CON_input )
-  #########
   
-  # transform list of lists into table using temporary file reads / writes and select
-  # the important columns only
-  DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 21, byrow = TRUE ),
-                           stringsAsFactors = FALSE )
-  input <- DF_buffer[ , c( -20, -19, -18, -15, -14, -12, -7, -6, -3, -1 ) ]
-  STRING_tempFile <- tempfile( "MDplot_Hbonds" )
-  on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
-  write.table( input, file = STRING_tempFile )
-  input <- read.table( STRING_tempFile )
-  #########
-  
-  # update column names
-  colnames( input ) <- c( "hbondID", "resDonor", "resDonorName",
-                          "resAcceptor", "resAcceptorName", "atomDonor",
-                          "atomDonorName", "atomH", "atomAcceptor",
-                          "atomAcceptorName", "percentage" )
-  #########
-  return( input )
+  if( mdEngine == "GROMACS" )
+  {
+    if( is.na( GROMACShbondlogfile ) )
+      stop( "When loading GROMACS hydrogen bond input, a second file (the logfile) has to be provided as agrument 'GROMACShbondlogfile'!" )
+    DATA_inputTimeseries <- load_XPM( path )
+    DATA_inputNames <- read.table( GROMACShbondlogfile )
+    LIST_donors <- list( split_GROMACS_atomnames( as.character( DATA_inputNames[[ 1 ]][ 1 ] ) ) )
+    LIST_hydrogens <- list( split_GROMACS_atomnames( as.character( DATA_inputNames[[ 2 ]][ 1 ] ) ) )
+    LIST_acceptors <- list( split_GROMACS_atomnames( as.character( DATA_inputNames[[ 3 ]][ 1 ] ) ) )
+    for( i in 2:length( DATA_inputNames[[ 1 ]] ) )
+    {
+      LIST_donors[[ length( LIST_donors ) + 1 ]] <- split_GROMACS_atomnames( as.character( DATA_inputNames[[ 1 ]][ i ] ) )
+      LIST_hydrogens[[ length( LIST_hydrogens ) + 1 ]] <- split_GROMACS_atomnames( as.character( DATA_inputNames[[ 2 ]][ i ] ) )
+      LIST_acceptors[[ length( LIST_acceptors ) + 1 ]] <- split_GROMACS_atomnames( as.character( DATA_inputNames[[ 3 ]][ i ] ) )
+    }
+    MAT_result <- matrix( c( 1:DATA_inputTimeseries[[ "numberRows" ]],
+                             rep( "", times = 10 * DATA_inputTimeseries[[ "numberRows" ]] ) ),
+                          ncol = 11,
+                          byrow = FALSE )
+    for( i in 1:DATA_inputTimeseries[[ "numberRows" ]] )
+    {
+      # insert donor information
+      MAT_result[ i, 2 ] <- LIST_donors[[ i ]][[ "residueNumber" ]]
+      #MAT_result[ i, 3 ] <- LIST_donors[[ i ]][[ "residueName" ]]
+      #MAT_result[ i, 7 ] <- LIST_donors[[ i ]][[ "atomName" ]]
+      
+      # calculate and insert percentage
+      REAL_percentage <- length( which( DATA_inputTimeseries[[ "data" ]][ i, ] == "o" ) ) /
+                         DATA_inputTimeseries[[ "numberColumns" ]]
+      MAT_result[ i, 11 ] <- REAL_percentage
+    }
+    return( MAT_result )
+  }
 }
 
 # plot the hbond information

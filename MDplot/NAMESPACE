@@ -68,7 +68,9 @@ export(
          fill_bins,
          print_help,
          setNumberDigits,
-         load_XPM
+         load_XPM,
+         find_Nth_occurrence,
+         split_GROMACS_atomnames
       )
 
 # export classes

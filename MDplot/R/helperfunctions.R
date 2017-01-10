@@ -1,4 +1,51 @@
+# split GROMACS atom names into parts
+split_GROMACS_atomnames <- function( STRING_input )
+{
+  STRING_residueName <- NA
+  STRING_residueNumber <- NA
+  STRING_atomName <- NA
+  for( i in 1:nchar( STRING_input ) )
+  {
+    if( suppressWarnings( is.na( as.numeric( substr( STRING_input,
+                                                     i,
+                                                     i ) ) ) ) )
+      next
+    STRING_residueName <- substr( STRING_input,
+                                  1,
+                                  i - 1 )
+    for( j in i:nchar( STRING_input ) )
+    {
+      if( suppressWarnings( !is.na( as.numeric( substr( STRING_input,
+                                                        j,
+                                                        j ) ) ) ) )
+        next
+      STRING_residueNumber <- substr( STRING_input,
+                                      i,
+                                      j - 1 )
+      STRING_atomName <- substr( STRING_input,
+                                 j,
+                                 nchar( STRING_input ) )
+      return( list( residueName = STRING_residueName,
+                    residueNumber = STRING_residueNumber,
+                    atomName = STRING_atomName ) )
+    }
+  }
+}
+
+# find nth occurence
+find_Nth_occurrence <- function( target,
+                                 phrase,
+                                 startFrom = 1,
+                                 numberMatch = 1)
+{
+  parts = unlist( strsplit( substring( target, startFrom ), phrase ) )
+  if( length( parts ) < ( numberMatch + 1 ) )
+    return( -1 )
+  return( sum( nchar( parts[ 1:numberMatch ] ) ) + startFrom + ( numberMatch - 1 ) * nchar( phrase ) )
+}
+
 # load XPM file and convert it into a matrix
+# WARNING: colors are not reported
 load_XPM <- function( path )
 {
   inputData <- readLines( path )
@@ -6,12 +53,27 @@ load_XPM <- function( path )
     stop( "Magic number in file does not match XPM definition!" )
   inputData <- inputData[ -1 ]
   MAT_result <- NULL
+  INT_numberColumns <- NA
+  INT_numberRows <- NA
+  VEC_colors <- c()
+  VEC_chars <- c()
   for( i in 1:length( inputData ) )
   {
     if( regexpr( "static char", inputData[ i ] ) != -1 )
     {
       STRING_header <- inputData[ i + 1 ]
       VEC_header <- as.numeric( unlist( strsplit( substr( STRING_header, 2, nchar( STRING_header ) - 2 ), "[[:space:]]+" ) ) )
+      INT_numberColumns <- VEC_header[ 1 ]
+      INT_numberRows <- VEC_header[ 2 ]
+      INT_start <- i + 2
+      for( j in INT_start:( INT_start + VEC_header[ 3 ] - 1 ) )
+      {
+        STRING_colBuffer <- substr( inputData[ j ],
+                                    find_Nth_occurrence( inputData[ j ], '"' ) + 1,
+                                    find_Nth_occurrence( inputData[ j ], '"', numberMatch = 2 ) - 1 )
+        VEC_chars <- c( VEC_chars,
+                        substr( STRING_colBuffer, 1, 1 ) ) 
+      }
       INT_start <- i + 1 + VEC_header[ 3 ] + 1
       INT_addition <- 0
       for( j in INT_start:length( inputData ) )
@@ -39,7 +101,11 @@ load_XPM <- function( path )
       break
     }
   }
-  return( MAT_result )
+  return( list( numberColumns = INT_numberColumns,
+                numberRows = INT_numberRows,
+                usedColors = VEC_colors,
+                usedChars = VEC_chars,
+                data = MAT_result ) )
 }
 
 # round properly
