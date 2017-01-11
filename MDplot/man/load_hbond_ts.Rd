@@ -12,8 +12,14 @@ load_hbond_ts( path,
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
+# GROMOS
 # see "extdata/hbond_ts_example.txt.gz" for format information
 load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz", package = "MDplot" ) )
+
+# GROMACS
+load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
+                            package = "MDplot" ),
+               mdEngine = "GROMACS" )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

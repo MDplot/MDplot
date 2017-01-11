@@ -4,9 +4,10 @@ Date: ZZZZ-YY-XX
 o added 'stride' to function 'load_dssp_ts()
 o added additional box lines to function 'ramachandran()' for 'plotType = "comic"' (still in development)
 o added 'barScaleFactor' to function 'dssp_ts()' to account for the possibility that very small peptides might be plotted
-o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()'
+o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()', 'load_hbond()' and 'load_hbond_ts()'
 o added function 'load_XPM()' to load "X PixMap" data as commonly produced by GROMACS
 o added functions 'find_Nth_occurrence()' and 'split_GROMACS_atomnames()' to the collection of helper functions
+o added parameter 'showMultipleInteractions' to function 'hbond()' to represent multi- or hybrid hydrogen bond donors and acceptors
 ------------------------
 
 Version: 0.3.1

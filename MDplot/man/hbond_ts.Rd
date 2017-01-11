@@ -38,11 +38,25 @@ hbond_ts( timeseries,
 \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
+# GROMOS
 # see "extdata/hbond_example.txt.gz" and "extdata/hbond_ts_example.txt.gz" for format information
 hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz",
                                       package = "MDplot" ) ),
           load_hbond( system.file( "extdata/hbond_example.txt.gz",
                                    package = "MDplot" ) ) )
+
+# GROMACS
+hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
+                                      package = "MDplot" ),
+                         mdEngine = "GROMACS" ),
+          load_hbond( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
+                                  package = "MDplot" ),
+                      system.file( "extdata/hbond_log_GROMACS.txt.gz",
+                                   package = "MDplot" ),
+                      mdEngine = "GROMACS" ),
+          plotOccurences = TRUE, namesToSingle = FALSE, printNames = TRUE,
+          printAtoms = TRUE, hbondIndices = list( c( 1, 12 ) ),
+          timeUnit = "ns", snapshotsPerTimeInt = 100 )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

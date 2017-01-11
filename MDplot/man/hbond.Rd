@@ -22,9 +22,18 @@ hbond( hbonds,
   \item{...}{Additional arguments (ellipsis).}
 }
 \examples{
+# GROMOS
 # see "extdata/hbond_example.txt.gz" for format information
 hbond( load_hbond( system.file( "extdata/hbond_example.txt.gz",
                                 package = "MDplot" ) ) )
+
+# GROMACS
+# see "extdata/hbond_example.txt.gz" for format information
+hbond( load_hbond( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
+                                package = "MDplot" ),
+                   system.file( "extdata/hbond_log_GROMACS.txt.gz",
+                                package = "MDplot" ),
+                   mdEngine = "GROMACS" ) )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

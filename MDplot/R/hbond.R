@@ -2,8 +2,36 @@
 load_hbond_ts <- function( path,
                            mdEngine = "GROMOS" )
 {
-  timeseries <- read.table( path )
-  return( timeseries )
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+  if( mdEngine == "GROMOS" )
+  {
+    timeseries <- read.table( path )
+    return( timeseries )
+  }
+  if( mdEngine == "GROMACS" )
+  {
+    DATA_input <- load_XPM( path )
+    VEC_times <- c()
+    VEC_which <- c()
+    for( i in 1:DATA_input[[ "numberRows" ]] )
+      for( j in 1:DATA_input[[ "numberColumns" ]] )
+      {
+        if( DATA_input[[ "data" ]][ i, j ] == "o" )
+        {
+          VEC_times <- c( VEC_times,
+                          j - 1 )
+          VEC_which <- c( VEC_which,
+                          i )
+        }
+      }
+    return( matrix( c( VEC_times,
+                       VEC_which ),
+                    byrow = FALSE,
+                    ncol = 2 ) )
+  }
 }
 
 # plot hbond timeseries
@@ -67,14 +95,11 @@ hbond_ts <- function( timeseries,
                             drop = FALSE ]
   #########
 
-  # set time axis
+  # set time limits
   VEC_timeLimits <- c( min( timeseries[ , 1 ] ),
                        max( timeseries[ , 1 ] ) )
   if( !all( is.na( timeRange ) ) )
     VEC_timeLimits <- timeRange
-  VEC_timeTicks <- VEC_timeLimits
-  if( !is.na( timeUnit ) )
-    VEC_timeTicks <- VEC_timeTicks / snapshotsPerTimeInt
   #########
 
   # get the vector for the names (left plot)
@@ -150,11 +175,12 @@ hbond_ts <- function( timeseries,
   #########
   
   # plot (left graph)
-  plot( timeseries,
-        xlim = VEC_timeLimits, xaxs = "i", xaxt = "n", xlab = "",
-        ylim = c( min( VEC_hbondIDs ), max( VEC_hbondIDs ) ), yaxt = "n", ylab = "",
-        type = "n" )
+  thePlot <- plot( timeseries,
+                   xlim = VEC_timeLimits, xaxs = "i", xaxt = "n", xlab = "",
+                   ylim = c( min( VEC_hbondIDs ), max( VEC_hbondIDs ) ), yaxt = "n", ylab = "",
+                   type = "n" )
   LIST_ellipsis <- list( ... )
+
   if( !barePlot )
   {
     mtext( side = 3, line = 1.25, cex = 1.45,
@@ -177,15 +203,14 @@ hbond_ts <- function( timeseries,
     mtext( side = 2, line = 2.45, cex = 1, text = "hbonds [#]" )
   if( !barePlot )
   {
+    VEC_timeTicks <- axTicks( 1,
+                              usr = VEC_timeLimits )[ 1:4 ]
+    VEC_timeLabels <- VEC_timeTicks
+    if( !is.na( timeUnit ) )
+      VEC_timeLabels <- VEC_timeTicks / snapshotsPerTimeInt
     axis( 1,
-          at = split_equidistant( VEC_values = VEC_timeLimits,
-                                  n = 6,
-                                  BOOL_removeLast = TRUE,
-                                  BOOL_roundDown = TRUE ),
-          labels = split_equidistant( VEC_values = VEC_timeTicks,
-                                      n = 6,
-                                      BOOL_removeLast = TRUE,
-                                      BOOL_roundDown = TRUE ) )
+          at = VEC_timeTicks,
+          labels = VEC_timeLabels )
     axis( 2,
           at = VEC_hbondNamesPositions,
           labels = VEC_hbondNames,
@@ -325,15 +350,30 @@ load_hbond <- function( path,
     {
       # insert donor information
       MAT_result[ i, 2 ] <- LIST_donors[[ i ]][[ "residueNumber" ]]
-      #MAT_result[ i, 3 ] <- LIST_donors[[ i ]][[ "residueName" ]]
-      #MAT_result[ i, 7 ] <- LIST_donors[[ i ]][[ "atomName" ]]
+      MAT_result[ i, 3 ] <- LIST_donors[[ i ]][[ "residueName" ]]
+      MAT_result[ i, 7 ] <- LIST_donors[[ i ]][[ "atomName" ]]
+      
+      # insert acceptor information
+      MAT_result[ i, 4 ] <- LIST_acceptors[[ i ]][[ "residueNumber" ]]
+      MAT_result[ i, 5 ] <- LIST_acceptors[[ i ]][[ "residueName" ]]
+      MAT_result[ i, 10 ] <- LIST_acceptors[[ i ]][[ "atomName" ]]
       
       # calculate and insert percentage
-      REAL_percentage <- length( which( DATA_inputTimeseries[[ "data" ]][ i, ] == "o" ) ) /
-                         DATA_inputTimeseries[[ "numberColumns" ]]
+      REAL_percentage <- round( length( which( DATA_inputTimeseries[[ "data" ]][ i, ] == "o" ) ) /
+                                DATA_inputTimeseries[[ "numberColumns" ]] * 100, digits = 2 )
       MAT_result[ i, 11 ] <- REAL_percentage
     }
-    return( MAT_result )
+    
+    # write and load temporary file for update
+    STRING_tempFile <- tempfile( "MDplot_Hbonds" )
+    on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
+    write.table( MAT_result, file = STRING_tempFile )
+    TABLE_result <- read.table( STRING_tempFile )
+    
+    # update column names
+    colnames( TABLE_result ) <- VEC_outputColumnNames
+    
+    return( TABLE_result )
   }
 }
 
@@ -343,6 +383,7 @@ hbond <- function( hbonds,
                    acceptorRange = NA,
                    donorRange = NA,
                    printLegend = TRUE,
+                   showMultipleInteractions = TRUE,
                    barePlot = FALSE,
                    ... )
 {
@@ -366,23 +407,24 @@ hbond <- function( hbonds,
           if( ( MAT_result[ j, 2 ] == hbonds[ i, 2 ] ) &&
               ( MAT_result[ j, 4 ] == hbonds[ i, 4 ] ) )
           {
-            MAT_result[ j, 9 ] <- MAT_result[ j, 9 ] + hbonds[ i, 9 ]
+            MAT_result[ j, 11 ] <- max( MAT_result[ j, 11 ], hbonds[ i, 11 ] )
+            MAT_result[ j, 12 ] <- MAT_result[ j, 12 ] + 1
             BOOL_found = TRUE
             break
           }
         }
       }
       if( !BOOL_found )
-      {
-        MAT_result <- rbind( MAT_result, hbonds[ i, ] )
-      }
+        MAT_result <- rbind( MAT_result, cbind( hbonds[ i, ],
+                                                1 ) )
     }
+    colnames( MAT_result ) <- c( colnames( hbonds ), "numberInteractions" )
     #########
-    
+
     # remove unused columns and define zoom area if specified
-    MAT_result <- MAT_result[ , c( -8, -7, -6, -5, -3, -1 ) ]
+    MAT_result <- MAT_result[ , c( -10, -9, -8, -7, -6, -5, -3, -1 ) ]
     MAT_result <- MAT_result[ order( MAT_result[ , 1 ], MAT_result[ , 2 ] ), ]
-    PALETTE_residuewise <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+
     if( all( !is.na( acceptorRange ) ) )
     {
       MAT_result <- MAT_result[ MAT_result[ , 2 ] >= acceptorRange[ 1 ], , drop = FALSE ]
@@ -395,38 +437,62 @@ hbond <- function( hbonds,
     }
     #########
     
-    # normalize values to 0 to 100% and plot graph and legend (in case)
-    VEC_normalized <- lapply( as.list( MAT_result[ , 3 ] ), function( x ) x / 100 )
     if( printLegend && !barePlot )
     {
       par( mar = c( 4.25, 4.25, 3.25, 0.25 ) )
       layout( matrix( 1:2, ncol = 2 ), widths = c( 2.5, 0.5 ), heights = c( 1.0, 1.0 ) )
     }
+
     PALETTE_colors <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
     PALETTE_colors_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-    plot( MAT_result[ , 1:2 ],
-          col = PALETTE_colors_rev( 10 )[ as.numeric( cut( as.numeric( VEC_normalized ), breaks = 10 ) )  ],
-          pch = 19,
+
+    VEC_colorsDots <- PALETTE_colors_rev( 21 )[ as.numeric( cut( c( 0, as.numeric( MAT_result[ , 3 ] ), 100 ), breaks = 21 ) )  ]
+    VEC_colorsDots <- VEC_colorsDots[ 2:( length( VEC_colorsDots ) - 1 ) ]
+    
+    v <- plot( MAT_result[ , 1:2 ],
+               col = VEC_colorsDots,
+               pch = 19,
           cex = 0.75,
           xlab = ifelse( barePlot, "", "Donor [residue number]" ),
           ylab = ifelse( barePlot, "", "Acceptor [residue number]" ),
           xaxt = ifelse( barePlot, "n", "s" ),
           yaxt = ifelse( barePlot, "n", "s" ),
+          xlim = c( min( MAT_result[ , 1 ] ) - 1,
+                    max( MAT_result[ , 1 ] ) + 1 ),
+          ylim = c( min( MAT_result[ , 2 ] ) - 1,
+                    max( MAT_result[ , 2 ] ) + 1 ),
           ... )
+    if( showMultipleInteractions )
+    {
+      par( new = TRUE )
+      plot( MAT_result[ MAT_result[ , 4 ] > 1, 1:2 ],
+            pch = 1,
+            col = "black",
+            cex = 0.75,
+            xaxt = "n",
+            yaxt = "n",
+            xlab = "",
+            ylab = "",
+            xlim = c( min( MAT_result[ , 1 ] ) - 1,
+                      max( MAT_result[ , 1 ] ) + 1 ),
+            ylim = c( min( MAT_result[ , 2 ] ) - 1,
+                      max( MAT_result[ , 2 ] ) + 1 ) )
+    }
     if( printLegend && !barePlot )
     {
       par( mar = c( 4.25, 0.25, 3.25, 1.0 ) )
-      legend_image <- as.raster( matrix( PALETTE_colors( 10 ), ncol = 1 ) )
+      legend_image <- as.raster( matrix( PALETTE_colors( 21 ), ncol = 1 ) )
       plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = '[%]' )
       text( x = 1.5, y = seq( 0, 1, l = 5 ),
             labels = seq( 0, 100, l = 5 ) )
       rasterImage( legend_image, 0, 0, 1, 1 )
     }
     #########
+    
+    return( MAT_result )
   }
   else
   {
     stop( paste( "Error: plot method ", plotMethod, " is unknown. Process aborted!" ) )
   }
-  return( hbonds )
 }

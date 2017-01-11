@@ -139,8 +139,6 @@ noe <- function( noeData,
         at = seq( from = 0,
                   to = ( ( ncol( noeData ) - 1 ) * nrow( noeData ) ) - 1,
                   by = ( ncol( noeData ) - 1 ) ),
-                  #to = ( nrow( noeData ) - 1 ) * ( ncol( noeData ) - 1 ),
-                  #by = ncol( noeData ) - 1 ), 
         labels = c( noeData[ , 1 ] ),
         las = 3,
         cex = 0.85 )
