@@ -70,7 +70,8 @@ export(
          setNumberDigits,
          load_XPM,
          find_Nth_occurrence,
-         split_GROMACS_atomnames
+         split_GROMACS_atomnames,
+         load_clusters_GROMACS
       )
 
 # export classes

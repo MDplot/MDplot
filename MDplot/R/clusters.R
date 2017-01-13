@@ -4,26 +4,39 @@ load_clusters_ts <- function( path,
                               names = NA,
                               mdEngine = "GROMOS" )
 {
-  
-  # read input and get rid of column 2, which is unnecessary and pack everything in a list
-  # of lists, where the first element is the name of the trajectory and the second is the
-  # list of clusterIDs between the boundaries specified by the lengths of every trajectory
-  TABLE_buf <- read.table( path )[ , -2 ]
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+
   LIST_return <- list()
-  INT_startLine <- 1  
   if( all( is.na( names ) ) ||
       length( lengths ) != length( names ) )
     names <- sapply( seq( 1, length( lengths ) ),
-                         function( x ) paste( "trajectory",
-                                              x,
-                                              sep = "" ) )
-  for( i in 1:length( lengths ) )
+                     function( x ) paste( "trajectory",
+                                          x,
+                                          sep = "" ) )
+
+  if( mdEngine == "GROMOS" )
   {
-    LIST_return[[ length( LIST_return ) + 1 ]] <- list( names[ i ], TABLE_buf[ INT_startLine:( INT_startLine + ( lengths[ i ] - 1 ) ),
-                                                                               2 ] )
-    INT_startLine <- INT_startLine + lengths[ i ]
+    # read input and get rid of column 2, which is unnecessary and pack everything in a list
+    # of lists, where the first element is the name of the trajectory and the second is the
+    # list of clusterIDs between the boundaries specified by the lengths of every trajectory
+    TABLE_buf <- read.table( path )[ , -2 ]
+    INT_startLine <- 1  
+    for( i in 1:length( lengths ) )
+    {
+      LIST_return[[ length( LIST_return ) + 1 ]] <- list( names[ i ], TABLE_buf[ INT_startLine:( INT_startLine + ( lengths[ i ] - 1 ) ),
+                                                                                 2 ] )
+      INT_startLine <- INT_startLine + lengths[ i ]
+    }
   }
-  #########
+  if( mdEngine == "GROMACS" )
+  {
+    LIST_temp <- load_clusters_GROMACS( path, lengths )
+    for( i in 1:length( LIST_temp ) )
+      LIST_return[[ length( LIST_return ) + 1 ]] <- list( names[ i ], unlist( LIST_temp[[ i ]][ , 2 ] ) )
+  }
   return( LIST_return )
 }
 
@@ -157,46 +170,113 @@ clusters_ts <- function( clustersDataTS,
   #########
   
   # plot the coloured lines representing the cluster occurences over time here
-  if( length( clustersDataTS ) > 1 )
+  for( i in 1:length( clustersDataTS ) )
   {
-    for( i in 1:length( clustersDataTS ) )
+    VEC_trajOccurences <- c()
+    VEC_clusterIDs <- unlist( clustersDataTS[[ i ]][[ 2 ]] )
+    VEC_xTicks <- seq( 1, length( clustersDataTS[[ i ]][[ 2 ]] ) )
+    for( j in 1:clustersNumber )
     {
-      VEC_trajOccurences <- c()
-      VEC_clusterIDs <- unlist( clustersDataTS[[ i ]][[ 2 ]] )
-      VEC_xTicks <- seq( 1, length( clustersDataTS[[ i ]][[ 2 ]] ) )
-      for( j in 1:clustersNumber )
-      {
-        segments( VEC_xTicks[ VEC_clusterIDs == j ],
-                  rep( i - 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
-                  VEC_xTicks[ VEC_clusterIDs == j ],
-                  rep( i + 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
-                  lwd = 0.65,
-                  col = COLOURS_clusters[ j ] )
-        VEC_trajOccurences <- c( VEC_trajOccurences,
-                                 length( VEC_clusterIDs[ VEC_clusterIDs == j ] ) / length( VEC_clusterIDs ) * 100 )
-      }
-      MAT_printResults <- rbind( MAT_printResults,
-                                 setNumberDigits( VEC_trajOccurences,
-                                                  2 ) )
+      segments( VEC_xTicks[ VEC_clusterIDs == j ],
+                rep( i - 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
+                VEC_xTicks[ VEC_clusterIDs == j ],
+                rep( i + 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
+                lwd = 0.65,
+                col = COLOURS_clusters[ j ] )
+      VEC_trajOccurences <- c( VEC_trajOccurences,
+                               length( VEC_clusterIDs[ VEC_clusterIDs == j ] ) / length( VEC_clusterIDs ) * 100 )
     }
-    rownames( MAT_printResults ) <- c( "overall",
-                                       unlist( lapply( clustersDataTS, function( x ) x[[ 1 ]] ) ) )
+    MAT_printResults <- rbind( MAT_printResults,
+                               setNumberDigits( VEC_trajOccurences,
+                                                2 ) )
   }
+  rownames( MAT_printResults ) <- c( "overall",
+                                     unlist( lapply( clustersDataTS, function( x ) x[[ 1 ]] ) ) )
   #########
   
   return( MAT_printResults )
 }
 
+# load input for GROMACS
+load_clusters_GROMACS <- function( path,
+                                   lengths )
+{
+  inputData <- readLines( path )
+  VEC_times <- c()
+  VEC_clusters <- c()
+  for( i in 1:length( inputData ) )
+  {
+    if( substr( inputData[ i ], 1, 5 ) == "@TYPE" )
+    {
+      for( j in ( i + 1 ):length( inputData ) )
+      {
+        if( substr( inputData[ j ], 1, 1 ) != "@" )
+        {
+          for( k in j:length( inputData ) )
+          {
+            VEC_curLine <- unlist( strsplit( inputData[ k ], " +" ) )
+            VEC_clusters <- c( VEC_clusters, as.numeric( VEC_curLine[ 3 ] ) )
+            VEC_times <- c( VEC_times, as.numeric( VEC_curLine[ 2 ] ) )
+          }
+          MAT_input <- matrix( c( VEC_times,
+                                  VEC_clusters ),
+                                  ncol = 2,
+                               byrow = FALSE )
+          LIST_temp <- NULL
+          if( all( !is.na( lengths ) ) )
+          {
+            if( sum( lengths ) != nrow( MAT_input ) )
+              stop( "The sum of lengths must be the same as the number of lines in the input!" )
+            INT_lastBegin <- 1
+            for( k in 1:length( lengths ) )
+            {
+              LIST_temp[[ length( LIST_temp ) + 1 ]] <- MAT_input[ INT_lastBegin:( INT_lastBegin +
+                                                                                   lengths[ k ] -
+                                                                                   1 ),
+                                                                   ,
+                                                                   drop = FALSE ]
+              INT_lastBegin <- lengths[ k ] + 1
+            }
+          }
+          else
+            LIST_temp <- list( MAT_input )
+          return( LIST_temp )
+        }
+      }
+    }
+  }
+}
+
 # load function for "MDplot_clusters"
 load_clusters <- function( path,
                            names = NA,
+                           lengths = NA,
                            mdEngine = "GROMOS" )
 {
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+  MAT_pre <- NULL
+  if( mdEngine == "GROMOS" )
+  {
+    # load and transpose matrix
+    MAT_pre <- as.matrix( read.table( path ) )[ , -1  ]
+    MAT_pre <- MAT_pre[ , ( ( ncol( MAT_pre ) / 2 ) + 1 ):ncol( MAT_pre ) ]
+    MAT_pre <- t( MAT_pre )
+  }
+  if( mdEngine == "GROMACS" )
+  {
+    LIST_temp <- load_clusters_GROMACS( path, lengths )
+    INT_numberClusters <- max( unlist( lapply( LIST_temp,
+                                               FUN = function( x ) max( unlist( x[ , 2 ] ) ) ) ) )
+    MAT_pre <- matrix( rep( 0, times = INT_numberClusters * length( LIST_temp ) ),
+                       nrow = length( LIST_temp ) )
+    for( i in 1:length( LIST_temp ) )
+      for( j in 1:INT_numberClusters )
+        MAT_pre[ i, j ] <- sum( LIST_temp[[ i ]][ , 2 ] == j )
+  }
   
-  # load and transpose matrix
-  MAT_pre <- as.matrix( read.table( path ) )[ , -1  ]
-  MAT_pre <- MAT_pre[ , ( ( ncol( MAT_pre ) / 2 ) + 1 ):ncol( MAT_pre ) ]
-  MAT_pre <- t( MAT_pre )
   if( all( !is.na( names ) ) &&
       length( names ) == nrow( MAT_pre ) )
   {

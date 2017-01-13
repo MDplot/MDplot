@@ -16,6 +16,7 @@
 \alias{setNumberDigits}
 \alias{load_dssp_GROMACS}
 \alias{load_XPM}
+\alias{load_clusters_GROMACS}
 \title{Internal functions for \code{MDplot}}
 \description{Functions in \code{MDplot} not to be used by the user directly.
 }

@@ -15,8 +15,12 @@ load_clusters( path,
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
+# GROMOS
 # see "extdata/clusters_example.txt.gz" for format information
 load_clusters( system.file( "extdata/clusters_example.txt.gz", package = "MDplot" ) )
+
+# GROMACS
+load_clusters( system.file( "clust-id.xvg", package = "MDplot" ), mdEngine = "GROMACS", lengths = c( 1001, 1001 ) )
 }
 \author{Christian Margreitter}
 \keyword{Clusters}
