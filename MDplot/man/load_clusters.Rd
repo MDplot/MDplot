@@ -20,7 +20,8 @@ load_clusters( path,
 load_clusters( system.file( "extdata/clusters_example.txt.gz", package = "MDplot" ) )
 
 # GROMACS
-load_clusters( system.file( "clust-id.xvg", package = "MDplot" ), mdEngine = "GROMACS", lengths = c( 1001, 1001 ) )
+load_clusters( system.file( "extdata/clusters_GROMACS.txt.gz", package = "MDplot" ),
+               mdEngine = "GROMACS", lengths = c( 1001, 1001 ) )
 }
 \author{Christian Margreitter}
 \keyword{Clusters}
