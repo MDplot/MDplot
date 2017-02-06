@@ -4,22 +4,40 @@ load_xrmsd <- function( path,
                         factor = 10000,
                         mdEngine = "GROMOS" )
 {
-  
-  # get total line number and subtract end and header after header skipping
-  INT_skipBeginning <- NA
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+
   if( mdEngine == "GROMOS" )
+  {
+    # get total line number and subtract end and header after header skipping
+    INT_skipBeginning <- NA
     INT_skipBeginning <- 8
-  InputFile <- readLines( path )
-  MAT_return <- as.matrix( read.table( path,
-                                       skip = INT_skipBeginning,
-                                       nrows = length( InputFile ) -
-                                               ( INT_skipBeginning + 2 ) ) )
-  #########
+    InputFile <- readLines( path )
+    MAT_return <- as.matrix( read.table( path,
+                                         skip = INT_skipBeginning,
+                                         nrows = length( InputFile ) -
+                                                 ( INT_skipBeginning + 2 ) ) )
+    #########
   
-  # divide RMSD integer values by the proper factor (usually 10000) and return resulting matrix
-  MAT_return[ , 3 ] <- MAT_return[ , 3 ] / factor
-  return( MAT_return )  
-  #########
+    # divide RMSD integer values by the proper factor (usually 10000) and return resulting matrix
+    MAT_return[ , 3 ] <- MAT_return[ , 3 ] / factor
+    return( MAT_return )  
+  }
+  if( mdEngine == "GROMACS" )
+  {
+    XPM_data <- load_XPM( path )
+    MAT_return <- matrix( c( rep( 1:XPM_data$numberRows, each = XPM_data$numberColumns ),
+                             rep( 1:XPM_data$numberColumns, times = XPM_data$numberRows ),
+                             rep( NA, times = XPM_data$numberRows * XPM_data$numberColumns ) ),
+                          ncol = 3,
+                          byrow = FALSE )
+    for( i in 1:nrow( MAT_return ) )
+      MAT_return[ i, 3 ] <- XPM_data$colorComments[ match( XPM_data$data[ MAT_return[  i, 1 ], MAT_return[ i, 2 ]  ],
+                                                           XPM_data$usedChars ) ]
+    return( MAT_return )
+  }
 }
 
 # do 2D XRMSD heatmap plot, with possible legend

@@ -57,6 +57,7 @@ load_XPM <- function( path )
   INT_numberRows <- NA
   VEC_colors <- c()
   VEC_chars <- c()
+  VEC_colorComments <- c()
   for( i in 1:length( inputData ) )
   {
     if( regexpr( "static char", inputData[ i ] ) != -1 )
@@ -72,7 +73,19 @@ load_XPM <- function( path )
                                     find_Nth_occurrence( inputData[ j ], '"' ) + 1,
                                     find_Nth_occurrence( inputData[ j ], '"', numberMatch = 2 ) - 1 )
         VEC_chars <- c( VEC_chars,
-                        substr( STRING_colBuffer, 1, 1 ) ) 
+                        substr( STRING_colBuffer, 1, 1 ) )
+        INT_commentStart <- find_Nth_occurrence( inputData[ j ], "/" )
+        if( INT_commentStart != -1 )
+        {
+          STRING_commentBuffer <- substr( inputData[ j ],
+                                          INT_commentStart + 1,
+                                          find_Nth_occurrence( inputData[ j ], "/", numberMatch = 2 ) - 1 )
+          VEC_colorComments <- c( VEC_colorComments,
+                                  as.numeric( 
+                                  substr( STRING_commentBuffer,
+                                          find_Nth_occurrence( STRING_commentBuffer, '"' ) + 1,
+                                          find_Nth_occurrence( STRING_commentBuffer, '"', numberMatch = 2 ) - 1 ) ) )
+        }
       }
       INT_start <- i + 1 + VEC_header[ 3 ] + 1
       INT_addition <- 0
@@ -104,6 +117,7 @@ load_XPM <- function( path )
   return( list( numberColumns = INT_numberColumns,
                 numberRows = INT_numberRows,
                 usedColors = VEC_colors,
+                colorComments = VEC_colorComments,
                 usedChars = VEC_chars,
                 data = MAT_result ) )
 }
