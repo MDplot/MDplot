@@ -4,15 +4,34 @@ load_ramachandran <- function( path,
                                shiftAngles = NA,
                                mdEngine = "GROMOS" )
 {
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" &&
+      mdEngine != "GROMACS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   
-  # load and parse matrix, return result
-  MAT_buffer <- as.matrix( read.table( path ) )
-  if( ncol( MAT_buffer ) < max( angleColumns ) )
-    stop( paste( "Error while loading and parsing file '",
-                 path, "' since the number of columns is less than ",
-                 "the maximum column number specified.",
-                 sep = "" ) )
-  MAT_input <- MAT_buffer[ , angleColumns ]
+  MAT_input <- NA
+  if( mdEngine == "GROMOS" )
+  {
+    # load and parse matrix, return result
+    MAT_buffer <- as.matrix( read.table( path ) )
+    if( ncol( MAT_buffer ) < max( angleColumns ) )
+      stop( paste( "Error while loading and parsing file '",
+                   path, "' since the number of columns is less than ",
+                   "the maximum column number specified.",
+                   sep = "" ) )
+    MAT_input <- MAT_buffer[ , angleColumns ]
+  }
+  if( mdEngine == "GROMACS" )
+  {
+    inputData <- readLines( path,
+                            warn = FALSE )
+    inputData <- gsub( "^[#].*", "", inputData )
+    inputData <- gsub( "^[@].*", "", inputData )
+    inputData <- gsub( "^\\s+|\\s+$", "", inputData )
+    inputData <- inputData[ inputData != "" ]
+    VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) )[ c( T, T, F ) ] )
+    MAT_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+  }
   if( !is.na( shiftAngles ) )
   {
     MAT_input[ , 1 ] <- MAT_input[ , 1 ] + shiftAngles

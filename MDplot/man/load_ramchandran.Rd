@@ -16,9 +16,14 @@ load_ramachandran( path,
 \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
 }
 \examples{
-# load table and return it into plotting function "MDplot_ramachandran()"
-# see "extdata/ramachandran_example.txt.gz" for format information
+# load table and return it into plotting function "ramachandran()"
+
+# GROMOS
 load_ramachandran( system.file( "extdata/ramachandran_example.txt.gz", package = "MDplot" ) )
+
+# GROMACS
+load_ramachandran( system.file( "extdata/ramachandran_example_GROMACS.txt.gz",
+                   package = "MDplot" ), mdEngine = "GROMACS" )
 }
 \author{Christian Margreitter}
 \keyword{Ramachandran}

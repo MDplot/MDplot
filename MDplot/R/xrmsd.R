@@ -36,6 +36,7 @@ load_xrmsd <- function( path,
     for( i in 1:nrow( MAT_return ) )
       MAT_return[ i, 3 ] <- XPM_data$colorComments[ match( XPM_data$data[ MAT_return[  i, 1 ], MAT_return[ i, 2 ]  ],
                                                            XPM_data$usedChars ) ]
+    MAT_return[ , 2 ] <- rev( MAT_return[ , 2 ] )
     return( MAT_return )
   }
 }
