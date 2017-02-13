@@ -78,7 +78,8 @@ load_rmsd <- function( files,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   LIST_return <- list()
   for( i in 1:length( files ) )
@@ -89,6 +90,17 @@ load_rmsd <- function( files,
       TABLE_input <- read.table( files[ i ] )
     }
     if( mdEngine == "GROMACS" )
+    {
+      inputData <- readLines( files[ i ],
+                              warn = FALSE )
+      inputData <- gsub( "^[#].*", "", inputData )
+      inputData <- gsub( "^[@].*", "", inputData )
+      inputData <- gsub( "^\\s+|\\s+$", "", inputData )
+      inputData <- inputData[ inputData != "" ]
+      VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
+      TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+    }
+    if( mdEngine == "AMBER" )
     {
       inputData <- readLines( files[ i ],
                               warn = FALSE )
@@ -127,7 +139,11 @@ rmsd <- function( rmsdData,
                                        FUN = function( x ) max( x ) ) ) )
   INT_max_snapshot = max( unlist( lapply( rmsdData[ c( T, F ) ],
                                            FUN = function( x ) max( x ) ) ) )
+  INT_min_snapshot = min( unlist( lapply( rmsdData[ c( T, F ) ],
+                                          FUN = function( x ) min( x ) ) ) )
   #########
+  print( INT_max_snapshot )
+  print( INT_min_snapshot )
   
   # set colours and names
   PALETTE_RMSD_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
@@ -167,10 +183,15 @@ rmsd <- function( rmsdData,
   # plot the rest
   if( !barePlot )
   {
+    VEC_timeTicks <- axTicks( 1,
+                              usr = c( INT_min_snapshot,
+                                       INT_max_snapshot ) )
+    VEC_timeLabels <- VEC_timeTicks
+    if( !is.na( timeUnit ) )
+      VEC_timeLabels <- VEC_timeTicks / snapshotsPerTimeInt
     axis( 1,
-          at = split_equidistant( c( 1, length( rmsdData[[ 1 ]] ) ), 7 ),
-          labels = split_equidistant( c( 1, ( length( rmsdData[[ 1 ]] ) / snapshotsPerTimeInt ) ), 7 ),
-          cex.axis = 1 )
+          at = VEC_timeTicks,
+          labels = VEC_timeLabels )
     mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
            cex = 1 )
     mtext( side = 2, text = paste( "RMSD [", rmsdUnit, "]", sep = "" ), line = 2.75,

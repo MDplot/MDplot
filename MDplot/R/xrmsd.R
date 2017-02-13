@@ -2,6 +2,7 @@
 # WARNING: very sensitive to proper file format (line skipping and end ignoring)
 load_xrmsd <- function( path,
                         factor = 10000,
+                        removeLowerHalf = TRUE,
                         mdEngine = "GROMOS" )
 {
   mdEngine <- toupper( mdEngine )
@@ -37,7 +38,10 @@ load_xrmsd <- function( path,
       MAT_return[ i, 3 ] <- XPM_data$colorComments[ match( XPM_data$data[ MAT_return[  i, 1 ], MAT_return[ i, 2 ]  ],
                                                            XPM_data$usedChars ) ]
     MAT_return[ , 2 ] <- rev( MAT_return[ , 2 ] )
-    return( MAT_return )
+    if( removeLowerHalf == FALSE ) 
+      return( MAT_return )
+    else
+      return( MAT_return[ MAT_return[ , 1 ] < MAT_return[ , 2 ], ] )
   }
 }
 

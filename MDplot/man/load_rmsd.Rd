@@ -22,6 +22,11 @@ load_rmsd( c( system.file( "extdata/rmsd1_example.txt.gz", package = "MDplot" ),
 load_rmsd( c( system.file( "extdata/rmsd_example_GROMACS.txt.gz",
                            package = "MDplot" ) ),
            mdEngine = "GROMACS" )
+
+% AMBER
+load_rmsd( c( system.file( "extdata/rmsd_example_AMBER.txt.gz",
+                           package = "MDplot" ) ),
+           mdEngine = "AMBER" )
 }}
 \author{Christian Margreitter}
 \keyword{rmsd}

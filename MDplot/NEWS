@@ -1,13 +1,22 @@
 Version: 0.3.x
-Date: ZZZZ-YY-XX
+Date: 2017-YY-XX
 
 o added 'stride' to function 'load_dssp_ts()
-o added additional box lines to function 'ramachandran()' for 'plotType = "comic"' (still in development)
-o added 'barScaleFactor' to function 'dssp_ts()' to account for the possibility that very small peptides might be plotted
-o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()', 'load_hbond()', 'load_hbond_ts()', 'load_clusters()' and 'load_clusters_ts()'
-o added function 'load_XPM()' to load "X PixMap" data as commonly produced by GROMACS
-o added functions 'find_Nth_occurrence()' and 'split_GROMACS_atomnames()' to the collection of helper functions
-o added parameter 'showMultipleInteractions' to function 'hbond()' to represent multi- or hybrid hydrogen bond donors and acceptors
+o added additional box lines to function 'ramachandran()' for
+  'plotType = "comic"'
+o added 'barScaleFactor' to function 'dssp_ts()' to account for the
+  possibility that very small peptides might be plotted
+o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()',
+  'load_hbond()', 'load_hbond_ts()', 'load_clusters()',
+  'load_clusters_ts()', 'load_ramachandran()' and 'load_xrmsd()'
+o added AMBER support for functions: 'load_rmsd()'
+o added function 'load_XPM()' to load "X PixMap" data as commonly
+  produced by GROMACS
+o added functions 'find_Nth_occurrence()' and 'split_GROMACS_atomnames()'
+  to the collection of helper functions
+o added parameter 'showMultipleInteractions' to function 'hbond()' to
+  represent multi- or hybrid hydrogen bond donors and acceptors
+o fixed time-axis issue in function 'load_rmsd()'
 ------------------------
 
 Version: 0.3.1
@@ -24,7 +33,8 @@ o changed some phrases and the title
 Version: 0.3
 Date: 2016-02-15
 
-o added multiple vector selection by hydrogen bond identifiers to function 'hbond_ts()'
+o added multiple vector selection by hydrogen bond identifiers to
+  function 'hbond_ts()'
 o added argument 'printValues' functionality to function 'TIcurve()'
 o removed hard-coding for the filenames of function 'load_dssp_ts()'
 o included new functions 'load_timeseries()' and 'timeseries()'
