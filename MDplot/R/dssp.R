@@ -97,7 +97,8 @@ load_dssp_summary <- function( path,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   if( mdEngine == "GROMOS" )
   {
@@ -136,6 +137,33 @@ load_dssp_summary <- function( path,
     MAT_data <- round( MAT_data / nrow( MAT_dataBuffer ) * 100,
                        digits = 2 )
     MAT_data[ , 1 ] <- 1:ncol( MAT_dataBuffer )
+    return( MAT_data )
+  }
+  if( mdEngine == "AMBER" )
+  {
+    dsspData <- read.table( path )[ , -1 ]
+    MAT_data <- matrix( c( 1:ncol( dsspData ),
+                           rep( 0,
+                                times = ncol( dsspData ) * 7 ) ),
+                        ncol = 8, byrow = FALSE )
+    VEC_abbrev <- c( "G", "H", "I",
+                     "T", "E", "B",
+                     "S" )
+    colnames( MAT_data ) <- c( "residue", "3-Helix", "4-Helix",
+                               "5-Helix", "Turn", "B-Strand",
+                               "B-Bridge", "Bend" )
+    for( i in 1:length( VEC_abbrev ) )
+      for( j in 1:ncol( dsspData ) )
+      {
+        INT_occ <- sum( sapply( gregexpr( VEC_abbrev[ i ],
+                                          dsspData[ , j ],
+                                          fixed = TRUE ),
+                                function( x ) sum( x > -1 ) ) )
+        MAT_data[ j, i + 1 ] <- INT_occ
+      }
+    MAT_data <- round( MAT_data / nrow( dsspData ) * 100,
+                       digits = 2 )
+    MAT_data[ , 1 ] <- 1:ncol( dsspData )
     return( MAT_data )
   }
 }
@@ -349,13 +377,14 @@ load_dssp_ts <- function( folder,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   LIST_return <- list()
   if( mdEngine == "GROMOS" )
   {
     VEC_gromos_names <- filenames
-    if( is.na( filenames ) )
+    if( all( is.na( filenames ) ) )
       VEC_gromos_names <- c( "3-Helix", "4-Helix", "5-Helix",
                              "Bend", "Beta-Bridge", "Beta-Strand",
                              "Turn" )
@@ -377,7 +406,6 @@ load_dssp_ts <- function( folder,
                             values = TABLE_current )
       LIST_return[[ length( LIST_return ) + 1 ]] <- LIST_current
     }
-    return( LIST_return )
   }
   if( mdEngine == "GROMACS" )
   {
@@ -408,8 +436,38 @@ load_dssp_ts <- function( folder,
                                                             values = list( x=VEC_tableColumnSnapshot[ -1 ],
                                                                            y=VEC_tableColumnResidues[ -1 ] ) )
     }
-    return( LIST_return )
   }
+  if( mdEngine == "AMBER" )
+  {
+    dsspData <- read.table( paste( folder, "/", filenames, sep = "" ) )[ , -1 ]
+    VEC_abbrev <- c( "G", "H", "I",
+                     "T", "E", "B",
+                     "S" )
+    VEC_types <- c( "3-Helix", "4-Helix", "5-Helix",
+                    "Turn", "B-Strand", "B-Bridge",
+                    "Bend" )
+    for( i in 1:length( VEC_abbrev ) )
+    {
+      VEC_tableColumnResidues <- NA
+      VEC_tableColumnSnapshot <- NA
+      for( j in 1:ncol( dsspData ) )
+        for( k in 1:nrow( dsspData ) )
+        {
+          if( dsspData[ k, j ] == VEC_abbrev[ i ] )
+          {
+            VEC_tableColumnSnapshot <- c( VEC_tableColumnSnapshot,
+                                          k )
+            VEC_tableColumnResidues <- c( VEC_tableColumnResidues,
+                                          j )
+          }
+        }
+      if( !all( is.na( VEC_tableColumnResidues ) ) )
+        LIST_return[[ length( LIST_return ) + 1 ]] <- list( name = VEC_types[ i ],
+                                                            values = list( x=VEC_tableColumnSnapshot[ -1 ],
+                                                                           y=VEC_tableColumnResidues[ -1 ] ) )
+    }
+  }
+  return( LIST_return )
 }
 
 # BUG: time in nanoseconds does not work!

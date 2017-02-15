@@ -6,7 +6,8 @@ load_ramachandran <- function( path,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   
   MAT_input <- NA
@@ -31,6 +32,16 @@ load_ramachandran <- function( path,
     inputData <- inputData[ inputData != "" ]
     VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) )[ c( T, T, F ) ] )
     MAT_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+  }
+  if( mdEngine == "AMBER" )
+  {
+    MAT_buffer <- as.matrix( read.table( path ) )[ , -1 ]
+    if( ncol( MAT_buffer ) < max( angleColumns ) )
+      stop( paste( "Error while loading and parsing file '",
+                   path, "' since the number of columns is less than ",
+                   "the maximum column number specified.",
+                   sep = "" ) )
+    MAT_input <- MAT_buffer[ , angleColumns ]
   }
   if( !is.na( shiftAngles ) )
   {
