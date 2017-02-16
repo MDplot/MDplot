@@ -17,6 +17,10 @@
 \alias{load_dssp_GROMACS}
 \alias{load_XPM}
 \alias{load_clusters_GROMACS}
+\alias{find_Nth_occurrence}
+\alias{split_GROMACS_atomnames}
+\alias{split_AMBER_atomnames}
+\alias{load_clusters_GROMACS}
 \title{Internal functions for \code{MDplot}}
 \description{Functions in \code{MDplot} not to be used by the user directly.
 }

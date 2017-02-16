@@ -31,7 +31,7 @@ hbond( load_hbond( system.file( "extdata/hbond_example.txt.gz",
 # see "extdata/hbond_example.txt.gz" for format information
 hbond( load_hbond( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                                 package = "MDplot" ),
-                   system.file( "extdata/hbond_log_GROMACS.txt.gz",
+                   system.file( "extdata/hbond_example_GROMACS.txt.gz",
                                 package = "MDplot" ),
                    mdEngine = "GROMACS" ) )
 }

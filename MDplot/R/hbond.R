@@ -4,7 +4,8 @@ load_hbond_ts <- function( path,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   if( mdEngine == "GROMOS" )
   {
@@ -31,6 +32,10 @@ load_hbond_ts <- function( path,
                        VEC_which ),
                     byrow = FALSE,
                     ncol = 2 ) )
+  }
+  if( mdEngine == "AMBER" )
+  {
+    
   }
 }
 
@@ -284,7 +289,8 @@ load_hbond <- function( path,
                               "atomAcceptorName", "percentage" )
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   if( mdEngine == "GROMOS" )
   {
@@ -373,6 +379,53 @@ load_hbond <- function( path,
     # update column names
     colnames( TABLE_result ) <- VEC_outputColumnNames
     
+    return( TABLE_result )
+  }
+  if( mdEngine == "AMBER" )
+  {
+    CON_input <- file( path, open = "r" )
+    LIST_buffer <- list()
+    INT_line <- 1
+
+    while( length( STRING_theLine <- readLines( CON_input, n = 1, warn = FALSE ) ) > 0 )
+    {
+      if( !( grepl( "#", STRING_theLine ) ||
+             grepl( "Bridge ", STRING_theLine ) ||
+             grepl( "SolventAcc", STRING_theLine ) ) )
+      {
+        VEC_buffer <- unlist( strsplit( STRING_theLine, split = " +" ) )
+        LIST_buffer[[ INT_line ]] <- VEC_buffer
+        INT_line <- INT_line + 1
+      }
+    }
+    close( CON_input )
+
+    DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 7, byrow = TRUE ),
+                             stringsAsFactors = FALSE )
+    MAT_result <- matrix( c( 1:nrow( DF_buffer ),
+                             rep( NA, times = 10 * nrow( DF_buffer ) ) ),
+                          ncol = 11,
+                          byrow = FALSE )
+    for( i in 1:nrow( DF_buffer ) )
+    {
+      LIST_acceptor = split_AMBER_atomnames( DF_buffer[ i, 1 ] )
+      LIST_hydrogen = split_AMBER_atomnames( DF_buffer[ i, 2 ] )
+      LIST_donor = split_AMBER_atomnames( DF_buffer[ i, 3 ] )
+      MAT_result[ i, 2 ] <- LIST_donor$resNumber
+      MAT_result[ i, 3 ] <- LIST_donor$resName
+      MAT_result[ i, 4 ] <- LIST_acceptor$resNumber
+      MAT_result[ i, 5 ] <- LIST_acceptor$resName
+      MAT_result[ i, 7 ] <- LIST_donor$atomName
+      MAT_result[ i, 10 ] <- LIST_acceptor$atomName
+      REAL_percentage <- round( as.numeric( DF_buffer[ i, 5 ] ) * 100,
+                                digits = 2 )
+      MAT_result[ i, 11 ] <- REAL_percentage
+    }
+    STRING_tempFile <- tempfile( "MDplot_Hbonds" )
+    on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
+    write.table( MAT_result, file = STRING_tempFile )
+    TABLE_result <- read.table( STRING_tempFile )
+    colnames( TABLE_result ) <- VEC_outputColumnNames
     return( TABLE_result )
   }
 }

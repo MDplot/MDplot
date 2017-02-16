@@ -13,15 +13,18 @@ load_hbond( path,
 }
 \examples{
 # GROMOS
-# see "extdata/hbond_example.txt.gz" for format information
 load_hbond( system.file( "extdata/hbond_example.txt.gz", package = "MDplot" ) )
 
 # GROMACS
 load_hbond( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                          package = "MDplot" ),
-            system.file( "extdata/hbond_log_GROMACS.txt.gz",
+            system.file( "extdata/hbond_example_GROMACS.txt.gz",
                          package = "MDplot" ),
             mdEngine = "GROMACS" )
+
+# AMBER
+load_hbond( system.file( "extdata/hbond_example_AMBER.txt.gz",
+            package = "MDplot" ), mdEngine = "AMBER" )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

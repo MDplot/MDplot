@@ -71,7 +71,8 @@ export(
          load_XPM,
          find_Nth_occurrence,
          split_GROMACS_atomnames,
-         load_clusters_GROMACS
+         load_clusters_GROMACS,
+         split_AMBER_atomnames
       )
 
 # export classes

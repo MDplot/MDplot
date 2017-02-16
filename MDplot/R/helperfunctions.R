@@ -1,3 +1,15 @@
+# split AMBER atom names into parts
+split_AMBER_atomnames <- function( STRING_input )
+{
+  VEC_first <- unlist( strsplit( STRING_input,
+                                 split = "@" ) )
+  VEC_second <- unlist( strsplit( VEC_first[ 1 ],
+                                  split = "_" ) )
+  return( list( resName = VEC_second[ 1 ],
+                resNumber = as.numeric( VEC_second[ 2 ] ),
+                atomName = VEC_first[ 2 ] ) )
+}
+
 # split GROMACS atom names into parts
 split_GROMACS_atomnames <- function( STRING_input )
 {

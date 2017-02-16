@@ -9,10 +9,11 @@ o added 'barScaleFactor' to function 'dssp_ts()' to account for the
 o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()',
   'load_hbond()', 'load_hbond_ts()', 'load_clusters()',
   'load_clusters_ts()', 'load_ramachandran()' and 'load_xrmsd()'
-o added AMBER support for functions: 'load_rmsd()'
+o added AMBER support for functions: 'load_rmsd()', 'load_ramachandran()',
+  'load_dssp()', 'load_dssp_ts()' and 'load_hbond()'
 o added function 'load_XPM()' to load "X PixMap" data as commonly
   produced by GROMACS
-o added functions 'find_Nth_occurrence()' and 'split_GROMACS_atomnames()'
+o added functions 'find_Nth_occurrence()', 'split_GROMACS_atomnames()' and 'split_AMBER_atomnames()'
   to the collection of helper functions
 o added parameter 'showMultipleInteractions' to function 'hbond()' to
   represent multi- or hybrid hydrogen bond donors and acceptors
