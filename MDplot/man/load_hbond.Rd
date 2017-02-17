@@ -9,7 +9,7 @@ load_hbond( path,
             mdEngine = "GROMOS" ) }
 \arguments{
   \item{path}{Specifies the path of the text input file.}
-  \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
+  \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine - currently supported: GROMOS, GROMACS and AMBER. Note, that \code{load_hbond()} is able to load both summary and time-series data.}
 }
 \examples{
 # GROMOS
@@ -23,7 +23,12 @@ load_hbond( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
             mdEngine = "GROMACS" )
 
 # AMBER
+# summary
 load_hbond( system.file( "extdata/hbond_example_AMBER.txt.gz",
+            package = "MDplot" ), mdEngine = "AMBER" )
+
+# time-series
+load_hbond( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
             package = "MDplot" ), mdEngine = "AMBER" )
 }
 \author{Christian Margreitter}

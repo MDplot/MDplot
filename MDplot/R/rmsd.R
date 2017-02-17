@@ -84,10 +84,16 @@ load_rmsd <- function( files,
   LIST_return <- list()
   for( i in 1:length( files ) )
   {
-    TABLE_input <- NA
     if( mdEngine == "GROMOS" )
     {
       TABLE_input <- read.table( files[ i ] )
+      if( length( LIST_return ) == 0 )
+        LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
+      else
+      {
+        LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
+        LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+      }
     }
     if( mdEngine == "GROMACS" )
     {
@@ -99,24 +105,44 @@ load_rmsd <- function( files,
       inputData <- inputData[ inputData != "" ]
       VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
       TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+      if( length( LIST_return ) == 0 )
+        LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
+      else
+      {
+        LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
+        LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+      }
     }
     if( mdEngine == "AMBER" )
     {
       inputData <- readLines( files[ i ],
                               warn = FALSE )
-      inputData <- gsub( "^[#].*", "", inputData )
-      inputData <- gsub( "^[@].*", "", inputData )
-      inputData <- gsub( "^\\s+|\\s+$", "", inputData )
-      inputData <- inputData[ inputData != "" ]
-      VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
-      TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
-    }
-    if( length( LIST_return ) == 0 )
-      LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
-    else
-    {
-      LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
-      LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+      LIST_inputData <- list()
+      INT_previous <- 1
+      for( j in 1:length( inputData ) )
+        if( inputData[ j ] == "@type xy" )
+        {
+          LIST_inputData[[ length( LIST_inputData ) + 1 ]] <- inputData[ INT_previous:j ]
+          INT_previous <- j
+        }
+      LIST_inputData[[ length( LIST_inputData ) + 1 ]] <- inputData[ ( INT_previous + 1 ):length( inputData ) ]
+      for( j in 2:length( LIST_inputData ) )
+      {
+        inputData <- LIST_inputData[[ j ]]
+        inputData <- gsub( "^[#].*", "", inputData )
+        inputData <- gsub( "^[@].*", "", inputData )
+        inputData <- gsub( "^\\s+|\\s+$", "", inputData )
+        inputData <- inputData[ inputData != "" ]
+        VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
+        TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+        if( length( LIST_return ) == 0 )
+          LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
+        else
+        {
+          LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
+          LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+        }
+      }
     }
   }
   return( LIST_return )

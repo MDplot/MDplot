@@ -13,7 +13,6 @@ load_rmsd( files,
   \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine. Currently available: "GROMOS" and "GROMACS".}
 }
 \examples{
-\dontrun{
 % GROMOS
 load_rmsd( c( system.file( "extdata/rmsd1_example.txt.gz", package = "MDplot" ),
               system.file( "extdata/rmsd2_example.txt.gz", package = "MDplot" ) ) )
@@ -27,6 +26,6 @@ load_rmsd( c( system.file( "extdata/rmsd_example_GROMACS.txt.gz",
 load_rmsd( c( system.file( "extdata/rmsd_example_AMBER.txt.gz",
                            package = "MDplot" ) ),
            mdEngine = "AMBER" )
-}}
+}
 \author{Christian Margreitter}
 \keyword{rmsd}
