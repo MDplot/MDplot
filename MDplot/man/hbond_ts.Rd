@@ -39,7 +39,6 @@ hbond_ts( timeseries,
 }
 \examples{
 # GROMOS
-# see "extdata/hbond_example.txt.gz" and "extdata/hbond_ts_example.txt.gz" for format information
 hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz",
                                       package = "MDplot" ) ),
           load_hbond( system.file( "extdata/hbond_example.txt.gz",
@@ -57,6 +56,14 @@ hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
           plotOccurences = TRUE, namesToSingle = FALSE, printNames = TRUE,
           printAtoms = TRUE, hbondIndices = list( c( 1, 12 ) ),
           timeUnit = "ns", snapshotsPerTimeInt = 100 )
+
+# AMBER
+hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
+                                      package = "MDplot" ),
+                         mdEngine = "AMBER" ),
+          load_hbond( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
+                                   package = "MDplot" ),
+                         mdEngine = "AMBER" ) )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

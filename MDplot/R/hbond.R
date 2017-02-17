@@ -35,7 +35,22 @@ load_hbond_ts <- function( path,
   }
   if( mdEngine == "AMBER" )
   {
-    
+    inputData <- read.table( path )
+    VEC_times <- c()
+    VEC_which <- c()
+    for( i in 1:nrow( inputData ) )
+      for( j in 1:ncol( inputData ) )
+        if( inputData[ i, j ] == 1 )
+        {
+          VEC_times <- c( VEC_times,
+                          i )
+          VEC_which <- c( VEC_which,
+                          j - 1 )
+        }
+    return( matrix( c( VEC_times,
+                       VEC_which ),
+                    byrow = FALSE,
+                    ncol = 2 ) )
   }
 }
 
@@ -381,45 +396,85 @@ load_hbond <- function( path,
     
     return( TABLE_result )
   }
+  
+  # WARNING: function 'load_hbond()' does not support H-bonds formed with solvent yet
   if( mdEngine == "AMBER" )
   {
+    firstElement <- read.table( path )[ 1, 1 ]
     CON_input <- file( path, open = "r" )
     LIST_buffer <- list()
     INT_line <- 1
+    TABLE_result <- NA
+    MAT_result <- NA
 
-    while( length( STRING_theLine <- readLines( CON_input, n = 1, warn = FALSE ) ) > 0 )
+    if( is.numeric( firstElement ) )
     {
-      if( !( grepl( "#", STRING_theLine ) ||
-             grepl( "Bridge ", STRING_theLine ) ||
-             grepl( "SolventAcc", STRING_theLine ) ) )
+      # -> input is timeseries file
+      
+      inputData <- read.table( path )[ , -1 ]
+      firstLine <- readLines( CON_input, n = 1, warn = FALSE )
+      close( CON_input )
+      VEC_names <- unlist( strsplit( firstLine, split = " +" ) )[ -1 ]
+      VEC_fractions <- round( apply( inputData,
+                                     2,
+                                     FUN = sum ) / nrow( inputData ) * 100,
+                              digits = 2 )
+      MAT_result <- matrix( c( 1:ncol( inputData ),
+                               rep( NA, times = 10 * ncol( inputData ) ) ),
+                            ncol = 11,
+                            byrow = FALSE )
+      for( i in 1:length( VEC_names ) )
       {
-        VEC_buffer <- unlist( strsplit( STRING_theLine, split = " +" ) )
-        LIST_buffer[[ INT_line ]] <- VEC_buffer
-        INT_line <- INT_line + 1
+        VEC_currentNamesFragments <- unlist( strsplit( VEC_names[ i ],
+                                                       split = "-" ) )
+        LIST_acceptor = split_AMBER_atomnames( VEC_currentNamesFragments[ 1 ] )
+        LIST_donor = split_AMBER_atomnames( VEC_currentNamesFragments[ 2 ] )
+        MAT_result[ i, 2 ] <- LIST_donor$resNumber
+        MAT_result[ i, 3 ] <- LIST_donor$resName
+        MAT_result[ i, 4 ] <- LIST_acceptor$resNumber
+        MAT_result[ i, 5 ] <- LIST_acceptor$resName
+        MAT_result[ i, 7 ] <- LIST_donor$atomName
+        MAT_result[ i, 10 ] <- LIST_acceptor$atomName
+        MAT_result[ i, 11 ] <- VEC_fractions[ i ]
       }
     }
-    close( CON_input )
-
-    DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 7, byrow = TRUE ),
-                             stringsAsFactors = FALSE )
-    MAT_result <- matrix( c( 1:nrow( DF_buffer ),
-                             rep( NA, times = 10 * nrow( DF_buffer ) ) ),
-                          ncol = 11,
-                          byrow = FALSE )
-    for( i in 1:nrow( DF_buffer ) )
+    else
     {
-      LIST_acceptor = split_AMBER_atomnames( DF_buffer[ i, 1 ] )
-      LIST_hydrogen = split_AMBER_atomnames( DF_buffer[ i, 2 ] )
-      LIST_donor = split_AMBER_atomnames( DF_buffer[ i, 3 ] )
-      MAT_result[ i, 2 ] <- LIST_donor$resNumber
-      MAT_result[ i, 3 ] <- LIST_donor$resName
-      MAT_result[ i, 4 ] <- LIST_acceptor$resNumber
-      MAT_result[ i, 5 ] <- LIST_acceptor$resName
-      MAT_result[ i, 7 ] <- LIST_donor$atomName
-      MAT_result[ i, 10 ] <- LIST_acceptor$atomName
-      REAL_percentage <- round( as.numeric( DF_buffer[ i, 5 ] ) * 100,
-                                digits = 2 )
-      MAT_result[ i, 11 ] <- REAL_percentage
+      # -> input is summary file
+
+      while( length( STRING_theLine <- readLines( CON_input, n = 1, warn = FALSE ) ) > 0 )
+      {
+        if( !( grepl( "#", STRING_theLine ) ||
+               grepl( "Bridge ", STRING_theLine ) ||
+               grepl( "SolventAcc", STRING_theLine ) ) )
+        {
+          VEC_buffer <- unlist( strsplit( STRING_theLine, split = " +" ) )
+          LIST_buffer[[ INT_line ]] <- VEC_buffer
+          INT_line <- INT_line + 1
+        }
+      }
+      close( CON_input )
+
+      DF_buffer <- data.frame( matrix( unlist( LIST_buffer ), ncol = 7, byrow = TRUE ),
+                               stringsAsFactors = FALSE )
+      MAT_result <- matrix( c( 1:nrow( DF_buffer ),
+                               rep( NA, times = 10 * nrow( DF_buffer ) ) ),
+                            ncol = 11,
+                            byrow = FALSE )
+      for( i in 1:nrow( DF_buffer ) )
+      {
+        LIST_acceptor = split_AMBER_atomnames( DF_buffer[ i, 1 ] )
+        LIST_donor = split_AMBER_atomnames( DF_buffer[ i, 3 ] )
+        MAT_result[ i, 2 ] <- LIST_donor$resNumber
+        MAT_result[ i, 3 ] <- LIST_donor$resName
+        MAT_result[ i, 4 ] <- LIST_acceptor$resNumber
+        MAT_result[ i, 5 ] <- LIST_acceptor$resName
+        MAT_result[ i, 7 ] <- LIST_donor$atomName
+        MAT_result[ i, 10 ] <- LIST_acceptor$atomName
+        REAL_percentage <- round( as.numeric( DF_buffer[ i, 5 ] ) * 100,
+                                  digits = 2 )
+        MAT_result[ i, 11 ] <- REAL_percentage
+      }
     }
     STRING_tempFile <- tempfile( "MDplot_Hbonds" )
     on.exit( unlink( STRING_tempFile, recursive = FALSE, force = FALSE ) )
