@@ -247,7 +247,7 @@ load_clusters_GROMACS <- function( path,
   }
 }
 
-# load function for "MDplot_clusters"
+# load function for function "clusters()"
 load_clusters <- function( path,
                            names = NA,
                            lengths = NA,
@@ -255,7 +255,8 @@ load_clusters <- function( path,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   MAT_pre <- NULL
   if( mdEngine == "GROMOS" )
@@ -276,7 +277,10 @@ load_clusters <- function( path,
       for( j in 1:INT_numberClusters )
         MAT_pre[ i, j ] <- sum( LIST_temp[[ i ]][ , 2 ] == j )
   }
-  
+  if( mdEngine == "AMBER" )
+  {
+    
+  }
   if( all( !is.na( names ) ) &&
       length( names ) == nrow( MAT_pre ) )
   {

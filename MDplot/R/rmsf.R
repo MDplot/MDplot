@@ -4,7 +4,8 @@ load_rmsf <- function( files,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   LIST_return <- list()
   for( i in 1:length( files ) )
@@ -24,6 +25,10 @@ load_rmsf <- function( files,
       inputData <- inputData[ inputData != "" ]
       VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
       TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = 2 )
+    }
+    if( mdEngine == "AMBER" )
+    {
+      TABLE_input <- read.table( files[ i ] )
     }
     if( length( LIST_return ) == 0 )
     {
