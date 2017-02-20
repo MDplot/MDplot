@@ -168,8 +168,6 @@ rmsd <- function( rmsdData,
   INT_min_snapshot = min( unlist( lapply( rmsdData[ c( T, F ) ],
                                           FUN = function( x ) min( x ) ) ) )
   #########
-  print( INT_max_snapshot )
-  print( INT_min_snapshot )
   
   # set colours and names
   PALETTE_RMSD_colours <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
@@ -179,8 +177,8 @@ rmsd <- function( rmsdData,
     names = 1:( length( rmsdData ) / 2 )
   #########
   
-  LIST_return <- list()
   # plot
+  LIST_return <- list()
   for( i in 1:length( rmsdData ) )
   {
     if( i %% 2 == 1 )

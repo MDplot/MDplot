@@ -1,21 +1,22 @@
-%  Copyright (C) 2015 Christian Margreitter
-\name{dssp_summary}
-\alias{dssp_summary}
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-20
+\name{dssp}
+\alias{dssp}
 \title{DSSP summary plot for secondary structure elements (proteins)}
 \description{
-Plots summary plot for secondary structure motifs based on the output of the widely used classification program DSSP, which takes hydrogen bonds into account. The default order is: "3-Helix", "4-Helix", "5-Helix", "Bend", "Beta-Bridge", "Beta-Strand", "Turn".}
+Plots summary plot for secondary structure motifs based on the output of the widely used classification program DSSP, which uses hydrogen bonds for classification. The default order is: "3-Helix", "4-Helix", "5-Helix", "Bend", "Beta-Bridge", "Beta-Strand", "Turn" (depending on the input, not all types might be included).}
 \usage{
-dssp_summary( dsspData,
-              printLegend = FALSE,
-              useOwnLegend = FALSE,
-              elementNames = NA,
-              colours = NA,
-              showValues = NA,
-              showResidues = NA,
-              plotType = "dots",
-              selectedElements = NA,
-              barePlot = FALSE,
-              ... )}
+dssp( dsspData,
+      printLegend = FALSE,
+      useOwnLegend = FALSE,
+      elementNames = NA,
+      colours = NA,
+      showValues = NA,
+      showResidues = NA,
+      plotType = "dots",
+      selectedElements = NA,
+      barePlot = FALSE,
+      ... )}
 \arguments{
   \item{dsspData}{Table containing the information on the secondary structure motifs.}
   \item{printLegend}{If \code{TRUE}, a legend is printed on the right hand side of the plot.}
@@ -29,10 +30,13 @@ dssp_summary( dsspData,
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }
+\value{
+Returns matrix, where the first column is the residue-number and the remaining ones denote secondary structure classes. Residues are given row-wise and values range from \code{0} to \code{100} percent.
+}
 \examples{
-# see "extdata/dssp_summary_example.txt.gz" for format information
-dssp_summary( load_dssp_summary( system.file( "extdata/dssp_summary_example.txt.gz",
-                                 package = "MDplot" ) ) )
+# GROMOS (see load_dssp() for other input possibilities)
+dssp( load_dssp( system.file( "extdata/dssp_example.txt.gz",
+                 package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{dssp}

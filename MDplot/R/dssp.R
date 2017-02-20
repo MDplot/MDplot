@@ -92,8 +92,8 @@ load_dssp_GROMACS <- function( path )
 }
 
 # load and return input
-load_dssp_summary <- function( path,
-                               mdEngine = "GROMOS" )
+load_dssp <- function( path,
+                       mdEngine = "GROMOS" )
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
@@ -169,18 +169,18 @@ load_dssp_summary <- function( path,
 }
 
 # plot the summary over residues and values (selected)
-# WARNING because residues are renumbered if selected
-dssp_summary <- function( dsspData,
-                          printLegend = FALSE,
-                          useOwnLegend = FALSE,
-                          elementNames = NA,
-                          colours = NA,
-                          showValues = NA,
-                          showResidues = NA,
-                          plotType = "dots",
-                          selectedElements = NA,
-                          barePlot = FALSE,
-                          ... )
+# WARNING: because residues are renumbered if selected
+dssp <- function( dsspData,
+                  printLegend = FALSE,
+                  useOwnLegend = FALSE,
+                  elementNames = NA,
+                  colours = NA,
+                  showValues = NA,
+                  showResidues = NA,
+                  plotType = "dots",
+                  selectedElements = NA,
+                  barePlot = FALSE,
+                  ... )
 {
   
   # parse input table and get all values in a matrix
@@ -470,7 +470,6 @@ load_dssp_ts <- function( folder,
   return( LIST_return )
 }
 
-# BUG: time in nanoseconds does not work!
 # plot the time-series files, that are specified
 dssp_ts <- function( tsData,
                      printLegend = TRUE,

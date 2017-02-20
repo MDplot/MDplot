@@ -1,4 +1,5 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-18
 \name{MDplot-internal}
 \alias{parse_arguments}
 \alias{testRequired}

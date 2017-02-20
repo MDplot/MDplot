@@ -1,9 +1,10 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-20
 \name{dssp_ts}
 \alias{dssp_ts}
 \title{DSSP timeseries plot for secondary structure elements (proteins)}
 \description{
-Plots time-series for secondary structure motifs in the context of the widely used dssp algorithm. The default order is: "3-Helix", "4-Helix", "5-Helix", "Bend", "Beta-Bridge", "Beta-Strand", "Turn".}
+Plots time-series for secondary structure motifs in the context of the widely used DSSP algorithm. The default order is: "3-Helix", "4-Helix", "5-Helix", "Bend", "Beta-Bridge", "Beta-Strand", "Turn".}
 \usage{
 dssp_ts( tsData,
          printLegend = TRUE,
@@ -20,13 +21,18 @@ dssp_ts( tsData,
   \item{timeBoundaries}{A vector of boundaries for the time in snapshots.}
   \item{residueBoundaries}{A vector of boundaries for the residues.}
   \item{timeUnit}{If set, the snapshots are transformed into the respective time (depending on parameter \code{snapshotsPerTime}.}
-  \item{snapshotsPerTimeInt}{Number of snapshots per respective \code{timeUnit}.}
+  \item{snapshotsPerTimeInt}{Number of snapshots per respective \code{timeUnit} (only used when \code{timeUnit} is set).}
   \item{barScaleFactor}{Allows to manually overwrite the height of the bars.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }
+\value{
+This function does not return data.
+}
 \examples{
-dssp_ts( load_dssp_ts( system.file( "extdata", package = "MDplot" ) ) )
+# GROMOS (see load_dssp_ts() for other input possibilities)
+dssp_ts( load_dssp_ts( system.file( "extdata/dssp_ts_example",
+                                    package = "MDplot" ) ) )
 }
 \author{Christian Margreitter}
 \keyword{dssp}

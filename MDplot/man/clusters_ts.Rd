@@ -1,9 +1,10 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-20
 \name{clusters_ts}
 \alias{clusters_ts}
 \title{Cluster timeseries plot}
 \description{
-This function plots distributions between clusters over time. In the top sub-plot, the overall distribution is given, while the timeseries is given at the bottom. The clusters are sorted beginning with the most populated one and then in descending order. Selections can be made, clusters that are not selected do also not appear in the timeseries plot (white areas).}
+This function plots distributions between clusters over time. In the top sub-plot, the overall distribution is given, while the timeseries is given at the bottom. The clusters are sorted beginning with the most populated one and then in descending order. Selections can be made and clusters that are not selected do also not appear in the timeseries plot (white areas).}
 \usage{
 clusters_ts( clustersDataTS,
              clustersNumber = NA,
@@ -21,8 +22,11 @@ clusters_ts( clustersDataTS,
   \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit.}
   \item{...}{Additional arguments (ellipsis).}
 }
+\value{
+Returns a summary \code{n}x\code{m}-matrix with \code{n} being the number of input trajectories and \code{m} the number of different clusters (which have been plotted). Each element in the matrix holds the number of snapshots, the respective cluster occured in the respective trajectory. In addition, the first line is the overall summary counted over all trajectories.
+}
 \examples{
-# see "extdata/clusters_ts_example.txt.gz" for format information
+# GROMOS (see load_clusters_ts() for other input possibilities)
 clusters_ts( load_clusters_ts( system.file( "extdata/clusters_ts_example.txt.gz",
                                package = "MDplot" ),
                                lengths = c( 4000, 4000, 4000, 4000, 4000, 4000 ) ),

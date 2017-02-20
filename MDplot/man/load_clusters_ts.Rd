@@ -1,4 +1,5 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-20
 \name{load_clusters_ts}
 \alias{load_clusters_ts}
 \title{Loading timeseries cluster information}
@@ -11,10 +12,15 @@ load_clusters_ts( path,
                   mdEngine = "GROMOS" )
 }
 \arguments{
-  \item{path}{Specified the path of the text input file.}
-  \item{lengths}{Mandatory vector holding the number of snapshots for the respective trajectories.}
-  \item{names}{Optional vector of trajectory names. Needs to be of the same length as the number of clusters to be plotted.}
-  \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
+  \item{path}{Specifies the path of the text input file.}
+  \item{lengths}{Mandatory vector holding the number of snapshots for the respective trajectories (e.g. when three trajectories of 3000 snapshots each have been analysed together: \code{lengths = c(3000,3000,300)}).}
+  \item{names}{Optional vector of trajectory names. If provided, needs to be of the same length as the number of clusters to be plotted.}
+  \item{mdEngine}{Argument distinguishes between input formats based on the molecular dynamics engine used. Currently available: \code{"GROMOS"}, \code{"GROMACS"} and \code{"AMBER"}.}
+}
+\value{
+Returns a list of name-cluster lists, which consist of:
+\item{[1]}{Trajectory name.}
+\item{[2]}{Vector of cluster numbers, where \code{0} indicates a structure not belonging to a cluster specified.}
 }
 \examples{
 # GROMOS

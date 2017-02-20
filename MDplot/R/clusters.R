@@ -1,4 +1,4 @@
-# load function for "MDplot_clusters_timeseries"
+# loading function for "clusters_ts()"
 load_clusters_ts <- function( path,
                               lengths,
                               names = NA,
@@ -262,7 +262,7 @@ load_clusters_GROMACS <- function( path,
   }
 }
 
-# load function for function "clusters()"
+# loading function for "clusters()"
 load_clusters <- function( path,
                            names = NA,
                            lengths = NA,

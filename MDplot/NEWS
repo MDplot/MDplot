@@ -1,7 +1,10 @@
 Version: 0.3.x
 Date: 2017-YY-XX
 
-o added 'stride' to function 'load_dssp_ts()
+o added 'stride' to function 'load_dssp_ts()'
+o changed parameters of function 'load_rmsf()'
+o renamed functions 'load_dssp_summary()' and 'dssp_summary()' into
+  'load_dssp()' and 'dssp()', respectively
 o added additional box lines to function 'ramachandran()' for
   'plotType = "comic"'
 o added 'barScaleFactor' to function 'dssp_ts()' to account for the
@@ -10,14 +13,15 @@ o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()',
   'load_hbond()', 'load_hbond_ts()', 'load_clusters()',
   'load_clusters_ts()', 'load_ramachandran()' and 'load_xrmsd()'
 o added AMBER support for functions: 'load_rmsd()', 'load_ramachandran()',
-  'load_dssp()', 'load_dssp_ts()' and 'load_hbond()'
+  'load_dssp()', 'load_dssp_ts()', 'load_hbond()', 'load_clusters()',
+  'load_clusters_ts()', 'load_rmsf()' and 'load_xrmsd()'
 o added function 'load_XPM()' to load "X PixMap" data as commonly
   produced by GROMACS
-o added functions 'find_Nth_occurrence()', 'split_GROMACS_atomnames()' and 'split_AMBER_atomnames()'
-  to the collection of helper functions
+o added functions 'find_Nth_occurrence()', 'split_GROMACS_atomnames()' and
+  'split_AMBER_atomnames()' to the collection of helper functions
 o added parameter 'showMultipleInteractions' to function 'hbond()' to
   represent multi- or hybrid hydrogen bond donors and acceptors
-o fixed time-axis issue in function 'load_rmsd()'
+o fixed time-axis issue in functions 'rmsd()' and 'rmsf()'
 ------------------------
 
 Version: 0.3.1

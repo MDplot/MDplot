@@ -12,7 +12,7 @@ importFrom( "grDevices", "as.raster", "colorRampPalette", "trans3d" )
 
 # export plotting functions
 export( 
-         dssp_summary,
+         dssp,
          dssp_ts,
          rmsd,
          rmsf,
@@ -35,7 +35,7 @@ export(
          load_ramachandran,
          load_clusters,
          load_TIcurve,
-         load_dssp_summary,
+         load_dssp,
          load_dssp_ts,
          load_rmsf,
          load_rmsd,
