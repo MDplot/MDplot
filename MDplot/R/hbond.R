@@ -311,7 +311,7 @@ load_hbond <- function( path,
   {
     CON_input <- file( path, open = "r" )
   
-    #skip first comments
+    # skip first comments
     readLines( CON_input, n = 23, warn = FALSE )
     LIST_buffer <- list()
     INT_line <- 1

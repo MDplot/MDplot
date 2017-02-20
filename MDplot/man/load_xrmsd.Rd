@@ -25,6 +25,11 @@ load_xrmsd( system.file( "extdata/xrmsd_example.txt.gz", package = "MDplot" ) )
 load_xrmsd( system.file( "extdata/xrmsd_example_GROMACS.txt.gz",
                          package = "MDplot" ),
             mdEngine = "GROMACS" )
+
+# AMBER
+load_xrmsd( system.file( "extdata/xrmsd_example_AMBER.txt.gz",
+                         package = "MDplot" ),
+            mdEngine = "AMBER" )
 }
 \author{Christian Margreitter}
 \keyword{xrmsd}

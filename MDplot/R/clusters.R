@@ -6,7 +6,8 @@ load_clusters_ts <- function( path,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
 
   LIST_return <- list()
@@ -36,6 +37,20 @@ load_clusters_ts <- function( path,
     LIST_temp <- load_clusters_GROMACS( path, lengths )
     for( i in 1:length( LIST_temp ) )
       LIST_return[[ length( LIST_return ) + 1 ]] <- list( names[ i ], unlist( LIST_temp[[ i ]][ , 2 ] ) )
+  }
+  if( mdEngine == "AMBER" )
+  {
+    TABLE_buf <- read.table( path )
+    INT_startLine <- 1  
+    for( i in 1:length( lengths ) )
+    {
+      TABLE_traj <- TABLE_buf[ INT_startLine:( INT_startLine + ( lengths[ i ] - 1 ) ),
+                               2 ]
+      TABLE_traj[ TABLE_traj == -1 ] <- 0
+      LIST_return[[ length( LIST_return ) + 1 ]] <- list( names[ i ],
+                                                          TABLE_traj )
+      INT_startLine <- INT_startLine + lengths[ i ]
+    }
   }
   return( LIST_return )
 }
@@ -279,7 +294,35 @@ load_clusters <- function( path,
   }
   if( mdEngine == "AMBER" )
   {
-    
+    # read comment line and the input table
+    CON_input <- file( path, open = "r" )
+    VEC_commentLine <- NA
+    while( length( STRING_theLine <- readLines( CON_input, n = 1, warn = FALSE ) ) > 0 )
+    {
+      VEC_commentLine <- unlist( strsplit( STRING_theLine, split = " +" ) )
+      if( VEC_commentLine[ 1 ] == "#Cluster" )
+        break
+    }
+    close( CON_input )
+    TABLE_input <- read.table( path )
+
+    # depending on input, generate output matrix and decide on processing
+    MAT_pre <- matrix( rep( 0, times = nrow( TABLE_input ) ),
+                       nrow = 1 )
+    if( "NumIn1st" %in% VEC_commentLine )
+    {
+      # more than one trajectories
+      VEC_indices <- grep( "NumIn", VEC_commentLine )
+      for( i in 1:length( VEC_indices ) )
+        MAT_pre <- rbind( MAT_pre,
+                          TABLE_input[ , VEC_indices[ i ] ] )
+      MAT_pre <- MAT_pre[ -1, ]
+    }
+    else
+    {
+      # only one trajectory
+      MAT_pre[ 1, ] <- TABLE_input[ , 2 ]
+    }
   }
   if( all( !is.na( names ) ) &&
       length( names ) == nrow( MAT_pre ) )
@@ -303,7 +346,7 @@ clusters <- function( clusters,
 {
   # reduce number of clusters, in case specified and take care of the trajectory names
   if( !is.na( clustersNumber ) )
-    clusters <- clusters[ , 1:clustersNumber ]
+    clusters <- clusters[ , 1:clustersNumber, drop = FALSE ]
   colnames( clusters ) <- 1:ncol( clusters )
   #########
   

@@ -8,6 +8,7 @@ xrmsd( xrmsdValues,
        printLegend = TRUE,
        xaxisRange = NA,
        yaxisRange = NA,
+       rmsdUnit = "nm",
        colours = NA,
        barePlot = FALSE,
        ... )}
@@ -16,6 +17,7 @@ xrmsd( xrmsdValues,
   \item{printLegend}{If \code{TRUE}, a legend is printed on the right hand side of the plot.}
   \item{xaxisRange}{A vector of boundaries for the x-snapshots.}
   \item{yaxisRange}{A vector of boundaries for the y-snapshots.}
+  \item{rmsdUnit}{Specifies, in which unit the RMSD values are given.}
   \item{colours}{A vector with colour names for the span palette.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}

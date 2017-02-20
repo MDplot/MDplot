@@ -7,7 +7,8 @@ load_xrmsd <- function( path,
 {
   mdEngine <- toupper( mdEngine )
   if( mdEngine != "GROMOS" &&
-      mdEngine != "GROMACS" )
+      mdEngine != "GROMACS" &&
+      mdEngine != "AMBER" )
     stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
 
   if( mdEngine == "GROMOS" )
@@ -41,7 +42,23 @@ load_xrmsd <- function( path,
     if( removeLowerHalf == FALSE ) 
       return( MAT_return )
     else
-      return( MAT_return[ MAT_return[ , 1 ] < MAT_return[ , 2 ], ] )
+      return( MAT_return[ MAT_return[ , 1 ] <= MAT_return[ , 2 ], ] )
+  }
+  if( mdEngine == "AMBER" )
+  {
+    TABLE_input <- read.table( path )[ , -1, drop = FALSE ]
+    MAT_return <- matrix( c( rep( 1:nrow( TABLE_input ), each = ncol( TABLE_input ) ),
+                             rep( 1:ncol( TABLE_input ), times = nrow( TABLE_input ) ),
+                             rep( NA, times = ncol( TABLE_input ) * nrow( TABLE_input ) ) ),
+                          ncol = 3,
+                          byrow = FALSE )
+    for( i in 1:nrow( MAT_return ) )
+      MAT_return[ i, 3 ] <- TABLE_input[ MAT_return[ i, 1 ],
+                                         MAT_return[ i, 2 ] ]
+    if( removeLowerHalf == FALSE ) 
+      return( MAT_return )
+    else
+      return( MAT_return[ MAT_return[ , 1 ] <= MAT_return[ , 2 ], ] )
   }
 }
 
@@ -52,6 +69,7 @@ xrmsd <- function( xrmsdValues,
                    xaxisRange = NA,
                    yaxisRange = NA,
                    colours = NA,
+                   rmsdUnit = "ns",
                    barePlot = FALSE,
                    ... )
 {
@@ -103,7 +121,10 @@ xrmsd <- function( xrmsdValues,
   if( printLegend )
   {
     legend_image <- as.raster( matrix( PALETTE_colours( 11 ), ncol = 1 ) )
-    plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = 'Legend [nm]' )
+    plot( c( 0, 2 ), c( 0, 1 ), type = 'n', axes = F, xlab = '', ylab = '', main = paste( 'Legend [',
+                                                                                           rmsdUnit,
+                                                                                           ']',
+                                                                                           sep = "" ) )
     text( x = 1.5, y = seq( 0, 1, l = 5 ),
           labels = round( seq( colours[ 1 ], colours[ 2 ], l = 5 ), digits = 2 ) )
     rasterImage( legend_image, 0, 0, 1, 1 )
