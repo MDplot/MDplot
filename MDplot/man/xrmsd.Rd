@@ -9,8 +9,8 @@ xrmsd( xrmsdValues,
        printLegend = TRUE,
        xaxisRange = NA,
        yaxisRange = NA,
-       rmsdUnit = "nm",
        colours = NA,
+       rmsdUnit = "nm",
        barePlot = FALSE,
        ... )}
 \arguments{
@@ -18,8 +18,8 @@ xrmsd( xrmsdValues,
   \item{printLegend}{If \code{TRUE}, a legend is printed on the right hand side of the plot.}
   \item{xaxisRange}{A vector of boundaries for the x-snapshots.}
   \item{yaxisRange}{A vector of boundaries for the y-snapshots.}
-  \item{rmsdUnit}{Specifies, in which unit the RMSD values are given.}
   \item{colours}{A vector with colour names for the span palette.}
+  \item{rmsdUnit}{Specifies, in which unit the RMSD values are given.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }
@@ -27,6 +27,7 @@ xrmsd( xrmsdValues,
 This function does not return data.
 }
 \examples{
+# GROMOS (see load_xrmsd() for other input possibilities)
 xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example.txt.gz",
                                 package = "MDplot" ),
                    factor = 10000 ) )

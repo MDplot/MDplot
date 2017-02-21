@@ -1,7 +1,7 @@
 # load the XRMSD data
 # NOTE: when testing 'GROMACS' support, also use additional input
 load_xrmsd <- function( path,
-                        factor = 10000,
+                        factor = 1,
                         removeLowerHalf = TRUE,
                         mdEngine = "GROMOS" )
 {

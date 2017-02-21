@@ -1,6 +1,7 @@
-Version: 0.3.x
-Date: 2017-YY-XX
+Version: 0.4.0
+Date: 2017-02-24
 
+o removed unnecessary input parameters from several functions
 o added 'stride' to function 'load_dssp_ts()'
 o changed parameters of function 'load_rmsf()'
 o renamed functions 'load_dssp_summary()' and 'dssp_summary()' into

@@ -8,11 +8,13 @@ This function loads clusters from a plain text file and stores them in a matrix.
 \usage{
 load_clusters( path,
                names = NA,
+               lengths = NA,
                mdEngine = "GROMOS" )
 }
 \arguments{
   \item{path}{Specifies the path of the text input file.}
   \item{names}{Optional vector of trajectory names. If provided, needs to be of the same length as the number of clusters to be plotted.}
+  \item{lengths}{When GROMACS input needs to be parsed, the lengths of the respective trajectories have to be given. This holds also in the case, that only one is used.}
   \item{mdEngine}{Argument distinguishes between input formats based on the molecular dynamics engine used. Currently available: \code{"GROMOS"}, \code{"GROMACS"} and \code{"AMBER"}. Note, that two different kinds of \code{AMBER} output may be loaded (see example input files).}
 }
 \value{

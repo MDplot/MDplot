@@ -5,7 +5,7 @@ import( gtools )
 import( gplots )
 importFrom( "graphics", "abline", "axis", "barplot", "contour", "image", "layout",
             "legend", "lines", "mtext", "par", "persp", "plot", "plot.new",
-            "rasterImage", "segments", "text" )
+            "rasterImage", "segments", "text", "axTicks" )
 importFrom( "stats", "sd" )
 importFrom( "utils", "read.table", "write.table" )
 importFrom( "grDevices", "as.raster", "colorRampPalette", "trans3d" )

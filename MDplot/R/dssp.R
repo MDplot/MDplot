@@ -19,23 +19,23 @@ dssp_summary_multi <- function( dsspSumMultInput,
     colours <- PALETTE_colours( length( dsspSumMultInput ) )
   }
   #########
-  MDplot::dssp_summary( dsspSumMultInput[[ 1 ]][[ "matrix" ]],
-                        selectedElements = c( selectedElements ),
-                        barePlot = barePlot,
-                        plotType = "curves",
-                        colours = c( colours[ 1 ] ),
-                        showResidues = showResidues,
-                        ... )
+  dssp( dsspSumMultInput[[ 1 ]][[ "matrix" ]],
+        selectedElements = c( selectedElements ),
+        barePlot = barePlot,
+        plotType = "curves",
+        colours = c( colours[ 1 ] ),
+        showResidues = showResidues,
+        ... )
   for( i in 2:length( dsspSumMultInput ) )
   {
     par( new = TRUE )
-    MDplot::dssp_summary( dsspSumMultInput[[ i ]][[ "matrix" ]],
-                          selectedElements = c( selectedElements ),
-                          barePlot = TRUE,
-                          plotType = "curves",
-                          colours = c( colours[ i ] ),
-                          showResidues = showResidues,
-                          ... )
+    dssp( dsspSumMultInput[[ i ]][[ "matrix" ]],
+          selectedElements = c( selectedElements ),
+          barePlot = TRUE,
+          plotType = "curves",
+          colours = c( colours[ i ] ),
+          showResidues = showResidues,
+          ... )
   }
   
   # print legend, if flag is set
@@ -56,10 +56,10 @@ averaging_dssp_summary <- function( VEC_files )
 {
   if( length( VEC_files ) < 2 )
     stop( "Error because no input files (two at least) have been specified!" )
-  MAT_average <- MDplot::load_dssp_summary( VEC_files[ 1 ] )
+  MAT_average <- load_dssp( VEC_files[ 1 ] )
   for( i in 2:length( VEC_files ) )
     MAT_average <- MAT_average +
-                   MDplot::load_dssp_summary( VEC_files[ i ] )
+                   load_dssp( VEC_files[ i ] )
   MAT_average <- MAT_average / length( VEC_files )
   colnames( MAT_average ) <- c( "residuenumber", "# 3-Helix", "3-Helix",
                                 "# 4-Helix", "4-Helix", "# 5-Helix",

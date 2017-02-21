@@ -10,7 +10,7 @@ load_noe( files,
           mdEngine = "GROMOS" )
 }
 \arguments{
-  \item{path}{Vector of file paths to be loaded.}
+  \item{files}{Vector of file paths to be loaded.}
   \item{mdEngine}{Argument distinguishes between input formats based on the molecular dynamics engine used. Currently available: \code{"GROMOS"}.}
 }
 \value{

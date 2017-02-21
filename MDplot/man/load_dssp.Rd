@@ -21,10 +21,12 @@ Returns matrix, where the first column is the residue-number and the remaining o
 load_dssp( system.file( "extdata/dssp_example.txt.gz", package = "MDplot" ) )
 
 # GROMACS
-load_dssp( system.file( "extdata/dssp_example_GROMACS.txt.gz", package = "MDplot" ), mdEngine = "GROMACS" )
+load_dssp( system.file( "extdata/dssp_example_GROMACS.txt.gz",
+                        package = "MDplot" ), mdEngine = "GROMACS" )
 
 # AMBER (same input as for load_dssp_ts())
-load_dssp( system.file( "extdata/dssp_ts_example_AMBER.txt.gz", package = "MDplot" ), mdEngine = "AMBER" )
+load_dssp( system.file( "extdata/dssp_ts_example_AMBER.txt.gz",
+                        package = "MDplot" ), mdEngine = "AMBER" )
 }
 \author{Christian Margreitter}
 \keyword{dssp}
