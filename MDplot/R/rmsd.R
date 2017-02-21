@@ -1,7 +1,5 @@
 # plot the average RMSD of many runs with spread
 rmsd_average <- function( rmsdInput,
-                          skip = 0,
-                          printMeans = FALSE,
                           levelFactor = NA,
                           snapshotsPerTimeInt = 1000,
                           timeUnit = "ns",
@@ -38,10 +36,10 @@ rmsd_average <- function( rmsdInput,
   plot( MAT_values[ , 1 ], MAT_values[ , 2 ], type = "l",
         col = "grey", xaxs = "i", yaxs = "i",
         xaxt = "n",
-        xlim = c( 0, nrow( MAT_values ) ),
+        xlim = c( min( MAT_values[ , 1 ] ), max( MAT_values[ , 1 ] ) ),
         #yaxt = ifelse( barePlot, "n", "s" ),
         xlab = "", ylab = "",
-        ylim = c( 0, REAL_max_RMSD * 1.05 ), ... ) #, xlim = c( 0, INT_max_snapshot ), ... )
+        ylim = c( 0, REAL_max_RMSD * 1.05 ), ... )
   if( !barePlot )
   {
     VEC_tickValues <- axTicks( 1 )
@@ -58,17 +56,19 @@ rmsd_average <- function( rmsdInput,
   # plot the maximum curve
   plot( MAT_values[ , 1 ], MAT_values[ , 4 ], type = "l",
         col = "grey", xaxs = "i", yaxs = "i",
-        xaxt = "n", yaxt = "n", xlim = c( 0, nrow( MAT_values ) ),
+        xaxt = "n", yaxt = "n", xlim = c( min( MAT_values[ , 1 ] ),
+                                          max( MAT_values[ , 1 ] ) ),
         xlab = "", ylab = "",
-        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... )
+        ylim = c( 0, REAL_max_RMSD * 1.05 ) )
    par( new = TRUE )
-  
+
   # plot the mean curve
   plot( MAT_values[ , 1 ], MAT_values[ , 3 ], type = "l",
         col = "black", xaxs = "i", yaxs = "i",
-        xaxt = "n", yaxt = "n", xlim = c( 0, nrow( MAT_values ) ),
+        xaxt = "n", yaxt = "n", xlim = c( min( MAT_values[ , 1 ] ),
+                                          max( MAT_values[ , 1 ] ) ),
         xlab = "", ylab = "", cex = 1.45,
-        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) #, xlim = c( 0, INT_max_snapshot ), ... 
+        ylim = c( 0, REAL_max_RMSD * 1.05 ) ) 
   return( MAT_values )
 }
 

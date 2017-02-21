@@ -1,4 +1,5 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-21
 \name{xrmsd}
 \alias{xrmsd}
 \title{XRMSD plot in heatmap style}
@@ -22,10 +23,13 @@ xrmsd( xrmsdValues,
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }
+\value{
+This function does not return data.
+}
 \examples{
-\dontrun{
-# see "extdata/xrmsd_example.txt.gz" for format information
-xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example.txt.gz", package = "MDplot" ) ) )
-}}
+xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example.txt.gz",
+                                package = "MDplot" ),
+                   factor = 10000 ) )
+}
 \author{Christian Margreitter}
 \keyword{xrmsd}

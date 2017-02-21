@@ -1,4 +1,5 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-21
 \name{translate_aminoacids}
 \alias{translate_aminoacids}
 \title{Function to translate between canonical and GROMOS amino acid abbreviations}
@@ -6,16 +7,15 @@
 Converts an aminoacid naming scheme in the context of GROMOS (e.g. containing HISH) into canonical three- or one-letter codes.}
 \usage{
 translate_aminoacids( input,
-                      switchMode)
+                      switchMode )
 }
 \arguments{
 \item{input}{Vector of GROMOS abbreviations.}
-\item{switchMode}{Type "1" results in three letter, type "2" in single-letter code.}
+\item{switchMode}{Type "1" results in single-letter, type "2" in three-letter code.}
 }
 \examples{
-# to one letter code
-test <- c( "ALA", "HISA", "SER" )
-MDplot::translate_aminoacids( test, switchMode = 2 )
+translate_aminoacids( c( "ALA", "HISA", "SER" ),
+                      switchMode = 2 )
 }
 \author{Christian Margreitter}
 \keyword{aminoacids}

@@ -1,4 +1,5 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-21
 \name{MDplot_argument-class}
 \docType{class}
 \alias{MDplot_argument}

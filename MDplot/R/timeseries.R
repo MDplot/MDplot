@@ -1,23 +1,10 @@
 # load timeseries
-load_timeseries <- function( files,
-                             mdEngine = "GROMOS" )
+load_timeseries <- function( files )
 {
-  mdEngine <- toupper( mdEngine )
-  if( mdEngine != "GROMOS" &&
-      mdEngine != "PLAINTEXT" )
-    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
   LIST_return <- list()
   for( i in 1:length( files ) )
   {
-    TABLE_input <- NA
-    if( mdEngine == "GROMOS" )
-    {
-      TABLE_input <- read.table( files[ i ] )
-    }
-    if( mdEngine == "PLAINTEXT" )
-    {
-      TABLE_input <- read.table( files[ i ] )
-    }
+    TABLE_input <- read.table( files[ i ] )
     if( length( LIST_return ) == 0 )
       LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
     else
@@ -37,7 +24,6 @@ timeseries <- function( tsData,
                         valueName = NA,
                         valueUnit = NA,
                         colours = NA,
-                        numberXLabels = 5,
                         names = NA,
                         legendPosition = "bottomright",
                         barePlot = FALSE,
@@ -99,10 +85,10 @@ timeseries <- function( tsData,
   # plot the rest
   if( !barePlot )
   {
+    VEC_tickValues <- axTicks( 1 )
     axis( 1,
-          at = split_equidistant( c( 1, length( tsData[[ 1 ]] ) ), numberXLabels ),
-          labels = split_equidistant( c( 1, ( length( tsData[[ 1 ]] ) / snapshotsPerTimeInt ) ), numberXLabels ),
-          cex.axis = 1 )
+          at = VEC_tickValues,
+          labels = VEC_tickValues / snapshotsPerTimeInt )
     mtext( side = 1, text = paste( "time [", timeUnit, "]", sep = "" ), line = 3,
            cex = 1 )
     if( !is.na( valueName ) )

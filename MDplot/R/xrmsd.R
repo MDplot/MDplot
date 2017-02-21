@@ -1,5 +1,5 @@
 # load the XRMSD data
-# WARNING: very sensitive to proper file format (line skipping and end ignoring)
+# NOTE: when testing 'GROMACS' support, also use additional input
 load_xrmsd <- function( path,
                         factor = 10000,
                         removeLowerHalf = TRUE,
@@ -21,7 +21,6 @@ load_xrmsd <- function( path,
                                          skip = INT_skipBeginning,
                                          nrows = length( InputFile ) -
                                                  ( INT_skipBeginning + 2 ) ) )
-    #########
   
     # divide RMSD integer values by the proper factor (usually 10000) and return resulting matrix
     MAT_return[ , 3 ] <- MAT_return[ , 3 ] / factor
@@ -69,7 +68,7 @@ xrmsd <- function( xrmsdValues,
                    xaxisRange = NA,
                    yaxisRange = NA,
                    colours = NA,
-                   rmsdUnit = "ns",
+                   rmsdUnit = "nm",
                    barePlot = FALSE,
                    ... )
 {

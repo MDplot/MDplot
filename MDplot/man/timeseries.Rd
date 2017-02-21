@@ -1,4 +1,5 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-21
 \name{timeseries}
 \alias{timeseries}
 \title{General timeseries plotting function}
@@ -11,7 +12,6 @@ timeseries( tsData,
             valueName = NA,
             valueUnit = NA,
             colours = NA,
-            numberXLabels = 5,
             names = NA,
             legendPosition = "bottomright",
             barePlot = FALSE,
@@ -24,17 +24,24 @@ timeseries( tsData,
   \item{valueName}{Name of response variable.}
   \item{valueUnit}{Specifies, which unit the y-axis is given in.}
   \item{colours}{Vector of colours used for plotting.}
-  \item{numberXLabels}{Specifies, how many ticks are used on the x-axis.}
   \item{names}{Vector of the names of the trajectories.}
   \item{legendPosition}{Indicate position of legend: either "\code{bottomright}", "\code{bottomleft}", "\code{topleft}" or "\code{topright}".}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }
-\examples{\dontrun{
-# two curves
-timeseries( load_timeseries( system.file( "extdata/timeseries_example.txt.gz",
-                                          package = "MDplot" ) ),
-            snapshotsPerTimeInt = 100 )
+\value{
+Returns a list of list, the latter each holding for every data input series:
+\itemize{\item{\code{minValue}} The minimum value over the whole set.
+\item{\code{maxValue}} The maximum value over the whole set.
+\item{\code{meanValue}} The mean value over the whole set.
+\item{\code{sd}} The standard deviation over the whole set.
 }}
+\examples{
+timeseries( load_timeseries( c( system.file( "extdata/timeseries_example_1.txt.gz",
+                                             package = "MDplot" ),
+                                system.file( "extdata/timeseries_example_2.txt.gz",
+                                             package = "MDplot" ) ) ),
+            snapshotsPerTimeInt = 100 )
+}
 \author{Christian Margreitter}
 \keyword{timeseries}

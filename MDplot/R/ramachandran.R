@@ -53,6 +53,9 @@ load_ramachandran <- function( path,
 
 
 # plot the angles on a x = ( -180, 180 ) to y = ( -180, 180 ) area
+# WARNING: when the input is very little, selection "sparse" will break
+#          down, seemingly because function 'hist2d()' does not work
+#          anymore - however, selection "comic" should be fine
 ramachandran <- function( dihedrals,
                           xBins = 150,
                           yBins = 150,
@@ -60,12 +63,10 @@ ramachandran <- function( dihedrals,
                           structureAreas = c(),
                           plotType = "sparse",
                           printLegend = FALSE,
-                          heatUnits = NA,
                           plotContour = FALSE,
                           barePlot = FALSE,
                           ... )
 {
-  
   # settings (small offset for label printing required)
   VEC_xTicks  <- c( -135,  -90,  -45,    0,   45,   90,  135 )
   VEC_xLabels <- c( -135,  -90,  -45,    0,   45,   90,  135 )
@@ -116,7 +117,6 @@ ramachandran <- function( dihedrals,
     }
     
     # contour
-    # TODO: separate this functionality somehow
     if( plotContour && ncol( dihedrals ) < 3 )
     {
       DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
@@ -152,7 +152,6 @@ ramachandran <- function( dihedrals,
     ##########
     
     # contour
-    # TODO: separate this functionality somehow
     if( plotContour && ncol( dihedrals ) < 3 )
     {
       DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
@@ -182,14 +181,6 @@ ramachandran <- function( dihedrals,
   }
   if( plotType == "fancy" )
   {
-    #DF_frequencies <- as.data.frame( table( findInterval( dihedrals[ , 1 ],
-    #                                                      LIST_filled[[ "xBins" ]] ),
-    #                                        findInterval( dihedrals[ , 2 ],
-    #                                                      LIST_filled[[ "yBins" ]] ) ) )
-    #DF_frequencies[ , 1 ] <- as.numeric( DF_frequencies[ , 1 ] )
-    #DF_frequencies[ , 2 ] <- as.numeric( DF_frequencies[ , 2 ] )
-    #freq2D <- diag( LIST_filled[[ "xBins" ]] ) * 0
-    #freq2D[ cbind( DF_frequencies[ , 1 ], DF_frequencies[ , 2 ] ) ] <- DF_frequencies[ , 3 ]
     freq2D <- LIST_filled[[ "freq2D" ]]
     freq2D[ is.na( freq2D ) ] <- 0
     INT_numberColours <- 100
@@ -209,9 +200,6 @@ ramachandran <- function( dihedrals,
                           d = 0.75,
                           ... )
     lines( trans3d( seq( 0, 1, by = 0.25 ), 0, 0, perspMatrix ), col = "black" )
-    #lines( trans3d( 0, seq( 0, 1, by = 0.25 ), 0, perspMatrix ), col = "black" )
-    #lines( trans3d( 0, 0, seq( 0, max( DF_frequencies[ , 3 ] ), length.out = 4 ), perspMatrix ),
-    #       col = "black" )
     
     # x-axis
     tick.start <- trans3d( seq( 1 / 8, 7 / 8, by = 1 / 8 ), 0, 0, perspMatrix )
@@ -283,9 +271,7 @@ ramachandran <- function( dihedrals,
                         VEC_palette )
     legend_image <- as.raster( matrix( rev( VEC_palette ) ), ncol = 1 )
     par( mar = c( 4.0, 1.0, 4.0, 2.5 ) )
-    STRING_legendCaption <- ifelse( is.na( heatUnits ),
-                                    "Legend",
-                                    paste( "Legend ", heatUnits, sep = "" ) )
+    STRING_legendCaption <- "Legend"
     plot( c( 0, 2 ), c( 0, 1 ), type = 'n',
           axes = F, xlab = '', ylab = '',
           main = STRING_legendCaption )
