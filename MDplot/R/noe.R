@@ -1,6 +1,11 @@
 # load noe data
-load_noe <- function( files )
+load_noe <- function( files,
+                      mdEngine = "GROMOS" )
 {
+  mdEngine <- toupper( mdEngine )
+  if( mdEngine != "GROMOS" )
+    stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) )
+
   # get number of violations
   VEC_fileRead <- scan( files[ 1 ], what = "",
                         sep = "\n", quiet = TRUE )

@@ -1,8 +1,9 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-21
 \name{hbond_ts}
 \alias{hbond_ts}
 \title{Plot hydrogen bond timeseries}
-\description{Timeseries plot of hydrogen bonds (various selections possible). In addition to the timeseries file, the summary file is also necessary.}
+\description{Timeseries plot of hydrogen bonds (various selections possible). In addition to the timeseries file, depending on the MD engine format used, an additional summary file might also be necessary (see below for examples).}
 \usage{
 hbond_ts( timeseries,
           summary,
@@ -29,13 +30,16 @@ hbond_ts( timeseries,
 \item{scalingFactorPlot}{To manually set the scaling factor (if necessary).}
 \item{printNames}{Enables human readable names rather than the hbond identifiers.}
 \item{namesToSingle}{If \code{printNames} is \code{TRUE}, this flags enables one letter codes.}
-\item{printAtoms}{Enables atom names in hydrogen bond identification on the y-axis.}
+\item{printAtoms}{If \code{printNames} is \code{TRUE}, this flag adds the atom names in the hydrogen bond identification on the y-axis.}
 \item{timeUnit}{Specifies the time unit on the x-axis.}
 \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit (see above).}
 \item{timeRange}{Selects a certain time range specified by a vector.}
 \item{hbondIndices}{List, containing vectors to select hbonds by their identifiers.}
 \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
 \item{...}{Additional arguments (ellipsis).}
+}
+\value{
+Returns a \code{n}x2 matrix, with the first column being the list of hydrogen bond identifiers plotted and the second one the occurence (in percent) over the selected time range.
 }
 \examples{
 # GROMOS
@@ -50,7 +54,7 @@ hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                          mdEngine = "GROMACS" ),
           load_hbond( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                                   package = "MDplot" ),
-                      system.file( "extdata/hbond_log_GROMACS.txt.gz",
+                      system.file( "extdata/hbond_example_GROMACS.txt.gz",
                                    package = "MDplot" ),
                       mdEngine = "GROMACS" ),
           plotOccurences = TRUE, namesToSingle = FALSE, printNames = TRUE,
@@ -63,7 +67,8 @@ hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
                          mdEngine = "AMBER" ),
           load_hbond( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
                                    package = "MDplot" ),
-                         mdEngine = "AMBER" ) )
+                         mdEngine = "AMBER" ),
+          plotOccurences = TRUE, timeRange = c( 20, 60 ) )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

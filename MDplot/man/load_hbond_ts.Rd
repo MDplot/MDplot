@@ -1,25 +1,33 @@
-%  Copyright (C) 2015 Christian Margreitter
+% (C) 2015 Christian Margreitter
+% last update: 2017-02-21
 \name{load_hbond_ts}
 \alias{load_hbond_ts}
 \title{Loading hydrogen bonds timeseries}
 \description{
-This function loads hydrogen bond timeseries information from a plain text file and stores them in a table.}
+This function loads hydrogen bond timeseries information from a text file and stores it in a table. See function \code{\link{hbond_ts}()} for usage of the return value. In case, AMBER format is used as input, this functions' return value might also be used for function \code{\link{hbond}()}.}
 \usage{
 load_hbond_ts( path,
                mdEngine = "GROMOS" ) }
 \arguments{
-  \item{path}{Specifies the path of the text input file.}
-  \item{mdEngine}{Argument introduced for distinction between input formats based on the used molecular dynamics engine (to be implemented).}
+  \item{path}{Specifies the path of the input file.}
+  \item{mdEngine}{Argument distinguishes between input formats based on the molecular dynamics engine used. Currently available: \code{"GROMOS"}, \code{"GROMACS"} and \code{"AMBER"}.}
+}
+\value{
+Returns a \code{n}x2-matrix, where the first column holds the time in snapshots and the second one the respective hydrogen bond identifier. Note, that function \code{\link{hbond_ts}()} requires additional input provided by function \code{\link{load_hbond}()} and that hydrogen bond identifiers have to match.
 }
 \examples{
 # GROMOS
-# see "extdata/hbond_ts_example.txt.gz" for format information
 load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz", package = "MDplot" ) )
 
 # GROMACS
 load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                             package = "MDplot" ),
                mdEngine = "GROMACS" )
+
+# AMBER
+load_hbond_ts( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
+                            package = "MDplot" ),
+               mdEngine = "AMBER" )
 }
 \author{Christian Margreitter}
 \keyword{hbond}

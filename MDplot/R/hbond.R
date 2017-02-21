@@ -55,7 +55,6 @@ load_hbond_ts <- function( path,
 }
 
 # plot hbond timeseries
-# WARNING: "timeRange" does not work
 hbond_ts <- function( timeseries,
                       summary,
                       acceptorRange = NA,
@@ -250,15 +249,17 @@ hbond_ts <- function( timeseries,
 
   # in case the occurences are to be plotted, add them on the right hand side
   VEC_occurences <- c()
+  VEC_instances <- timeseries[ ( timeseries[ , 1 ] >= VEC_timeLimits[ 1 ] ), , drop = FALSE]
+  VEC_instances <- VEC_instances[ ( VEC_instances[ , 1 ] <= VEC_timeLimits[ 2 ] ), , drop = FALSE ]
+
   for( i in 1:length( VEC_hbondIDs ) )
   {
-    INT_numberAppearances <- sum( timeseries[ , 2 ] == VEC_hbondIDs[ i ] )
+    INT_numberAppearances <- sum( VEC_instances[ , 2 ] == VEC_hbondIDs[ i ] )
     
     # calculate percent from the time limits
     # CAUTION: might differ from the overall score out of the summary file
     VEC_occurences <- c( VEC_occurences, ( INT_numberAppearances / 
-                                             ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 
-                                             100 ) )
+                                           ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 100 ) )
   }
   if( plotOccurences )
   {

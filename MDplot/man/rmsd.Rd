@@ -17,7 +17,7 @@ rmsd( rmsdData,
       ... )}
 \arguments{
   \item{rmsdData}{List of (alterating) indices and RMSD values, as produced e.g. by \code{\link{load_rmsd}()}.}
-  \item{printLegend}{Boolean, which triggers plotting of legend.}
+  \item{printLegend}{Boolean, which triggers plotting of the legend.}
   \item{snapshotsPerTimeInt}{Number, specifying how many snapshots are comprising one \code{timeUnit}.}
   \item{timeUnit}{Specifies, which unit the x-axis is given in.}
   \item{rmsdUnit}{Specifies, which unit the y-axis is given in.}
