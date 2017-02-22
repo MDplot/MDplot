@@ -15,6 +15,10 @@ load_hbond_ts <- function( path,
   if( mdEngine == "GROMACS" )
   {
     DATA_input <- load_XPM( path )
+    
+    # because of the XPM definition, a reversing is necessary here
+    DATA_input$data <- apply( DATA_input$data, 2, rev )
+
     VEC_times <- c()
     VEC_which <- c()
     for( i in 1:DATA_input[[ "numberRows" ]] )
@@ -354,6 +358,10 @@ load_hbond <- function( path,
     if( is.na( GROMACShbondlogfile ) )
       stop( "When loading GROMACS hydrogen bond input, a second file (the logfile) has to be provided as agrument 'GROMACShbondlogfile'!" )
     DATA_inputTimeseries <- load_XPM( path )
+
+    # because of the XPM definition, a reversing is necessary here
+    DATA_inputTimeseries$data <- apply( DATA_inputTimeseries$data, 2, rev )
+    
     DATA_inputNames <- read.table( GROMACShbondlogfile )
     LIST_donors <- list( split_GROMACS_atomnames( as.character( DATA_inputNames[[ 1 ]][ 1 ] ) ) )
     LIST_hydrogens <- list( split_GROMACS_atomnames( as.character( DATA_inputNames[[ 2 ]][ 1 ] ) ) )
