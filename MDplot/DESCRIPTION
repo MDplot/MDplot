@@ -1,5 +1,5 @@
 Package: MDplot
-Version: 0.4.0
+Version: 1.0.0
 Date: 2017-02-24
 Authors@R: person( given = "Christian", family = "Margreitter",
                    email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) )

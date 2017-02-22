@@ -148,7 +148,10 @@ noe <- function( noeData,
         las = 3,
         cex = 0.85 )
   mtext( text = "noe violations", side = 1, line = 4.15, cex = 1.0 )
-  mtext( text = "fraction violations [%]", side = 2, line = 2.75, cex = 1.0 )
+  STRING_yAxis <- "fraction violations"
+  if( printPercentages )
+    STRING_yAxis <- paste( STRING_yAxis, " [%]", sep = "" )
+  mtext( text = STRING_yAxis, side = 2, line = 2.75, cex = 1.0 )
 
   # add addition curves
   for( j in 2:ncol( noeData ) )

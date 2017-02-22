@@ -23,7 +23,7 @@ dssp( load_dssp( system.file( "extdata/dssp_example.txt.gz",
 ```
 
 ## New in the latest major version
-Version: 0.4.0
+Version: 1.0.0
 Date: 2017-02-24
 
 o removed unnecessary input parameters from several functions

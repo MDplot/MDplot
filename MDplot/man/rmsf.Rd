@@ -34,8 +34,8 @@ A list of vectors, alternately holding atom indices and their respective values.
 }
 \examples{
 # GROMOS (see load_rmsf() for other input possibilities)
-rmsf( load_rmsf( c( system.file( "extdata/rmsf1_example.txt.gz", package = "MDplot" ),
-                    system.file( "extdata/rmsf2_example.txt.gz", package = "MDplot" ) ) ) )
+rmsf( load_rmsf( c( system.file( "extdata/rmsf_example_1.txt.gz", package = "MDplot" ),
+                    system.file( "extdata/rmsf_example_2.txt.gz", package = "MDplot" ) ) ) )
 }
 \author{Christian Margreitter}
 \keyword{Root-mean-square-fluctuation}

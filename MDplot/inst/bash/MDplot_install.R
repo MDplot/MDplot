@@ -1,10 +1,12 @@
-install.packages( "./MDplot_0.31.tar.gz", dependencies = TRUE,
-                  repos = NULL, type = "source", INSTALL_opts = c( "--no-lock" ) )
+install.packages( "MDplot", dependencies = TRUE,
+                  INSTALL_opts = c( "--no-lock" ),
+                  repos = "http://cran.wu.ac.at" )
 if( require( MDplot ) )
 {
-  print( "Installation of MDplot version 0.31 succeeded!" )
-}
-else
+  print( paste( "Installation of MDplot version ",
+                packageVersion( "MDplot" ),
+                " succeeded!", sep = "" ) )
+}else
 {
   print( "Installation of MDplot could not be completed successfully!" )
 }

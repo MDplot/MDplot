@@ -27,7 +27,7 @@ load_xrmsd( system.file( "extdata/xrmsd_example.txt.gz",
             factor = 10000 )
 
 # GROMACS
-load_xrmsd( system.file( "extdata/xrmsd_example_GROMACS.txt.gz",
+load_xrmsd( system.file( "extdata/xrmsd_example_GROMACS.xpm.gz",
                          package = "MDplot" ),
             mdEngine = "GROMACS" )
 

@@ -33,9 +33,9 @@ Returns a \code{n}x4-matrix, with the rows representing different snapshots and 
 }}
 \examples{
 # GROMOS (see load_rmsd() for other input possibilities)
-rmsd_average( list( load_rmsd( system.file( "extdata/rmsd1_example.txt.gz",
+rmsd_average( list( load_rmsd( system.file( "extdata/rmsd_example_1.txt.gz",
                                             package = "MDplot" ) ),
-                    load_rmsd( system.file( "extdata/rmsd2_example.txt.gz",
+                    load_rmsd( system.file( "extdata/rmsd_example_2.txt.gz",
                                             package = "MDplot" ) ) ),
               snapshotsPerTimeInt = 2000, maxYAxis = 0.445 )
 }

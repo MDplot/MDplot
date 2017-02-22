@@ -453,5 +453,5 @@ print_help <- function( STRING_functionName,
                        sep = "" ) )
   writeLines( "------------------------" )
   writeLines( "Package: MDplot" )
-  writeLines( "Author: christian.margreitter@boku.ac.at\n\n" )
+  writeLines( "Author: christian.margreitter@gmail\n\n" )
 }

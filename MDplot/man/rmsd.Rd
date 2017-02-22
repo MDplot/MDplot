@@ -35,8 +35,8 @@ Returns a list of lists, where each sub-list represents a RMSD curve and contain
 \item{sd}{The standard deviation calculated over the whole time range.}}
 \examples{
 # GROMOS (see load_rmsd() for other input possibilities)
-rmsd( load_rmsd( c( system.file( "extdata/rmsd1_example.txt.gz", package = "MDplot" ),
-                    system.file( "extdata/rmsd2_example.txt.gz", package = "MDplot" ) ) ) )
+rmsd( load_rmsd( c( system.file( "extdata/rmsd_example_1.txt.gz", package = "MDplot" ),
+                    system.file( "extdata/rmsd_example_2.txt.gz", package = "MDplot" ) ) ) )
 }
 \author{Christian Margreitter}
 \keyword{Root-mean-square-deviation}

@@ -18,8 +18,8 @@ A list of vectors, alternately holding indices and their respective values.
 }
 \examples{
 # GROMOS
-load_rmsd( c( system.file( "extdata/rmsd1_example.txt.gz", package = "MDplot" ),
-              system.file( "extdata/rmsd2_example.txt.gz", package = "MDplot" ) ) )
+load_rmsd( c( system.file( "extdata/rmsd_example_1.txt.gz", package = "MDplot" ),
+              system.file( "extdata/rmsd_example_2.txt.gz", package = "MDplot" ) ) )
 
 # GROMACS
 load_rmsd( c( system.file( "extdata/rmsd_example_GROMACS.txt.gz",

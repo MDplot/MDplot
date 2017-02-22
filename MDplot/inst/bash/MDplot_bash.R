@@ -13,14 +13,18 @@ LIST_arguments <- parse_arguments( VEC_inputArguments[ -1 ] ) # -1: function nam
 # prepare vectors for checks
 VEC_requiredForAll <- c(  )
 VEC_allowedForAll <- c( VEC_requiredForAll, "files", "size", "outformat",
-                        "outfile", "title", "subtitle",
-                        "enableProtocol", "colours", "resolution",
-                        "axisNames", "names", "printLegend",
-                        "mdEngine", "help" )
-VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>", "<dimensions of the plot> (optional)", "['png'/'pdf'/'tiff'] (optional)",
-                            "<outputfile> (optional)", "<plot main title> (optional)", "<plot subtitle> (optional)",
-                            "<protocol steps in plot generation> (optional)", "<vector of colours used, separated by ','> (optional)", "<resolution> (optional)",
-                            "<vector of names for the axes> (optional)", "<vector of names for the data sets> (optional)", "['true'/'false'] (optional)",
+                        "outfile", "title",
+                        "resolution", "axisNames", "names",
+                        "printLegend", "mdEngine", "help" )
+VEC_allowedForAllDesc <- c( "<input file(s), separated by ','>",
+                            "<dimensions of the plot> (optional)",
+                            "['png'/'pdf'/'tiff'] (optional)",
+                            "<outputfile> (optional)",
+                            "<plot main title> (optional)",
+                            "<resolution of the plot> (optional)",
+                            "<vector of names for the axes> (optional)",
+                            "<vector of names for the data sets> (optional)",
+                            "['true'/'false'] (optional)",
                             "<name of molecular dynamics engine used> (default: GROMOS)",
                             "<if set to 'true', all other options are ignored and help is printed> (optional)" )
 #########
@@ -56,7 +60,7 @@ if( isKeySet( LIST_arguments, "resolution" ) )
   REAL_resolution <- as.numeric( getValue( LIST_arguments, "resolution" ) )
 STRING_mdEngine <- "GROMOS"
 if( isKeySet( LIST_arguments, "mdEngine" ) )
-  STRING_mdEngine <- as.numeric( getValue( LIST_arguments, "mdEngine" ) )
+  STRING_mdEngine <- getValue( LIST_arguments, "mdEngine" )
 #########
 
 # define plot device and options
@@ -94,10 +98,11 @@ if( STRING_outformat == "pdf" )
 #########
 
 # check, which plot has been selected
-if( STRING_function == "dssp_summary" )
+if( STRING_function == "dssp" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_dsspSumAll <- c( "plotType", "showResidues", "showValues" )
+  VEC_dsspSumAll <- c( "plotType", "showResidues", "showValues",
+                       "elementNames", "useOwnLegend" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_dsspSumAll,
                   VEC_allowedForAll ),
@@ -111,6 +116,8 @@ if( STRING_function == "dssp_summary" )
                 c( "['dots'/'curves'/'bars'] (optional)",
                    "<range of residues to show, separated by ','> (optional)",
                    "<range of values to show, separated by ','> (optional)",
+                   "<vector of motif names, separated by ','> (optional)",
+                   "<specifies, whether own legend labels should be used> (optional)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -128,31 +135,37 @@ if( STRING_function == "dssp_summary" )
                                                   fixed = TRUE ) ) )
   VEC_values <- NA
   if( isKeySet( LIST_arguments, "showValues" ) )
-    VEC_values <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "showValues" ),
-                                                ",",
-                                                fixed = TRUE ) ) )
-  
-  
+    VEC_showValues <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "showValues" ),
+                                                  ",",
+                                                  fixed = TRUE ) ) )
+  VEC_names <- NA
+  if( isKeySet( LIST_arguments, "elementNames" ) )
+    VEC_names <- unlist( strsplit( getValue( LIST_arguments, "elementNames" ),
+                                             ",",
+                                             fixed = TRUE ) )
   # plot
-  MDplot::dssp_summary( MDplot::load_dssp_summary( VEC_files,
-                                                   mdEngine = STRING_mdEngine ),
-                        printLegend = BOOL_printLegend,
-                        showResidues = VEC_residues,
-                        showValues = VEC_values,
-                        plotType = ifelse( isKeySet( LIST_arguments, "plotType" ),
-                                           getValue( LIST_arguments, "plotType" ),
-                                           "dots" ),
-                        main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                       getValue( LIST_arguments, "title" ),
-                                       NA ) )
+  MDplot::dssp( MDplot::load_dssp( VEC_files,
+                                   mdEngine = STRING_mdEngine ),
+                printLegend = BOOL_printLegend,
+                showResidues = VEC_residues,
+                showValues = VEC_values,
+                useOwnLegend = ifelse( isKeySet( LIST_arguments, "useOwnLegend" ),
+                                       TRUE,
+                                       FALSE ),
+                plotType = ifelse( isKeySet( LIST_arguments, "plotType" ),
+                                   getValue( LIST_arguments, "plotType" ),
+                                  "dots" ),
+                elementNames = VEC_names,
+                main = ifelse( isKeySet( LIST_arguments, "title" ),
+                               getValue( LIST_arguments, "title" ),
+                               NA ) )
 }
-
-
 
 if( STRING_function == "dssp_ts" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_dsspTSAll <- c( "timeBoundaries", "residueBoundaries", "timeUnit", "snapshotsPerTimeInt" )
+  VEC_dsspTSAll <- c( "filenames", "stride", "timeBoundaries",
+                      "residueBoundaries", "timeUnit", "snapshotsPerTimeInt" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_dsspTSAll,
                   VEC_allowedForAll ), LIST_arguments )
@@ -162,7 +175,9 @@ if( STRING_function == "dssp_ts" )
     print_help( STRING_function,
                 c( VEC_dsspTSAll,
                    VEC_allowedForAll ),
-                c( "<range of time plotted, separated by ','> (optional)",
+                c( "<vector of filename(s)> (optional for GROMOS, required for GROMACS and AMBER)",
+                   "<use only every xth snapshot> (optional)",
+                   "<range of time plotted, separated by ','> (optional)",
                    "<range of residues plotted, separated by ','> (optional)",
                    "<time unit, often: 'ns'> (optional)",
                    "<snapshots per time unit> (optional)",
@@ -176,6 +191,16 @@ if( STRING_function == "dssp_ts" )
       stop( paste( "Error in file checking: seemingly, file",
                    VEC_files[ i ], "does not exist." ) )
   }
+  VEC_filenames <- NA
+  if( isKeySet( LIST_arguments, "filenames" ) )
+    VEC_filenames <- unlist( strsplit( getValue( LIST_arguments,
+                                                 "filenames" ),
+                                       ",",
+                                       fixed = TRUE ) )
+  INT_stride <- 1
+  if( isKeySet( LIST_arguments, "stride" ) )
+    VEC_residueBoundaries <- as.numeric( getValue( LIST_arguments,
+                                                   "stride" ) )
   VEC_timeBoundaries <- NA
   if( isKeySet( LIST_arguments, "timeBoundaries" ) )
     VEC_timeBoundaries <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "timeBoundaries" ),
@@ -186,9 +211,11 @@ if( STRING_function == "dssp_ts" )
     VEC_residueBoundaries <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "residueBoundaries" ),
                                                            ",",
                                                            fixed = TRUE )))
-  
   # plot
-  MDplot::dssp_ts( MDplot::load_dssp_ts( VEC_files ), 
+  MDplot::dssp_ts( MDplot::load_dssp_ts( VEC_files,
+                                         VEC_filenames,
+                                         INT_stride,
+                                         STRING_mdEngine ), 
                    timeBoundaries = VEC_timeBoundaries,
                    residueBoundaries = VEC_residueBoundaries,
                    timeUnit = ifelse( isKeySet( LIST_arguments, "timeUnit" ),
@@ -201,8 +228,6 @@ if( STRING_function == "dssp_ts" )
                                   getValue( LIST_arguments, "title" ),
                                   NA ) )
 }
-
-
 
 if( STRING_function == "xrmsd" )
 {
@@ -244,15 +269,14 @@ if( STRING_function == "xrmsd" )
   # plot
   MDplot::xrmsd( MDplot::load_xrmsd( VEC_files, factor = ifelse( isKeySet( LIST_arguments, "factor" ),
                                                                  as.numeric( getValue( LIST_arguments, "factor" ) ),
-                                                                 10000 ) ),
+                                                                 10000 ),
+                                     mdEngine = STRING_mdEngine ),
                  main = ifelse( isKeySet( LIST_arguments, "title" ),
                                 getValue( LIST_arguments, "title" ),
                                 NA ),
                  xaxisRange = VEC_xaxisRange,
                  yaxisRange = VEC_yaxisRange )
 }
-
-
 
 if( STRING_function == "rmsf" )
 {
@@ -292,7 +316,8 @@ if( STRING_function == "rmsf" )
                                                fixed = TRUE ) ) )
   
   # plot
-  MDplot::rmsf( MDplot::load_rmsf( VEC_files ),
+  MDplot::rmsf( MDplot::load_rmsf( VEC_files,
+                                   mdEngine = STRING_mdEngine ),
                 names = VEC_dataNames,
                 residuewise = BOOL_resWise,
                 printLegend = BOOL_printLegend,
@@ -304,8 +329,6 @@ if( STRING_function == "rmsf" )
                                getValue( LIST_arguments, "title" ),
                                NA ) )
 }
-
-
 
 if( STRING_function == "rmsd" )
 {
@@ -336,7 +359,8 @@ if( STRING_function == "rmsd" )
   }    
   
   # plot
-  MDplot::rmsd( MDplot::load_rmsd( VEC_files ),
+  MDplot::rmsd( MDplot::load_rmsd( VEC_files,
+                                   mdEngine = STRING_mdEngine ),
                 names = VEC_dataNames,
                 snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments, "snapshotsPerTimeInt" ),
                                               as.numeric( getValue( LIST_arguments, "snapshotsPerTimeInt" ) ),
@@ -352,23 +376,26 @@ if( STRING_function == "rmsd" )
                                NA ) )
 }
 
-
-
-if( STRING_function == "MDplot_RMSD_average" )
+if( STRING_function == "rmsd_average" )
 {
   # check, if input is sane for this plot and get input files
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( VEC_allowedForAll, LIST_arguments )
 
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  LIST_input <- list()
+  for( i in 1:length( VEC_files ) )
+  {
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+    LIST_input[[ length( LIST_input ) + 1 ]] <- MDplot::load_rmsd( VEC_files[ i ],
+                                                                   mdEngine = STRING_mdEngine )
+  }
+  
   # plot
-  MDplot_RMSD_average( LIST_input = list( list( name = "one", 
-                                                files = getValue( LIST_arguments, "files" ) ) ),
-                       main = ifelse( isKeySet( LIST_arguments, "title" ),
-                                      getValue( LIST_arguments, "title" ),
-                                      NA ) )
+  MDplot::rmsd_average( LIST_input )
 }
-
-
 
 if( STRING_function == "ramachandran" )
 {
@@ -377,7 +404,6 @@ if( STRING_function == "ramachandran" )
                     "angleColumns",
                     "plotType",
                     "heatFun",
-                    "heatUnits",
                     "plotContour",
                     "shiftAngles",
                     VEC_allowedForAll )
@@ -390,7 +416,6 @@ if( STRING_function == "ramachandran" )
                    "<columns in file containing dihedrals>",
                    "['sparse'/'comic'/'fancy'] (optional)",
                    "<function to treat heat with, default 'log'> (optional)",
-                   "<units, in which heat is given> (optional)",
                    "<plot contour as well, default 'false'> (optional)",
                    "<if angle interval is not -180 to 180, a shift can be specified> (optional)",
                    VEC_allowedForAllDesc ) )
@@ -418,21 +443,16 @@ if( STRING_function == "ramachandran" )
   STRING_heatfunction <- "log"
   if( isKeySet( LIST_arguments, "heatFun" ) )
     STRING_heatfunction <- getValue( LIST_arguments, "heatFun" )
-  
   STRING_plotType <- "comic"
   if( isKeySet( LIST_arguments, "plotType" ) )
     STRING_plotType <- getValue( LIST_arguments, "plotType" )
-  
-  STRING_heatUnits <- NA
-  if( isKeySet( LIST_arguments, "heatUnits" ) )
-    STRING_heatUnits <- paste( "[", getValue( LIST_arguments, "heatUnits" ), "]", sep = "" )
-
   # plot
   MDplot::ramachandran( MDplot::load_ramachandran( VEC_files,
                                                    angleColumns = VEC_angleColumns,
                                                    shiftAngles = ifelse( isKeySet( LIST_arguments, "shiftAngles" ),
                                                                          as.numeric( getValue( LIST_arguments, "shiftAngles" ) ),
-                                                                         NA ) ),
+                                                                         NA ),
+                                                   mdEngine = STRING_mdEngine ),
                         xBins = VEC_bins[ 1 ],
                         yBins = VEC_bins[ 2 ],
                         plotType = STRING_plotType,
@@ -443,13 +463,10 @@ if( STRING_function == "ramachandran" )
                         plotContour = ifelse( isKeySet( LIST_arguments, "plotContour" ),
                                               TRUE,
                                               FALSE ),
-                        heatUnits = STRING_heatUnits,
                         main = ifelse( isKeySet( LIST_arguments, "title" ),
                                        getValue( LIST_arguments, "title" ),
                                        NA ) )
 }
-
-
 
 if( STRING_function == "TIcurve" )
 {
@@ -548,8 +565,6 @@ if( STRING_function == "timeseries" )
                                      NA ) )
 }
 
-
-
 if( STRING_function == "clusters" )
 {
   # check, if input is sane for this plot and get input files
@@ -576,7 +591,8 @@ if( STRING_function == "clusters" )
   
   # load matrix
   MAT_input <- MDplot::load_clusters( VEC_files,
-                                      names = VEC_dataNames )
+                                      names = VEC_dataNames,
+                                      mdEngine = STRING_mdEngine )
 
   # plot
   MDplot::clusters( MAT_input,
@@ -590,7 +606,43 @@ if( STRING_function == "clusters" )
                                    NA ) )
 }
 
-
+if( STRING_function == "noe" )
+{
+  # check, if input is sane for this plot and get input files
+  VEC_noeAll <- c( "printPercentages", "plotSumCurves" )
+  testRequired( VEC_requiredForAll, LIST_arguments )
+  testAllowed( c( VEC_noeAll,
+                  VEC_allowedForAll ),
+               LIST_arguments )
+  if( isKeySet( LIST_arguments, "help" )
+      && getValue( LIST_arguments, "help" ) == "TRUE" )
+  {
+    print_help( STRING_function,
+                c( VEC_noeAll,
+                   VEC_allowedForAll ),
+                c( "<use relative (percentages) for annotation rather than absolute values> (optional)",
+                   "<plot summary-curves on top> (optional)",
+                   VEC_allowedForAllDesc ) )
+    quit( save = "no", status = 0, runLast = TRUE )
+  }
+  VEC_files <- getFiles( getValue( LIST_arguments, "files" ) )
+  for( i in 1:length( VEC_files ) )
+    if( !file.exists( VEC_files[ i ] ) )
+      stop( paste( "Error in file checking: seemingly, file",
+                   VEC_files[ i ], "does not exist." ) )
+  
+  # plot
+  MDplot::noe( MDplot::load_noe( VEC_files ),
+               printPercentages = ifelse( isKeySet( LIST_arguments, "printPercentages" ),
+                                          FALSE,
+                                          TRUE ),
+               plotSumCurves = ifelse( isKeySet( LIST_arguments, "plotSumCurves" ),
+                                       FALSE,
+                                       TRUE ),
+               main = ifelse( isKeySet( LIST_arguments, "title" ),
+                              getValue( LIST_arguments, "title" ),
+                              NA ) )
+}
 
 if( STRING_function == "clusters_ts" )
 {
@@ -633,7 +685,8 @@ if( STRING_function == "clusters_ts" )
                                                                                   "lengths" ),
                                                                                   split = ",",
                                                                                   fixed = TRUE ) ) ),
-                                          names = NA )
+                                          names = NA,
+                                          mdEngine = STRING_mdEngine )
   if( isKeySet( LIST_arguments, "names" ) )
   {
     VEC_names <- unlist( strsplit( getValue( LIST_arguments, "names" ),
@@ -667,12 +720,10 @@ if( STRING_function == "clusters_ts" )
                                       NA ) )
 }
 
-
-
 if( STRING_function == "hbond" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_hbAll <- c( "acceptorRange", "donorRange" )
+  VEC_hbAll <- c( "acceptorRange", "donorRange", "GROMACShbondlogfile" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_hbAll,
                   VEC_allowedForAll ),
@@ -685,6 +736,7 @@ if( STRING_function == "hbond" )
                    VEC_allowedForAll ),
                 c( "<range of selected acceptors, separated by ','> (optional)",
                    "<range of selected donors, separated by ','> (optional)",
+                   "<path to GROMACS log file containing hydrogen bond information> (mandatory if GROMACS is specified as input format)",
                    VEC_allowedForAllDesc ) )
     quit( save = "no", status = 0, runLast = TRUE )
   }
@@ -707,9 +759,14 @@ if( STRING_function == "hbond" )
                                                               "donorRange" ),
                                                     ",",
                                                     fixed = TRUE ) ) )
-  
+  STRING_GROMACSlogfile <- NA
+  if( isKeySet( LIST_arguments, "GROMACShbondlogfile" ) )
+    STRING_GROMACSlogfile <- getValue( LIST_arguments,
+                                       "GROMACShbondlogfile" )
   # plot
-  MDplot::hbond( MDplot::load_hbond( VEC_files ),
+  MDplot::hbond( MDplot::load_hbond( VEC_files,
+                                     GROMACShbondlogfile = STRING_GROMACSlogfile,
+                                     mdEngine = STRING_mdEngine ),
                  printLegend = BOOL_printLegend,
                  donorRange = VEC_donorRange,
                  acceptorRange = VEC_acceptorRange,
@@ -717,8 +774,6 @@ if( STRING_function == "hbond" )
                                 getValue( LIST_arguments, "title" ),
                                 NA ) )
 }
-
-
 
 if( STRING_function == "hbond_ts" )
 {
@@ -776,10 +831,18 @@ if( STRING_function == "hbond_ts" )
                                                                 "hbondIndices" ),
                                                       ",",
                                                       fixed = TRUE ) ) )
+  STRING_hbondsummarypath <- VEC_files[ 2 ]
+  if( STRING_mdEngine == "GROMACS" )
+    STRING_hbondsummarypath <- VEC_files[ 1 ]
   
   # plot
-  MDplot::hbond_ts( MDplot::load_hbond_ts( VEC_files[ 1 ] ),
-                    MDplot::load_hbond( VEC_files[ 2 ] ),
+  MDplot::hbond_ts( MDplot::load_hbond_ts( VEC_files[ 1 ],
+                                           mdEngine = STRING_mdEngine ),
+                    MDplot::load_hbond( STRING_hbondsummarypath,
+                                        GROMACShbondlogfile = ifelse( STRING_mdEngine == "GROMACS",
+                                                                      VEC_files[ 2 ],
+                                                                      NA ),
+                                        mdEngine = STRING_mdEngine ),
                     printNames = ifelse( isKeySet( LIST_arguments, "printNames" ),
                                          TRUE,
                                          FALSE ),
