@@ -24,7 +24,6 @@ export(
          hbond_ts,
          clusters_ts,
          timeseries,
-         #dssp_summary_multi,
          rmsd_average,
          noe
        )
@@ -45,11 +44,6 @@ export(
          load_timeseries,
          load_noe
       )
-
-# export data manipulation functions
-#export(
-#         averaging_dssp_summary
-#      )
 
 # export other functions
 export(
