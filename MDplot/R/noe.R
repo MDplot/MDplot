@@ -44,12 +44,13 @@ load_noe <- function( files,
   }
   REAL_min <- min( as.numeric( unlist( LIST_result[[ 1 ]][ , 1 ] ) ) )
   REAL_max <- max( as.numeric( unlist( LIST_result[[ 1 ]][ , 1 ] ) ) )
+
   for( i in 1:length( LIST_result ) )
   {
     REAL_min <- min( c( REAL_min,
                         min( as.numeric( unlist( LIST_result[[ i ]][ , 1 ] ) ) ) ) )
     REAL_max <- max( c( REAL_max,
-                        min( as.numeric( unlist( LIST_result[[ i ]][ , 1 ] ) ) ) ) )
+                        max( as.numeric( unlist( LIST_result[[ i ]][ , 1 ] ) ) ) ) )
   }
   MAT_violationDistribution <- matrix( round( seq.int( from = REAL_min,
                                                        to = REAL_max,

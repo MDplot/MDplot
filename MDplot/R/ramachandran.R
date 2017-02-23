@@ -70,8 +70,7 @@ ramachandran <- function( dihedrals,
   # settings (small offset for label printing required)
   VEC_xTicks  <- c( -135,  -90,  -45,    0,   45,   90,  135 )
   VEC_xLabels <- c( -135,  -90,  -45,    0,   45,   90,  135 )
-  PALETTE_sparse <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  PALETTE_comic <- colorRampPalette( c( "white", rev( brewer.pal( 11, 'Spectral' ) ) ) )
+  PALETTE_2D <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
   PALETTE_fancy <- colorRampPalette( c( "lightgrey", rev( brewer.pal( 11, 'Spectral' ) ) ) )
   #########
   
@@ -102,7 +101,7 @@ ramachandran <- function( dihedrals,
   }
   if( plotType == "sparse" )
   {
-    VEC_palette <- PALETTE_sparse( 21 )
+    VEC_palette <- PALETTE_2D( 100 )
     hist2d( dihedrals, nbins = c( xBins, yBins ), same.scale = FALSE, na.rm = TRUE, 
             show = TRUE, col = VEC_palette, xlab = "", ylab = "",
             xaxs = "i", xaxt = "n", yaxs = "i", yaxt = "n",
@@ -139,7 +138,7 @@ ramachandran <- function( dihedrals,
   if( plotType == "comic" )
   {
     # heatmap
-    VEC_palette <- PALETTE_comic( 100 )
+    VEC_palette <- PALETTE_2D( 100 )
     image( LIST_filled[[ "xBins" ]],
            LIST_filled[[ "yBins" ]],
            FUN_heatFun( LIST_filled[[ "freq2D" ]] ),

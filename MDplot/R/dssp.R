@@ -169,7 +169,6 @@ load_dssp <- function( path,
 }
 
 # plot the summary over residues and values (selected)
-# WARNING: because residues are renumbered if selected
 dssp <- function( dsspData,
                   printLegend = FALSE,
                   useOwnLegend = FALSE,
@@ -217,12 +216,16 @@ dssp <- function( dsspData,
   # if certain range of residues is to be shown, remove the rest
   MAT_buffer <- MAT_data
   INT_resStart <- 1 # plot all residues
+  VEC_residueLabels <- VEC_residues
   if( !all( is.na( showResidues ) ) )
   {
     for( i in nrow( MAT_buffer ):1 )
       if( !( i %in% showResidues[ 1 ]:showResidues[ 2 ] ) )
+      {
         MAT_buffer <- MAT_buffer[ -i, , drop = FALSE ] #use "drop = FALSE" to avoid dimension reduction
-    INT_resStart<- showResidues[ 1 ]
+        VEC_residueLabels <- VEC_residueLabels[ -i ]
+      }
+    INT_resStart <- showResidues[ 1 ]
   }
   MAT_data <- MAT_buffer
   #########
@@ -276,7 +279,7 @@ dssp <- function( dsspData,
                       y = MAT_data[ 1, ],
                       xlim = c( 1, nrow( MAT_data ) ),
                       xaxs = "i",
-                      xaxt = ifelse( barePlot, "n", "s" ),
+                      xaxt = "n",
                       ylim = c( 0, 100 ),
                       yaxs = "i",
                       yaxt = ifelse( barePlot, "n", "s" ),
@@ -285,6 +288,13 @@ dssp <- function( dsspData,
                       col = colours,
                       bty = ifelse( barePlot, "n", "o" ) ),
                 ellipsis ) )
+   if( !barePlot )
+   {
+     VEC_tickValues <- axTicks( 1 )
+     axis( 1,
+           at = VEC_tickValues,
+           labels = VEC_residueLabels[ VEC_tickValues ] )
+   }
     if( nrow( MAT_data ) > 1 )
       for( i in 2:nrow( MAT_data ) )
     {
@@ -306,7 +316,7 @@ dssp <- function( dsspData,
     PLOT_bar <- do.call( what = barplot,
                          c( list( height = t( MAT_data ),
                                   xaxs = "i",
-                                  xaxt = ifelse( barePlot, "n", "s" ),
+                                  xaxt = "n",
                                   ylim = c( 0, 100 ),
                                   yaxs = "i",
                                   yaxt = ifelse( barePlot, "n", "s" ),
@@ -319,7 +329,7 @@ dssp <- function( dsspData,
       VEC_atLabels <- seq( 5, by = 5, length.out = length( VEC_atTicks ) )
       axis( side = 1,
             at = VEC_atTicks,
-            labels = VEC_atLabels )
+            labels = VEC_residueLabels[ VEC_atLabels ] )
     }
   }
   #########
@@ -331,7 +341,7 @@ dssp <- function( dsspData,
              c( list( x = MAT_data[ , 1 ],
                       xlim = c( 1, nrow( MAT_data ) ),
                       xaxs = "i",
-                      xaxt = ifelse( barePlot, "n", "s" ),
+                      xaxt = "n",
                       ylim = c( 0, 100 ),
                       yaxs = "i",
                       yaxt = ifelse( barePlot, "n", "s" ),
@@ -340,6 +350,13 @@ dssp <- function( dsspData,
                       lwd = 2.0,
                       bty = ifelse( barePlot, "n", "o" ) ),
                 ellipsis ) )
+    if( !barePlot )
+    {
+      VEC_tickValues <- axTicks( 1 )
+      axis( 1,
+            at = VEC_tickValues,
+            labels = VEC_residueLabels[ VEC_tickValues ] )
+    }
     if( ncol( MAT_data ) > 1 )
       for( i in 2:ncol( MAT_data ) )
       {

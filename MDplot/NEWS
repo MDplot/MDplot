@@ -1,6 +1,8 @@
 Version: 1.0.0
 Date: 2017-02-24
 
+o fixed issue with proper residue display when sub-selection was done in function 'dssp()'
+o fixed issue with bin-expansion in function 'load_noe()'
 o removed unnecessary input parameters from several functions
 o added 'stride' to function 'load_dssp_ts()'
 o changed parameters of function 'load_rmsf()'
@@ -8,6 +10,7 @@ o renamed functions 'load_dssp_summary()' and 'dssp_summary()' into
   'load_dssp()' and 'dssp()', respectively
 o added additional box lines to function 'ramachandran()' for
   'plotType = "comic"'
+o changed colour coding to be more consistent in function 'ramachandran()'
 o added 'barScaleFactor' to function 'dssp_ts()' to account for the
   possibility that very small peptides might be plotted
 o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()',
@@ -23,6 +26,7 @@ o added functions 'find_Nth_occurrence()', 'split_GROMACS_atomnames()' and
 o added parameter 'showMultipleInteractions' to function 'hbond()' to
   represent multi- or hybrid hydrogen bond donors and acceptors
 o fixed time-axis issue in functions 'rmsd()' and 'rmsf()'
+o changed all names on example input files according to convention
 ------------------------
 
 Version: 0.3.1
