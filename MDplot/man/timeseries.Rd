@@ -17,7 +17,7 @@ timeseries( tsData,
             barePlot = FALSE,
             ... )}
 \arguments{
-  \item{tsData}{List of (alterating) indices and response values, as also produced by \code{\link{load_timeseries}()} for example.}
+  \item{tsData}{List of (alternating) indices and response values, as also produced by \code{\link{load_timeseries}()} for example.}
   \item{printLegend}{Boolean, which triggers plotting of the legend.}
   \item{snapshotsPerTimeInt}{Number, specifying how many snapshots are within one \code{timeUnit}.}
   \item{timeUnit}{Specifies, which unit the x-axis is given in.}

@@ -17,7 +17,7 @@ rmsf( rmsfData,
       barePlot = FALSE,
       ... )}
 \arguments{
-  \item{rmsfData}{List of (alterating) indices and RMSF values, as produced e.g. by \code{\link{load_rmsf}()}.}
+  \item{rmsfData}{List of (alternating) indices and RMSF values, as produced e.g. by \code{\link{load_rmsf}()}.}
   \item{printLegend}{Boolean, which triggers plotting of the legend.}
   \item{rmsfUnit}{Specifies, which unit the y-axis is given in.}
   \item{colours}{Vector of colours used for plotting.}

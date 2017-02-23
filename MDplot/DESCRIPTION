@@ -1,6 +1,6 @@
 Package: MDplot
-Version: 1.0.0
-Date: 2017-02-24
+Version: 1.0.1
+Date: XXXX-XX-XX
 Authors@R: person( given = "Christian", family = "Margreitter",
                    email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) )
 Title: Visualising Molecular Dynamics Analyses

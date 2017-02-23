@@ -39,7 +39,7 @@ hbond_ts( timeseries,
 \item{...}{Additional arguments (ellipsis).}
 }
 \value{
-Returns a \code{n}x2 matrix, with the first column being the list of hydrogen bond identifiers plotted and the second one the occurence (in percent) over the selected time range.
+Returns a \code{n}x2 matrix, with the first column being the list of hydrogen bond identifiers plotted and the second one the occurrence (in percent) over the selected time range.
 }
 \examples{
 # GROMOS

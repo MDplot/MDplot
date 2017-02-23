@@ -28,13 +28,13 @@ ramachandran( dihedrals,
                 }
   \item{structureAreas}{List of areas, which are plotted as black lines.}
   \item{plotType}{Type of plot to be used, either "sparse" (default, using function \code{\link{hist2d}()}), "comic" (own binning, use for very few datapoints) or "fancy" (3D, using function \code{\link{persp}()}).}
-  \item{printLegend}{Boolean, specifying whether a heat lengend is to be plotted or not.}
+  \item{printLegend}{Boolean, specifying whether a heat legend is to be plotted or not.}
   \item{plotContour}{Boolean, specifying whether a contour should be plotted or no.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
 }
 \value{
-Returns a list of binned dihedral angle occurencies.
+Returns a list of binned dihedral angle occurrences.
 }
 \examples{
 # GROMOS (see load_rmsd() for other input possibilities)

@@ -2,7 +2,7 @@
 % last update: 2017-02-20
 \name{dssp}
 \alias{dssp}
-\title{DSSP summary plot for secondary structure elements (proteins)}
+\title{DSSP plot for secondary structure elements (proteins)}
 \description{
 Plots summary plot for secondary structure motifs based on the output of the widely used classification program DSSP, which uses hydrogen bonds for classification. The default order is: "3-Helix", "4-Helix", "5-Helix", "Bend", "Beta-Bridge", "Beta-Strand", "Turn" (depending on the input, not all types might be included).}
 \usage{

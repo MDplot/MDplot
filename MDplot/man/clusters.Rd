@@ -19,7 +19,7 @@ clusters( clusters,
   \item{...}{Additional arguments (ellipsis).}
 }
 \value{
-Returns a \code{n}x\code{m}-matrix with \code{n} being the number of input trajectories and \code{m} the number of different clusters. Each element in the matrix holds the number of snapshots, the respective cluster occured in the respective trajectory.
+Returns a \code{n}x\code{m}-matrix with \code{n} being the number of input trajectories and \code{m} the number of different clusters. Each element in the matrix holds the number of snapshots, the respective cluster occurred in the respective trajectory.
 }
 \examples{
 # GROMOS (see load_clusters() for other input possibilities)

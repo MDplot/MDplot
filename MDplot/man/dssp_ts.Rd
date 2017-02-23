@@ -20,7 +20,7 @@ dssp_ts( tsData,
   \item{printLegend}{If \code{TRUE}, a legend is printed on the right hand side of the plot.}
   \item{timeBoundaries}{A vector of boundaries for the time in snapshots.}
   \item{residueBoundaries}{A vector of boundaries for the residues.}
-  \item{timeUnit}{If set, the snapshots are transformed into the respective time (depending on parameter \code{snapshotsPerTime}.}
+  \item{timeUnit}{If set, the snapshots are transformed into the respective time (depending on parameter \code{snapshotsPerTime}).}
   \item{snapshotsPerTimeInt}{Number of snapshots per respective \code{timeUnit} (only used when \code{timeUnit} is set).}
   \item{barScaleFactor}{Allows to manually overwrite the height of the bars.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}

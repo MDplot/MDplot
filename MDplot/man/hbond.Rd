@@ -3,7 +3,7 @@
 \name{hbond}
 \alias{hbond}
 \title{Plot hydrogen bond summary}
-\description{This function plots the summary output of hydrogen bond calculations and allows selection of donor and acceptor residues and atoms. Occurence over the whole trajectory is indicated by a colour scale. A legend indicating the colour scale can be printed. Note, that in case multiple hydrogen bond interactions between two particular residues take place, the one with prevalence will be used for colour-coding (and by default, this interaction is marked with a black circle, see below).}
+\description{This function plots the summary output of hydrogen bond calculations and allows selection of donor and acceptor residues and atoms. Occurrence over the whole trajectory is indicated by a colour scale. A legend indicating the colour scale can be printed. Note, that in case multiple hydrogen bond interactions between two particular residues take place, the one with prevalence will be used for colour-coding (and by default, this interaction is marked with a black circle, see below).}
 \usage{
 hbond( hbonds,
        plotMethod = "residue-wise",
