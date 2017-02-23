@@ -74,7 +74,7 @@ Date: 2016-02-15
 * added labels for axes for function 'xrmsd()'
 * renamed title ("Analyses") to comply with the publication title
 
-## Outlook
-1. support for other MD engines such as GROMACS, NAMD, CHARMM, ...
-2. support DISICL input (both for C++ and phyton implementation)
-3. support for average-RMSD input resulting from replicate input
+## Outlook (probably)
+1. support for other MD engines such as NAMD, CHARMM, ...
+2. support DISICL input (both C++ and phyton implementation)
+3. provide more plotting
