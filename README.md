@@ -22,6 +22,15 @@ dssp( load_dssp( system.file( "extdata/dssp_example.txt.gz",
                  package = "MDplot" ) ) )
 ```
 
+The type of molecular dynamics engine used can be set by parameter ```mdEngine``` for both the bash interface and the call from within R:
+
+```
+xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example_AMBER.txt.gz",
+                                package = "MDplot" ),
+                   mdEngine = "AMBER" ),
+       rmsdUnit = "angstrom" )
+```
+
 ## New in the latest major version
 Version: 1.0.0
 Date: 2017-02-24
