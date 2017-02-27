@@ -26,32 +26,32 @@ dssp( load_dssp( system.file( "extdata/dssp_example.txt.gz",
 Version: 1.0.0
 Date: 2017-02-24
 
-o fixed issue with proper residue display when sub-selection was done in function 'dssp()'
-o fixed issue with bin-expansion in function 'load_noe()'
-o removed unnecessary input parameters from several functions
-o added 'stride' to function 'load_dssp_ts()'
-o changed parameters of function 'load_rmsf()'
-o renamed functions 'load_dssp_summary()' and 'dssp_summary()' into
+* fixed issue with proper residue display when sub-selection was done in function 'dssp()'
+* fixed issue with bin-expansion in function 'load_noe()'
+* removed unnecessary input parameters from several functions
+* added 'stride' to function 'load_dssp_ts()'
+* changed parameters of function 'load_rmsf()'
+* renamed functions 'load_dssp_summary()' and 'dssp_summary()' into
   'load_dssp()' and 'dssp()', respectively
-o added additional box lines to function 'ramachandran()' for
+* added additional box lines to function 'ramachandran()' for
   'plotType = "comic"'
-o changed colour coding to be more consistent in function 'ramachandran()'
-o added 'barScaleFactor' to function 'dssp_ts()' to account for the
+* changed colour coding to be more consistent in function 'ramachandran()'
+* added 'barScaleFactor' to function 'dssp_ts()' to account for the
   possibility that very small peptides might be plotted
-o added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()',
+* added GROMACS support for functions: 'load_dssp()', 'load_dssp_ts()',
   'load_hbond()', 'load_hbond_ts()', 'load_clusters()',
   'load_clusters_ts()', 'load_ramachandran()' and 'load_xrmsd()'
-o added AMBER support for functions: 'load_rmsd()', 'load_ramachandran()',
+* added AMBER support for functions: 'load_rmsd()', 'load_ramachandran()',
   'load_dssp()', 'load_dssp_ts()', 'load_hbond()', 'load_clusters()',
   'load_clusters_ts()', 'load_rmsf()' and 'load_xrmsd()'
-o added function 'load_XPM()' to load "X PixMap" data as commonly
+* added function 'load_XPM()' to load "X PixMap" data as commonly
   produced by GROMACS
-o added functions 'find_Nth_occurrence()', 'split_GROMACS_atomnames()' and
+* added functions 'find_Nth_occurrence()', 'split_GROMACS_atomnames()' and
   'split_AMBER_atomnames()' to the collection of helper functions
-o added parameter 'showMultipleInteractions' to function 'hbond()' to
+* added parameter 'showMultipleInteractions' to function 'hbond()' to
   represent multi- or hybrid hydrogen bond donors and acceptors
-o fixed time-axis issue in functions 'rmsd()' and 'rmsf()'
-o changed all names on example input files according to convention
+* fixed time-axis issue in functions 'rmsd()' and 'rmsf()'
+* changed all names on example input files according to convention
 
 Version: 0.3.1
 Date: 2016-04-28
