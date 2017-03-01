@@ -23,7 +23,7 @@ clusters_ts( clustersDataTS,
   \item{...}{Additional arguments (ellipsis).}
 }
 \value{
-Returns a summary \code{n}x\code{m}-matrix with \code{n} being the number of input trajectories and \code{m} the number of different clusters (which have been plotted). Each element in the matrix holds the number of snapshots, the respective cluster occured in the respective trajectory. In addition, the first line is the overall summary counted over all trajectories.
+Returns a summary \code{(n+1)}x\code{m}-matrix with \code{n} being the number of input trajectories and \code{m} the number of different clusters (which have been plotted). Each element in the matrix holds the number of snapshots, the respective cluster occured in the respective trajectory. In addition, the first line is the overall summary counted over all trajectories.
 }
 \examples{
 # GROMOS (see load_clusters_ts() for other input possibilities)
