@@ -14,7 +14,7 @@ load_ramachandran( path,
 \item{path}{Path to input file. At least two columns of the same length are expected.}
 \item{angleColumns}{If more columns are present, the angle columns can be chosen by this vector.}
 \item{shiftAngles}{In order to shift the values by a constant factor (e.g. -180).}
-  \item{mdEngine}{Argument distinguishes between input formats based on the molecular dynamics engine used. Currently available: \code{"GROMOS"}, \code{"GROMACS"} and \code{"AMBER"}.}
+\item{mdEngine}{Argument distinguishes between input formats based on the molecular dynamics engine used. Currently available: \code{"GROMOS"}, \code{"GROMACS"} and \code{"AMBER"}.}
 }
 \value{
 A \code{n}x2-matrix with phi and psi angles in the respective columns.

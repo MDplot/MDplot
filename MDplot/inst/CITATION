@@ -1,10 +1,14 @@
-
-citEntry( 
-          entry  = "phdthesis",
-          author = "Christian Margreitter", 
-          title  = "MDplot",
-          school = "University of Natural Resources and Life Sciences, Vienna",
-          year   = 2015,
-          note   = "to be published",
-          textVersion = 0.1
-         )
+citHeader( "To cite the package, please use:" )
+citEntry( entry = "Article",
+          author = personList( person( given = "Christian",
+                                       family = "Margreitter",
+                                       role = c( "aut", "cre" ) ),
+                               person( given = "Chris",
+                                       family = "Oostenbrink",
+                                       role = c( "aut" ) ) ),
+          title = "MDplot: Visualise Molecular Dynamics",
+          journal = "The R Journal", year = 2017,
+          volume = X, pages = "X--X",
+          url = "", textVersion = paste( "Margreitter, C. and Oostenbrink, C. (2017)",
+                                         "MDplot: Visualise Molecular Dynamics", "The R Journal X:X--X" ) )
+citFooter( "The publication describes package version 1.0.0, but please cite it also in case you are using a more recent version. You can use \"toBibtex()\" to generate an appropriate entry." )

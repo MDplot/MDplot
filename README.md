@@ -32,6 +32,14 @@ xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example_AMBER.txt.gz",
 ```
 
 ## New in the latest major version
+Version: 1.0.1
+Date: 2017-06-01
+
+* fixed some typos in the manual pages
+* added vignette (publication)
+* added special input support for function "load_timeseries()" to be able
+  to load multi-column timeseries data
+
 Version: 1.0.0
 Date: 2017-02-24
 

@@ -1,17 +1,43 @@
 # load timeseries
-load_timeseries <- function( files )
+load_timeseries <- function( files, mdEngine = "GROMOS" )
 {
   LIST_return <- list()
   for( i in 1:length( files ) )
   {
-    TABLE_input <- read.table( files[ i ] )
-    if( length( LIST_return ) == 0 )
-      LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
-    else
+    if( mdEngine == "GROMOS" || mdEngine == "AMBER" )
     {
-      LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
-      LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+      TABLE_input <- read.table( files[ i ] )
+      if( length( LIST_return ) == 0 )
+        LIST_return <- list( TABLE_input[ , 1 ], TABLE_input[ , 2 ] )
+      else
+      {
+        LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 1 ]
+        LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , 2 ]
+      }
     }
+    else if( mdEngine == "GROMACS" )
+    {
+      inputData <- readLines( files[ i ],
+                              warn = FALSE )
+      inputData <- gsub( "^[#].*", "", inputData )
+      inputData <- gsub( "^[@].*", "", inputData )
+      inputData <- gsub( "^\\s+|\\s+$", "", inputData )
+      inputData <- inputData[ inputData != "" ]
+      numberColumns <- length( unlist( strsplit( inputData[ 1 ], "\\s+" ) ) )
+      VEC_input <- as.numeric( unlist( strsplit( inputData, "\\s+" ) ) )
+      TABLE_input <- matrix( VEC_input, byrow = TRUE, ncol = numberColumns )
+      VEC_positions <- TABLE_input[ , 1 ]
+      TABLE_input <- TABLE_input[ , -1, drop = FALSE ]
+      for( i in 1:ncol( TABLE_input ) )
+        if( length( LIST_return ) == 0 )
+          LIST_return <- list( VEC_positions, TABLE_input[ , i ] )
+        else
+        {
+          LIST_return[[ length( LIST_return ) + 1 ]] <- VEC_positions
+          LIST_return[[ length( LIST_return ) + 1 ]] <- TABLE_input[ , i ]
+        }
+    }
+    else { stop( paste( "The specified 'mdEngine', set to ", mdEngine, " is unknown.", sep = "" ) ) }
   }
   return( LIST_return )
 }
@@ -52,27 +78,47 @@ timeseries <- function( tsData,
   if( all( is.na( names ) ) )
     names = 1:( length( tsData ) / 2 )
   #########
-  
+
+  defaultArguments <- list( xlim = c( INT_min_snapshot, INT_max_snapshot ),
+                            ylim = c( VEC_rangeValues[ 1 ] * 0.95, VEC_rangeValues[ 2 ] * 1.05 ) )
+  ellipsis <- list( ... )
+  defaultArguments[ names( ellipsis ) ] <- ellipsis
+  ellipsis[ names( defaultArguments ) ] <- defaultArguments  
+
   LIST_return <- list()
   # plot
   for( i in 1:length( tsData ) )
   {
     if( i %% 2 == 1 )
     {
-      if( i == 1 )
-        plot( tsData[[ i ]], tsData[[ ( i + 1 ) ]], type = "l",
-              col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
-              xaxt = "n",
-              yaxt = ifelse( barePlot, "n", "s" ),
-              xlab = "", ylab = "",
-              ylim = c( VEC_rangeValues[ 1 ] * 0.95, VEC_rangeValues[ 2 ] * 1.05 ),
-              xlim = c( INT_min_snapshot, INT_max_snapshot ), ... )
+      if( i == 1 ) 
+        do.call( what = plot,
+                 c( list( x = tsData[[ i ]],
+                          y = tsData[[ ( i + 1 ) ]],
+                          type = "l",
+                          col = colours[ ceiling( i / 2 ) ],
+                          xaxs = "i",
+                          yaxs = "i",
+                          xaxt = "n",
+                          yaxt = ifelse( barePlot, "n", "s" ),
+                          xlab = "", ylab = "" ),
+                 ellipsis ) )
       else
-        plot( tsData[[ i ]], tsData[[ ( i + 1 ) ]], type = "l",
-              col = colours[ ceiling( i / 2 ) ], xaxs = "i", yaxs = "i",
-              xaxt = "n", yaxt = "n", xlab = "", ylab = "",
-              ylim = c( VEC_rangeValues[ 1 ] * 0.95, VEC_rangeValues[ 2 ] * 1.05 ),
-              xlim = c( INT_min_snapshot, INT_max_snapshot ) )
+      {
+        ellipsis[ "main" ] <- ""
+        do.call( what = plot,
+                 c( list( x = tsData[[ i ]],
+                          y = tsData[[ ( i + 1 ) ]],
+                          type = "l",
+                          col = colours[ ceiling( i / 2 ) ],
+                          xaxs = "i",
+                          yaxs = "i",
+                          xaxt = "n",
+                          yaxt = "n",
+                          xlab = "",
+                          ylab = "" ),
+                    ellipsis ) )
+      }
       LIST_return[[ length( LIST_return ) + 1 ]] <- list( minValue = min( tsData[[ ( i + 1 ) ]] ),
                                                           maxValue = max( tsData[[ ( i + 1 ) ]] ),
                                                           meanValue = mean( tsData[[ ( i + 1 ) ]] ),
