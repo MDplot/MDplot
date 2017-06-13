@@ -522,15 +522,16 @@ if( STRING_function == "TIcurve" )
 if( STRING_function == "timeseries" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_rmsdAll <- c( "snapshotsPerTimeInt", "timeUnit", "valueUnit", "valueName" )
+  VEC_timeseriesAll <- c( "snapshotsPerTimeInt", "timeUnit", "valueUnit",
+                          "valueName" )
   testRequired( VEC_requiredForAll, LIST_arguments )
-  testAllowed( c( VEC_rmsdAll,
+  testAllowed( c( VEC_timeseriesAll,
                   VEC_allowedForAll ), LIST_arguments )
   if( isKeySet( LIST_arguments, "help" )
       && getValue( LIST_arguments, "help" ) == "TRUE" )
   {
     print_help( STRING_function,
-                c( VEC_rmsdAll,
+                c( VEC_timeseriesAll,
                    VEC_allowedForAll ),
                 c( "<factor by which the values should be divided> (default: 1000)",
                    "<abbreviation of unit used for time-axis> (default: ns)",
@@ -549,7 +550,7 @@ if( STRING_function == "timeseries" )
   }    
   
   # plot
-  MDplot::timeseries( MDplot::load_timeseries( VEC_files ),
+  MDplot::timeseries( MDplot::load_timeseries( VEC_files, mdEngine = STRING_mdEngine ),
                       names = VEC_dataNames,
                       snapshotsPerTimeInt = ifelse( isKeySet( LIST_arguments, "snapshotsPerTimeInt" ),
                                                     as.numeric( getValue( LIST_arguments, "snapshotsPerTimeInt" ) ),
