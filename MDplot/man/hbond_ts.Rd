@@ -1,5 +1,5 @@
 % (C) 2015 Christian Margreitter
-% last update: 2017-02-21
+% last update: 2017-07-04
 \name{hbond_ts}
 \alias{hbond_ts}
 \title{Plot hydrogen bond timeseries}
@@ -42,13 +42,16 @@ hbond_ts( timeseries,
 Returns a \code{n}x2 matrix, with the first column being the list of hydrogen bond identifiers plotted and the second one the occurrence (in percent) over the selected time range.
 }
 \examples{
+# the examples are valid and wrapped in the "dontrun{}" environment for efficiency purposes only
 # GROMOS
+\dontrun{
 hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz",
                                       package = "MDplot" ) ),
           load_hbond( system.file( "extdata/hbond_example.txt.gz",
-                                   package = "MDplot" ) ) )
+                                   package = "MDplot" ) ) )}
 
 # GROMACS
+\dontrun{
 hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                                       package = "MDplot" ),
                          mdEngine = "GROMACS" ),
@@ -59,7 +62,7 @@ hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                       mdEngine = "GROMACS" ),
           plotOccurences = TRUE, namesToSingle = FALSE, printNames = TRUE,
           printAtoms = TRUE, hbondIndices = list( c( 1, 12 ) ),
-          timeUnit = "ns", snapshotsPerTimeInt = 100 )
+          timeUnit = "ns", snapshotsPerTimeInt = 100 )}
 
 # AMBER
 hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
