@@ -1,5 +1,5 @@
 # MDplot: Visualise Molecular Dynamics Analyses
-MDplot is an R package that allows automated plot generation directly from the output produced by Molecular Dynamics (MD) engines. Currently, loading functions for [GROMOS](http://www.gromos.net), [GROMACS](http://www.gromacs.org) and [AMBER](http://www.ambermd.org) type of output is provided. See the PDF for a full description.
+MDplot is an R package that allows automated plot generation directly from the output produced by Molecular Dynamics (MD) engines. Currently, loading functions for [GROMOS](http://www.gromos.net), [GROMACS](http://www.gromacs.org) and [AMBER](http://www.ambermd.org) type of output is provided. See the [the MDplot publication](https://journal.r-project.org/archive/2017/RJ-2017-007/RJ-2017-007.pdf) for a full description.
 
 ## Call from within bash script
 An Rscript interface is provided, allowing to set most options:
@@ -13,6 +13,8 @@ Rscript MDplot_bash.R clusters \
                  clustersNumber=7 \
                  ...
 ```
+
+A script including many examples is available in the package (path: "MDplot/inst/bash/test.sh").
 
 ## Additional information and examples
 Loading functions parse input and translate it into data structures that can be read by the respective plotting functions.
@@ -31,9 +33,14 @@ xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example_AMBER.txt.gz",
        rmsdUnit = "angstrom" )
 ```
 
+### Example pictures
+![MDplot::ramachandran() example](http://margreitter.com/store/MDplot_github_ramachandran.png)
+![MDplot::clusters_ts() example](http://margreitter.com/store/MDplot_github_clusters_ts.png)
+![MDplot::hbond_ts() example](http://margreitter.com/store/MDplot_github_hbond_ts.png)
+
 ## New in the latest major version
 Version: 1.0.1
-Date: 2017-06-01
+Date: 2017-07-04
 
 * fixed some typos in the manual pages
 * added vignette (publication)

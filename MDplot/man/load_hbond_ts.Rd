@@ -1,5 +1,5 @@
 % (C) 2015 Christian Margreitter
-% last update: 2017-02-21
+% last update: 2017-07-04
 \name{load_hbond_ts}
 \alias{load_hbond_ts}
 \title{Loading hydrogen bonds timeseries}
@@ -16,18 +16,22 @@ load_hbond_ts( path,
 Returns a \code{n}x2-matrix, where the first column holds the time in snapshots and the second one the respective hydrogen bond identifier. Note, that function \code{\link{hbond_ts}()} requires additional input provided by function \code{\link{load_hbond}()} and that hydrogen bond identifiers have to match.
 }
 \examples{
+# the examples are valid and wrapped in the "dontrun{}" environment for efficiency purposes only
 # GROMOS
-load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz", package = "MDplot" ) )
+\dontrun{
+load_hbond_ts( system.file( "extdata/hbond_ts_example.txt.gz", package = "MDplot" ) )}
 
 # GROMACS
+\dontrun{
 load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                             package = "MDplot" ),
-               mdEngine = "GROMACS" )
+               mdEngine = "GROMACS" )}
 
 # AMBER
+\dontrun{
 load_hbond_ts( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
                             package = "MDplot" ),
-               mdEngine = "AMBER" )
+               mdEngine = "AMBER" )}
 }
 \author{Christian Margreitter}
 \keyword{hbond}
