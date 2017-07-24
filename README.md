@@ -95,3 +95,4 @@ Date: 2016-02-15
 1. support for other MD engines such as NAMD, CHARMM, ...
 2. support DISICL input (both C++ and phyton implementation)
 3. provide more plotting
+4. support multiple rmsd average curves at the same time
