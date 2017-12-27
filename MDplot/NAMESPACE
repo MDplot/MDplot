@@ -25,7 +25,16 @@ export(
          clusters_ts,
          timeseries,
          rmsd_average,
-         noe
+         noe,
+         mem_lod,
+         mem_lod_ts,
+         mem_tpc,
+         mem_tmc,
+         mem_apl,
+         mem_loc,
+         mem_loc_ts,
+         mem_area,
+         mem_area_ts
        )
 
 # export loading functions
@@ -42,7 +51,16 @@ export(
          load_hbond_ts,
          load_clusters_ts,
          load_timeseries,
-         load_noe
+         load_noe,
+         load_mem_lod,
+         load_mem_lod_ts,
+         load_mem_tpc,
+         load_mem_tmc,
+         load_mem_apl,
+         load_mem_loc,
+         load_mem_loc_ts,
+         load_mem_area,
+         load_mem_area_ts
       )
 
 # export other functions

@@ -39,6 +39,11 @@ xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example_AMBER.txt.gz",
 ![MDplot::hbond_ts() example](http://margreitter.com/store/MDplot_github_hbond_ts.png)
 
 ## New in the latest major version
+Version: 1.1.0
+Date: 2018-XX-XX
+
+* TBD
+
 Version: 1.0.1
 Date: 2017-07-04
 
