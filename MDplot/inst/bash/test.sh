@@ -23,7 +23,7 @@ eog hbond.tiff &
 # hbond timeseries
 Rscript MDplot_bash.R hbond_ts files=../extdata/hbond_ts_example.txt.gz,../extdata/hbond_example.txt.gz namesToSingle=TRUE hbondIndices=24,57 title="HBOND timeseries" size=1450,950 plotOccurences=TRUE outformat=tiff printNames=TRUE printAtoms=TRUE outfile=hbond_ts.tiff
 Rscript MDplot_bash.R hbond_ts help=TRUE
-eog hbond_ts.tifF
+eog hbond_ts.tiff
 
 # TIcurve
 Rscript MDplot_bash.R TIcurve files=../extdata/TIcurve_fb_forward_example.txt.gz,../extdata/TIcurve_fb_backward_example.txt.gz title="TIcurve plotted" size=900,900 invertedBackwards=TRUE resolution=145 outformat=png outfile=TIcurve.png
