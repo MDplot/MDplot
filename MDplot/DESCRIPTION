@@ -6,7 +6,7 @@ Authors@R: c( person( given = "Christian", family = "Margreitter",
               person( given = "Chris", family = "Oostenbrink",
                       role = "aut" ) )
 Title: Visualising Molecular Dynamics Analyses
-Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools
+Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools, MANTICORE
 Suggests: R.rsp
 VignetteBuilder: R.rsp
 Description: Provides automatization for plot generation succeeding common molecular dynamics analyses.
