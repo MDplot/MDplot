@@ -22,7 +22,7 @@ plotMembrane <- function( inputResult,
   if( all( is.na( selectSnapshot ) ) )
     selectSnapshot <- 1
   if( is.na( paletteCurvature ) )
-    paletteCurvature <- colorRampPalette( c( "white", "blue", "red" ) )
+    paletteCurvature <- colorRampPalette( c( "white", "blue", "orange", "red", "black" ) )
   if( is.na( paletteRange ) )
     paletteRange <- range( as.vector( unlist( lapply( X = inputResult, FUN = function( surface ) lapply( X = surface, FUN = function( x ) x$localCurvature ) ) ) ) )
   if( length( paletteRange ) != 2 )
@@ -188,7 +188,7 @@ shootMovieMembrane <- function( inputResult, outputMovie, interactive = TRUE, sn
 
   # generate the movie
   system2( command = "ffmpeg",
-           args = c( "-framerate 1",
+           args = c( "-framerate 4",
                      paste0( "-i ", tempDir, "/snapshot_%04d.png" ),
                      "-c:v libx264",
                      "-r 24",
@@ -198,5 +198,6 @@ shootMovieMembrane <- function( inputResult, outputMovie, interactive = TRUE, sn
            wait = TRUE )
 
   # switch back the directory
-  setwd( workingDir )
+  if( dir.exists( workingDir ) )
+    setwd( workingDir )
 }
