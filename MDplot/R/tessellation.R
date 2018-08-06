@@ -100,7 +100,7 @@ plotMembrane <- function( inputResult,
     vecLocalCurvature <- inputResult[[ selectSnapshot ]][[ paste0( "surface_", surfaces[ iSurface ] ) ]]$localCurvature
     matTriangleCoordinates <- getCoordinatesFromPointIDs( referencePointsDF = inputResult[[ selectSnapshot ]]$referencePointsDF,
                                                           indices = matTriangleIndices[ , c( "ind1", "ind2", "ind3" ), drop = FALSE ] )
-    colRange <- paletteCurvature( 100 )[ as.numeric( cut( c( paletteRange, vecLocalCurvature ), breaks = 100 ) ) ]
+    colRange <- paletteCurvature( 10 )[ as.numeric( cut( c( paletteRange, vecLocalCurvature ), breaks = 10 ) ) ]
     colRange <- colRange[ c( -2, -1 ) ]
     vecColours <- c()
     xVec <- c()
