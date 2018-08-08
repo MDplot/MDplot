@@ -1,7 +1,7 @@
 Version: 1.1.0
 Date: 2018-XX-XX
 
-o TBD
+o added support for the tessellation of membranes (load output from the "MANTICORE" package)
 ------------------------
 
 Version: 1.0.1

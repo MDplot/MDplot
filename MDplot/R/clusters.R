@@ -242,15 +242,11 @@ load_clusters_GROMACS <- function( path,
           {
             if( sum( lengths ) != nrow( MAT_input ) )
               stop( "The sum of lengths must be the same as the number of lines in the input!" )
-            INT_lastBegin <- 1
+            begin <- 1
             for( k in 1:length( lengths ) )
             {
-              LIST_temp[[ length( LIST_temp ) + 1 ]] <- MAT_input[ INT_lastBegin:( INT_lastBegin +
-                                                                                   lengths[ k ] -
-                                                                                   1 ),
-                                                                   ,
-                                                                   drop = FALSE ]
-              INT_lastBegin <- lengths[ k ] + 1
+              LIST_temp[[ length( LIST_temp ) + 1 ]] <- MAT_input[ begin:( begin + lengths[ k ] - 1 ), , drop = FALSE ]
+              begin <- begin + lengths[ k ]
             }
           }
           else
