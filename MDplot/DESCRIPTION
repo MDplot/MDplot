@@ -9,7 +9,7 @@ Title: Visualising Molecular Dynamics Analyses
 Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools, MANTICORE
 Suggests: R.rsp
 VignetteBuilder: R.rsp
-Description: Provides automatization for plot generation succeeding common molecular dynamics analyses.
+Description: Provides automatisation for plot generation succeeding common molecular dynamics analyses.
              This includes straightforward plots, such as RMSD (Root-Mean-Square-Deviation) and
              RMSF (Root-Mean-Square-Fluctuation) but also more sophisticated ones such as
              dihedral angle maps, hydrogen bonds, cluster bar plots and

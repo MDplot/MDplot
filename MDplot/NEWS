@@ -2,6 +2,7 @@ Version: 1.1.0
 Date: 2018-XX-XX
 
 o added support for the tessellation of membranes (load output from the "MANTICORE" package)
+o fixed bug in function 'load_clusters_GROMACS()', leading to the strange behaviour that clusters 3 to n were exactly as cluster 2
 ------------------------
 
 Version: 1.0.1
