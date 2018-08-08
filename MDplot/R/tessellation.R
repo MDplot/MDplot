@@ -15,6 +15,9 @@ plotMembrane <- function( inputResult,
                           PNGsnapshot = NA,
                           PDFsnapshot = NA )
 {
+  # "require" the package
+  require( MANTICORE )
+
   # check the input
   if( !is.list( inputResult ) || !all( c( "list", "MANTICORE::result" ) %in% class( inputResult ) ) )
     stop( "The input does not seem to be a proper MANTICORE membrane tessellation result." )
@@ -187,6 +190,9 @@ plotMembrane <- function( inputResult,
 # function to generate a movie from PNG snapshots
 shootMovieMembrane <- function( inputResult, outputMovie, interactive = TRUE, snapshots = NA, ... )
 {
+  # "require" the package
+  require( MANTICORE )
+
   # check input
   if( is.null( inputResult ) || is.null( outputMovie ) )
     stop( "Parameters \"inputResult\" and \"outputMovie\" are mandatory." )

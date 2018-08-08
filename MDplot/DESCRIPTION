@@ -6,8 +6,8 @@ Authors@R: c( person( given = "Christian", family = "Margreitter",
               person( given = "Chris", family = "Oostenbrink",
                       role = "aut" ) )
 Title: Visualising Molecular Dynamics Analyses
-Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools, MANTICORE
-Suggests: R.rsp
+Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools
+Suggests: R.rsp, MANTICORE
 VignetteBuilder: R.rsp
 Description: Provides automatisation for plot generation succeeding common molecular dynamics analyses.
              This includes straightforward plots, such as RMSD (Root-Mean-Square-Deviation) and
