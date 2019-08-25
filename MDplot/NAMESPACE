@@ -9,7 +9,6 @@ importFrom( "graphics", "abline", "axis", "barplot", "contour", "image", "layout
 importFrom( "stats", "sd" )
 importFrom( "utils", "read.table", "write.table" )
 importFrom( "grDevices", "as.raster", "colorRampPalette", "trans3d" )
-importFrom( "MANTICORE", "loadMembraneResult" )
 
 # export plotting functions
 export( 
