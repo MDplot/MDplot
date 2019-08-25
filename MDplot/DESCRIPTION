@@ -1,21 +1,20 @@
 Package: MDplot
-Version: 1.1.0
-Date: 2018-XX-XX
+Version: 1.1.1
+Date: 2019-08-25
 Authors@R: c( person( given = "Christian", family = "Margreitter",
                       email = "christian.margreitter@gmail.com", role = c( "aut", "cre" ) ),
               person( given = "Chris", family = "Oostenbrink",
                       role = "aut" ) )
 Title: Visualising Molecular Dynamics Analyses
 Depends: R (>= 3.0.0), methods, MASS, RColorBrewer, gplots, gtools
-Suggests: R.rsp, MANTICORE
+Suggests: R.rsp
 VignetteBuilder: R.rsp
 Description: Provides automatisation for plot generation succeeding common molecular dynamics analyses.
              This includes straightforward plots, such as RMSD (Root-Mean-Square-Deviation) and
              RMSF (Root-Mean-Square-Fluctuation) but also more sophisticated ones such as
              dihedral angle maps, hydrogen bonds, cluster bar plots and
              DSSP (Definition of Secondary Structure of Proteins) analysis. Currently able to load
-             GROMOS, GROMACS and AMBER formats, respectively. In addition, membrane analysis plotting functions 
-             have been implemented, covering area per lipid, curvature and orthogonal displacement estimates.
+             GROMOS, GROMACS and AMBER formats, respectively.
 License: GPL-3
 URL: https://github.com/MDplot/MDplot
 LazyLoad: yes

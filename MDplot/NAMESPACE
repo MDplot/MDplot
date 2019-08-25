@@ -25,9 +25,7 @@ export(
          clusters_ts,
          timeseries,
          rmsd_average,
-         noe,
-         plotMembrane,
-         shootMovieMembrane
+         noe
        )
 
 # export loading functions
