@@ -43,6 +43,8 @@ Version: 1.1.1
 Date: 2019-08-25
 
 * changed selection of hydrogen bond IDs for 'hbond_ts()'
+* fixed typo in 'hbond_ts()' interface ("plotOccurences")
+* fixed bug in 'load_hbond_ts()' when loading AMBER-style input
 
 Version: 1.0.1
 Date: 2017-07-04

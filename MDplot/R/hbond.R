@@ -43,7 +43,7 @@ load_hbond_ts <- function( path,
     VEC_times <- c()
     VEC_which <- c()
     for( i in 1:nrow( inputData ) )
-      for( j in 1:ncol( inputData ) )
+      for( j in 2:ncol( inputData ) )
         if( inputData[ i, j ] == 1 )
         {
           VEC_times <- c( VEC_times,
@@ -63,7 +63,7 @@ hbond_ts <- function( timeseries,
                       summary,
                       acceptorRange = NA,
                       donorRange = NA,
-                      plotOccurences = FALSE,
+                      plotOccurrences = FALSE,
                       scalingFactorPlot = NA,
                       printNames = FALSE,
                       namesToSingle = FALSE,
@@ -81,67 +81,49 @@ hbond_ts <- function( timeseries,
     acceptorRange <- c( min( summary[ , 4 ] ), max( summary[ , 4 ] ) )
   if( all( is.na( donorRange ) ) )
     donorRange <- c( min( summary[ , 2 ] ), max( summary[ , 2 ] ) )
-  if( all( is.na( hbondIndices ) ) )
-    hbondIndices <- list( c( min( summary[ , 1 ] ), max( summary[ , 1 ] ) ) )
-  else
-    if( is.list( hbondIndices ) == FALSE )
-      stop( "Error in input parsing: 'hbondIndices' needs to be a list of vectors of dimensionality 2." )
-  #########
+  if( all( is.na( hbondIndices ) ) ) {
+    # no indices selected -> default to all hydrogen bonds in increasing order
+    hbondIndices <- c( min( summary[ , 1 ] ):max( summary[ , 1] ) )
+   } else {
+    if( is.vector( hbondIndices ) == FALSE || length( hbondIndices ) < 1 )
+      stop( "Error in input parsing: 'hbondIndices' needs to be a vector of a length of at least 1." ) }
 
   # select the hbond-IDs of those hbonds, that match all criteria
-  VEC_hbondIDs <- c()
-  for( i in 1:nrow( summary ) )
-  {
-    if( summary[ i, 2 ] >= donorRange[ 1 ] &&
-        summary[ i, 2 ] <= donorRange[ 2 ] &&
-        summary[ i, 4 ] >= acceptorRange[ 1 ] &&
-        summary[ i, 4 ] <= acceptorRange[ 2 ] )
-    {
-      BOOL_add <- FALSE
-      for( j in 1:length( hbondIndices ) )
-      {
-        
-        VEC_hbondIndCur <- hbondIndices[[ j ]]
-        if( summary[ i, 1 ] >= VEC_hbondIndCur[ 1 ] &&
-            summary[ i, 1 ] <= VEC_hbondIndCur[ 2 ] )
-          BOOL_add <- TRUE
-      }
-      if( BOOL_add )
-        VEC_hbondIDs <- c( VEC_hbondIDs, i )
-    }
-  }
-  #########
+  # order them
+  vecBoolHbonds <- summary[ , 2 ] >= donorRange[ 1 ] &
+                   summary[ , 2 ] <= donorRange[ 2 ] &
+                   summary[ , 4 ] >= acceptorRange[ 1 ] &
+                   summary[ , 4 ] <= acceptorRange[ 2 ] &
+                   summary[ , 1 ] %in% hbondIndices
+  if( sum( vecBoolHbonds ) == 0 )
+    stop( "No hydrogen bond satisfies all criteria." )
+  summary <- summary[ vecBoolHbonds, , drop = FALSE ]
+  hbondIndices <- hbondIndices[ hbondIndices %in% summary[ , 1 ] ]
+  summary <- summary[ match( hbondIndices, summary[ , 1 ] ), , drop = FALSE ]
 
   # check, that one or more hbonds match the criteria
   # remove all hbonds from the timeseries table, that do not match the criteria
-  if( length( VEC_hbondIDs ) == 0 )
-    stop( paste( "The selection of acceptor residues ", acceptorRange[ 1 ], ":",
-                 acceptorRange[ 2 ], " with donor residues ", donorRange[ 1 ], ":",
-                 donorRange[ 2 ], " does not contain any hbonds.", sep = "" ) )
-  timeseries <- timeseries[ ( timeseries[ , 2 ] %in% VEC_hbondIDs ), ,
-                            drop = FALSE ]
-  #########
+  timeseries <- timeseries[ ( timeseries[ , 2 ] %in% hbondIndices ), , drop = FALSE ]
+
+  # establish plotting-only indices
+  plotIndices <- 1:length( hbondIndices )
 
   # set time limits
   VEC_timeLimits <- c( min( timeseries[ , 1 ] ),
                        max( timeseries[ , 1 ] ) )
   if( !all( is.na( timeRange ) ) )
     VEC_timeLimits <- timeRange
-  #########
 
   # get the vector for the names (left plot)
   # in case, names are selected transform the hbond-ID into three or one letter constructs
-  VEC_hbondNames <- split_equidistant( VEC_values = c( min( VEC_hbondIDs ),
-                                                       max( VEC_hbondIDs ) ),
-                                       n = 5 )
-  VEC_hbondNamesPositions <- VEC_hbondNames
+  VEC_hbondNamesPositions <- plotIndices
+  VEC_hbondNames <- hbondIndices
   if( printNames )
   {
     VEC_hbondNames <- c()
-    VEC_hbondNamesPositions <- VEC_hbondIDs
-    for( i in 1:length( VEC_hbondIDs ) )
+    for( i in 1:length( plotIndices ) )
     {
-      LIST_tableLine <- summary[ summary[ , 1 ] == VEC_hbondIDs[ i ], ]
+      LIST_tableLine <- summary[ summary[ , 1 ] == hbondIndices[ i ], ]
       if( namesToSingle )
       {
         LIST_tableLine[[ "resDonorName" ]] <- translate_aminoacids( LIST_tableLine[[ "resDonorName" ]],
@@ -169,12 +151,10 @@ hbond_ts <- function( timeseries,
                                          sep = "" ) ) )
     }
   }
-  #########
 
   # calculate a scaling factor in dependence of the number of hbonds to be plotted
   if( is.na( scalingFactorPlot ) )
-    scalingFactorPlot <- 0.75 / log( length( VEC_hbondIDs ) )
-  #########
+    scalingFactorPlot <- 0.75 / log( length( hbondIndices ) )
 
   # in case the occurences are to be plotted, make some space
   # do make sure, that the y axis has enough space for long labels
@@ -187,24 +167,27 @@ hbond_ts <- function( timeseries,
                           7.95 + INT_additionForAtomNumbers,
                           5.95 + INT_additionForAtomNumbers ),
                   3.25,
-                  ifelse( plotOccurences,
+                  ifelse( plotOccurrences,
                           0.0,
                           2.0 ) ) )
   else
     par( mar = c( 4.0,
                   3.25,
                   3.25,
-                  ifelse( plotOccurences,
+                  ifelse( plotOccurrences,
                           0.0,
                           2.0 ) ) )
-  if( plotOccurences )
+  if( plotOccurrences )
     layout( matrix( 1:2, ncol = 2 ), widths = c( 2, 1 ), heights = c( 1, 1 ) )
-  #########
-  
+
   # plot (left graph)
-  thePlot <- plot( timeseries,
+  # first, make a timeseries copy that uses 1 to n instead of the real hydrogen bond enumeration (allows arbitrary ordering and selection)
+  timeseriesArb <- matrix( c( timeseries[ , 1 ], rep( NA, times = nrow( timeseries ) ) ), byrow = FALSE, ncol = 2 )
+  for( iRow in 1:nrow( timeseries ) )
+    timeseriesArb[ iRow, 2 ] <- which( hbondIndices == timeseries[ iRow, 2 ] )
+  thePlot <- plot( timeseriesArb,
                    xlim = VEC_timeLimits, xaxs = "i", xaxt = "n", xlab = "",
-                   ylim = c( min( VEC_hbondIDs ), max( VEC_hbondIDs ) ), yaxt = "n", ylab = "",
+                   ylim = c( min( plotIndices ), max( plotIndices ) ), yaxt = "n", ylab = "",
                    type = "n" )
   LIST_ellipsis <- list( ... )
 
@@ -214,7 +197,7 @@ hbond_ts <- function( timeseries,
            text = ifelse( is.null( LIST_ellipsis[[ "main" ]] ),
                           "Hbond timeseries",
                           LIST_ellipsis[[ "main" ]] ),
-           adj = ifelse( plotOccurences,
+           adj = ifelse( plotOccurrences,
                          0.795,
                          0.5 ) )
     mtext( side = 1, line = 2.45, cex = 1.0,
@@ -248,57 +231,54 @@ hbond_ts <- function( timeseries,
                              scalingFactorPlot * 2.15,
                              1 ) )
   }
-  segments( timeseries[ , 1 ],
-            timeseries[ , 2 ] - scalingFactorPlot,
-            timeseries[ , 1 ],
-            timeseries[ , 2 ] + scalingFactorPlot,
+  segments( timeseriesArb[ , 1 ],
+            timeseriesArb[ , 2 ] - scalingFactorPlot,
+            timeseriesArb[ , 1 ],
+            timeseriesArb[ , 2 ] + scalingFactorPlot,
             lwd = 0.15 )
-  #########
 
   # in case the occurences are to be plotted, add them on the right hand side
-  VEC_occurences <- c()
-  VEC_instances <- timeseries[ ( timeseries[ , 1 ] >= VEC_timeLimits[ 1 ] ), , drop = FALSE]
+  VEC_occurrences <- c()
+  VEC_instances <- timeseriesArb[ ( timeseriesArb[ , 1 ] >= VEC_timeLimits[ 1 ] ), , drop = FALSE ]
   VEC_instances <- VEC_instances[ ( VEC_instances[ , 1 ] <= VEC_timeLimits[ 2 ] ), , drop = FALSE ]
 
-  for( i in 1:length( VEC_hbondIDs ) )
+  for( i in 1:length( hbondIndices ) )
   {
-    INT_numberAppearances <- sum( VEC_instances[ , 2 ] == VEC_hbondIDs[ i ] )
+    INT_numberAppearances <- sum( VEC_instances[ , 2 ] == plotIndices[ i ] )
     
     # calculate percent from the time limits
     # CAUTION: might differ from the overall score out of the summary file
-    VEC_occurences <- c( VEC_occurences, ( INT_numberAppearances / 
+    VEC_occurrences <- c( VEC_occurrences, ( INT_numberAppearances / 
                                            ( VEC_timeLimits[ 2 ] - VEC_timeLimits[ 1 ] ) * 100 ) )
   }
-  if( plotOccurences )
+  if( plotOccurrences )
   {
     par( mar = c( 4.0, 0.0, 3.25, 3.0 ) )
-    
     # plot
-    plot( VEC_hbondIDs~VEC_occurences,
-          ylim = c( min( VEC_hbondIDs ),
-                    max( VEC_hbondIDs ) ),
+    plot( plotIndices~VEC_occurrences,
+          ylim = c( min( plotIndices ),
+                    max( plotIndices ) ),
           yaxt = "n", ylab = "",
           xaxs = "i", xlim = c( 0, 100 ), xlab = "",
           xaxt = ifelse( barePlot, "n", "s" ),
           type = "n" )
     if( !barePlot )
       mtext( side = 1, line = 2.45, cex = 1, text = "occurence [%]" )
-    segments( rep( 0, length( VEC_hbondIDs ) ),
-              VEC_hbondIDs,
-              VEC_occurences,
-              VEC_hbondIDs,
+    segments( rep( 0, length( plotIndices ) ),
+              plotIndices,
+              VEC_occurrences,
+              plotIndices,
               lwd = 2.0 )
-    segments( VEC_occurences,
-              VEC_hbondIDs - scalingFactorPlot * 0.65,
-              VEC_occurences,
-              VEC_hbondIDs + scalingFactorPlot * 0.65,
+    segments( VEC_occurrences,
+              plotIndices - scalingFactorPlot * 0.65,
+              VEC_occurrences,
+              plotIndices + scalingFactorPlot * 0.65,
               lwd = 2.0 )
   }
-  #########
-  MAT_return <- matrix( c( VEC_hbondIDs,
-                           VEC_occurences ),
+  MAT_return <- matrix( c( hbondIndices[ plotIndices ],
+                           VEC_occurrences ),
                         ncol = 2, byrow = FALSE )
-  colnames( MAT_return ) <- c( "hbondID", "occurence [%]" )
+  colnames( MAT_return ) <- c( "hbondID", "occurrence [%]" )
   return( MAT_return )
 }
 

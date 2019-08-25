@@ -1,5 +1,5 @@
 % (C) 2015 Christian Margreitter
-% last update: 2017-07-04
+% last update: 2019-08-25
 \name{hbond_ts}
 \alias{hbond_ts}
 \title{Plot hydrogen bond timeseries}
@@ -9,7 +9,7 @@ hbond_ts( timeseries,
           summary,
           acceptorRange = NA,
           donorRange = NA,
-          plotOccurences = FALSE,
+          plotOccurrences = FALSE,
           scalingFactorPlot = NA,
           printNames = FALSE,
           namesToSingle = FALSE,
@@ -26,7 +26,7 @@ hbond_ts( timeseries,
 \item{summary}{Table, containing the summary information (e.g. produced by \code{\link{load_hbond}()}).}
 \item{acceptorRange}{Vector of acceptor resdiues, which are to be plotted.}
 \item{donorRange}{Vector of donor residues, which are to be plotted.}
-\item{plotOccurences}{Specifies, whether the overall summary should also be plotted in a subplot on the right hand side.}
+\item{plotOccurrences}{Specifies, whether the overall summary should also be plotted in a subplot on the right hand side.}
 \item{scalingFactorPlot}{To manually set the scaling factor (if necessary).}
 \item{printNames}{Enables human readable names rather than the hbond identifiers.}
 \item{namesToSingle}{If \code{printNames} is \code{TRUE}, this flags enables one letter codes.}
@@ -34,7 +34,7 @@ hbond_ts( timeseries,
 \item{timeUnit}{Specifies the time unit on the x-axis.}
 \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit (see above).}
 \item{timeRange}{Selects a certain time range specified by a vector.}
-\item{hbondIndices}{List, containing vectors to select hbonds by their identifiers.}
+\item{hbondIndices}{Vector of hydrogen bonds to be shown (dependent on the \code{summary} input). Can be used to order the hydrogen bonds as well.}
 \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
 \item{...}{Additional arguments (ellipsis).}
 }
@@ -60,7 +60,7 @@ hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_GROMACS.xpm.gz",
                       system.file( "extdata/hbond_example_GROMACS.txt.gz",
                                    package = "MDplot" ),
                       mdEngine = "GROMACS" ),
-          plotOccurences = TRUE, namesToSingle = FALSE, printNames = TRUE,
+          plotOccurrences = TRUE, namesToSingle = FALSE, printNames = TRUE,
           printAtoms = TRUE, hbondIndices = list( c( 1, 12 ) ),
           timeUnit = "ns", snapshotsPerTimeInt = 100 )}
 
@@ -71,7 +71,7 @@ hbond_ts( load_hbond_ts( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
           load_hbond( system.file( "extdata/hbond_ts_example_AMBER.txt.gz",
                                    package = "MDplot" ),
                          mdEngine = "AMBER" ),
-          plotOccurences = TRUE, timeRange = c( 20, 60 ) )
+          plotOccurrences = TRUE, timeRange = c( 20, 60 ) )
 }
 \author{Christian Margreitter}
 \keyword{hbond}
