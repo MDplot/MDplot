@@ -1,5 +1,5 @@
 % (C) 2015 Christian Margreitter
-% last update: 2017-02-20
+% last update: 2021-05-18
 \name{clusters_ts}
 \alias{clusters_ts}
 \title{Cluster timeseries plot}
@@ -12,6 +12,7 @@ clusters_ts( clustersDataTS,
              selectTime = NA,
              timeUnit = NA,
              snapshotsPerTimeInt = 1000,
+             colourPalette = NA,
              ... )}
 \arguments{
   \item{clustersDataTS}{List of cluster information as provided by \code{\link{load_clusters_ts}()}, the associated loading function.}
@@ -20,6 +21,7 @@ clusters_ts( clustersDataTS,
   \item{selectTime}{Range of time in snapshots, which is to be plotted.}
   \item{timeUnit}{Abbreviation of time unit.}
   \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit.}
+  \item{colourPalette}{A \code{colorRampPalette} that is used for colouring the clusters.}
   \item{...}{Additional arguments (ellipsis).}
 }
 \value{

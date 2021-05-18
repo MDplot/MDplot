@@ -17,3 +17,4 @@ PackageUseDevtools: Yes
 PackagePath: MDplot
 PackageInstallArgs: --no-multiarch --with-keep.source
 PackageCheckArgs: --as-cran
+PackageRoxygenize: rd

@@ -62,6 +62,7 @@ clusters_ts <- function( clustersDataTS,
                          selectTime = NA,
                          timeUnit = NA,
                          snapshotsPerTimeInt = 1000,
+                         colourPalette = NA,
                          ... )
 {
   
@@ -81,6 +82,9 @@ clusters_ts <- function( clustersDataTS,
   
   # do the colors
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, "Spectral" ) )
+  if( !is.na(colourPalette) ) {
+    PALETTE_colours <- colourPalette
+  }
   COLOURS_clusters <- PALETTE_colours( clustersNumber )
   #########
 
