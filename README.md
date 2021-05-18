@@ -38,7 +38,13 @@ xrmsd( load_xrmsd( system.file( "extdata/xrmsd_example_AMBER.txt.gz",
 ![MDplot::clusters_ts() example](http://margreitter.com/store/MDplot_github_clusters_ts.png)
 ![MDplot::hbond_ts() example](http://margreitter.com/store/MDplot_github_hbond_ts.png)
 
+
 ## New in the latest major version
+Version: 1.1.2
+Date: 2021-05-18
+
+* added more interface options for 'clusters_ts()'
+
 Version: 1.1.1
 Date: 2019-08-25
 

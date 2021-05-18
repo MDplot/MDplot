@@ -13,6 +13,7 @@ clusters_ts( clustersDataTS,
              timeUnit = NA,
              snapshotsPerTimeInt = 1000,
              colourPalette = NA,
+             widthBars = 0.65
              ... )}
 \arguments{
   \item{clustersDataTS}{List of cluster information as provided by \code{\link{load_clusters_ts}()}, the associated loading function.}
@@ -22,6 +23,7 @@ clusters_ts( clustersDataTS,
   \item{timeUnit}{Abbreviation of time unit.}
   \item{snapshotsPerTimeInt}{Specifies, how many snapshots make up one time unit.}
   \item{colourPalette}{A \code{colorRampPalette} that is used for colouring the clusters.}
+  \item{widthBars}{Sets the withs of the bars in the time-series plot.}
   \item{...}{Additional arguments (ellipsis).}
 }
 \value{

@@ -63,6 +63,7 @@ clusters_ts <- function( clustersDataTS,
                          timeUnit = NA,
                          snapshotsPerTimeInt = 1000,
                          colourPalette = NA,
+                         widthBars = 0.65,
                          ... )
 {
   
@@ -200,7 +201,7 @@ clusters_ts <- function( clustersDataTS,
                 rep( i - 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
                 VEC_xTicks[ VEC_clusterIDs == j ],
                 rep( i + 0.425, length( VEC_xTicks[ VEC_clusterIDs == j ] ) ),
-                lwd = 0.65,
+                lwd = widthBars,
                 col = COLOURS_clusters[ j ] )
       VEC_trajOccurences <- c( VEC_trajOccurences,
                                length( VEC_clusterIDs[ VEC_clusterIDs == j ] ) / length( VEC_clusterIDs ) * 100 )
