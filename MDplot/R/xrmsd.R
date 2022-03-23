@@ -68,12 +68,11 @@ xrmsd <- function( xrmsdValues,
                    xaxisRange = NA,
                    yaxisRange = NA,
                    coloursRange = NA,
-                   colours = NA,
                    rmsdUnit = "nm",
                    barePlot = FALSE,
                    ... )
 {
-  
+  colours <- NA
   # check user supplied input and replace in case undefined
   if( all( is.na( xaxisRange ) ) )
     xaxisRange <- c( min( xrmsdValues[ , 1 ] ),
@@ -100,12 +99,16 @@ xrmsd <- function( xrmsdValues,
   defaultArguments[ names( ellipsis ) ] <- ellipsis
   ellipsis[ names( defaultArguments ) ] <- defaultArguments
   
-  # colour values accordingly
+  # colour values
   if( printLegend )
     layout( matrix( 1:2, ncol = 2 ), widths = c( 2, 1 ), heights = c( 1, 1 ) )
   PALETTE_colours <- colorRampPalette( brewer.pal( 11, 'Spectral' ) )
-  PALETTE_colours_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
-  VEC_coloursPlot <- PALETTE_colours_rev( 11 )[ as.numeric( cut( as.numeric( xrmsdValues[ , 3 ] ), breaks = 10 ) ) ]
+  #PALETTE_colours_rev <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )
+  
+  values <- as.numeric( xrmsdValues[ , 3 ] )
+  ii <- cut(values, breaks = seq(min(values), colours[2], len = 100), 
+            include.lowest = TRUE)
+  VEC_coloursPlot <- colorRampPalette( rev( brewer.pal( 11, 'Spectral' ) ) )(99)[ii]
   #########
   
   # plot the heatmap thing

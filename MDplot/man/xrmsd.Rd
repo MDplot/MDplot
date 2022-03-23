@@ -10,7 +10,6 @@ xrmsd( xrmsdValues,
        xaxisRange = NA,
        yaxisRange = NA,
        coloursRange = NA,
-       colours = NA,
        rmsdUnit = "nm",
        barePlot = FALSE,
        ... )}
@@ -20,7 +19,6 @@ xrmsd( xrmsdValues,
   \item{xaxisRange}{A vector of boundaries for the x-snapshots.}
   \item{yaxisRange}{A vector of boundaries for the y-snapshots.}
   \item{coloursRange}{A vector of boundaries for the colour palette.}
-  \item{colours}{A vector with colour names for the span palette (not implemented yet).}
   \item{rmsdUnit}{Specifies, in which unit the RMSD values are given.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}
