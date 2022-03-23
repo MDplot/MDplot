@@ -1,5 +1,5 @@
 % (C) 2015 Christian Margreitter
-% last update: 2017-02-21
+% last update: 2022-03-23
 \name{xrmsd}
 \alias{xrmsd}
 \title{XRMSD plot in heatmap style}
@@ -9,6 +9,7 @@ xrmsd( xrmsdValues,
        printLegend = TRUE,
        xaxisRange = NA,
        yaxisRange = NA,
+       coloursRange = NA,
        colours = NA,
        rmsdUnit = "nm",
        barePlot = FALSE,
@@ -18,7 +19,8 @@ xrmsd( xrmsdValues,
   \item{printLegend}{If \code{TRUE}, a legend is printed on the right hand side of the plot.}
   \item{xaxisRange}{A vector of boundaries for the x-snapshots.}
   \item{yaxisRange}{A vector of boundaries for the y-snapshots.}
-  \item{colours}{A vector with colour names for the span palette.}
+  \item{coloursRange}{A vector of boundaries for the colour palette.}
+  \item{colours}{A vector with colour names for the span palette (not implemented yet).}
   \item{rmsdUnit}{Specifies, in which unit the RMSD values are given.}
   \item{barePlot}{Boolean, indicating whether the plot is to be made without any additional information.}
   \item{...}{Additional arguments (ellipsis).}

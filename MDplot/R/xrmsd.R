@@ -67,6 +67,7 @@ xrmsd <- function( xrmsdValues,
                    printLegend = TRUE,
                    xaxisRange = NA,
                    yaxisRange = NA,
+                   coloursRange = NA,
                    colours = NA,
                    rmsdUnit = "nm",
                    barePlot = FALSE,
@@ -80,8 +81,12 @@ xrmsd <- function( xrmsdValues,
   if( all( is.na( yaxisRange ) ) )
     yaxisRange <- c( min( xrmsdValues[ , 2 ] ),
                      max( xrmsdValues[ , 2 ] ) )
-  colours <- c( 0, 
-                max( xrmsdValues[ , 3 ] ) )
+  if( all( is.na( coloursRange ) ) )
+    colours <- c( 0,
+                  max( xrmsdValues[ , 3 ] ) )
+  else
+    colours <- coloursRange
+
   #########
 
   defaultArguments <- list( xlab = ifelse( barePlot,
