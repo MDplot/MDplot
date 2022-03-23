@@ -232,7 +232,7 @@ if( STRING_function == "dssp_ts" )
 if( STRING_function == "xrmsd" )
 {
   # check, if input is sane for this plot and get input files
-  VEC_xrmsdAll <- c( "xaxisRange", "yaxisRange", "factor" )
+  VEC_xrmsdAll <- c( "xaxisRange", "yaxisRange", "coloursRange", "factor" )
   testRequired( VEC_requiredForAll, LIST_arguments )
   testAllowed( c( VEC_xrmsdAll,
                   VEC_allowedForAll ), LIST_arguments )
@@ -265,6 +265,11 @@ if( STRING_function == "xrmsd" )
     VEC_yaxisRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "yaxisRange" ),
                                                     ",",
                                                     fixed = TRUE ) ) )
+  VEC_coloursRange <- NA
+  if( isKeySet( LIST_arguments, "coloursRange" ) )
+    VEC_coloursRange <- as.numeric( unlist( strsplit( getValue( LIST_arguments, "coloursRange" ),
+                                                    ",",
+                                                    fixed = TRUE ) ) )
   
   # plot
   MDplot::xrmsd( MDplot::load_xrmsd( VEC_files, factor = ifelse( isKeySet( LIST_arguments, "factor" ),
@@ -275,7 +280,8 @@ if( STRING_function == "xrmsd" )
                                 getValue( LIST_arguments, "title" ),
                                 NA ),
                  xaxisRange = VEC_xaxisRange,
-                 yaxisRange = VEC_yaxisRange )
+                 yaxisRange = VEC_yaxisRange,
+                 coloursRange = VEC_coloursRange)
 }
 
 if( STRING_function == "rmsf" )
